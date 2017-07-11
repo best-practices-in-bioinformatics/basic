@@ -1,0 +1,65 @@
+# 数据存放类型 {#filetype}
+
+数据类型那么多，我想都了解，当然，不需要背诵它们所有的细节~
+
+## FASTA 格式
+
+> 在生物信息学中，FASTA是用于表示任一核苷酸序列或氨基酸序列的最基本的格式。
+
+需要了解FASTA格式的3个方面：
+* 格式
+* 规则
+* 扩展名
+
+### 格式
+
+```
+>A B                        
+ATCGATCGATCGATCGATCGATCGATCG
+```
+
+“>”是序列的标识符，必须以“>”作为序列的开始
+“A”是序列的名称或标识
+“B”可以是关于序列的描述信息，换行后是为序列信息
+“>”与“A”之间不能有空格
+每当遇到下一个“>”，意味着当前序列的结束
+从测序仪上得到的文本一般是FASTQ格式，FASTA结构的简单性，使得它更易于文本，所以一般参考序列会选择使用FASTA格式。
+
+## FASTQ 格式
+> FASTQ格式是一种基于文本的格式，一般表示核苷酸序列，包含其对应的质量分数。
+序列来源于原始测序数据（raw data）。
+
+需要了解FASTA格式的3个方面：
+* 格式
+* 序列标识
+* 质量分数 
+* 存储
+
+## SAM 格式
+
+> SAM是一种由sanger制定的序列比对格式标准。将测序得到的FASTQ格式的序列mapping到基因组上，可以得到一个SAM或者BAM格式的文件。BAM 是 SAM 的二进制文件。
+
+## BAM 格式
+
+> 本质上就是二进制压缩的SAM文件，大部分生物信息学流程都需要这个格式，为了节省存储空间已经方便索引。
+
+```{r,warning=F,cache=T,message=F}
+# BiocInstaller::biocLite('Rsamtools')
+library(Rsamtools) 
+test_bam_file <- 'data/CHIP-seq.bam' 
+#fileter bam
+filter <- FilterRules(list(MinWidth = function(x) width(x$seq) > 35))
+res <- scanBam(test_bam_file, filter=filter)[[1]]
+sapply(res, head)
+
+```
+
+
+## VCF 格式
+> Variant Call Format（VCF）是一个用于存储基因序列突变信息的文本格式。表示单碱基突变, 插入/缺失, 拷贝数变异和结构变异等。BCF格式文件是VCF格式的二进制文件。
+
+## gtf
+
+## bed
+
+## 其它格式

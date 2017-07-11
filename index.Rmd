@@ -1,0 +1,56 @@
+--- 
+title: "生物信息学最佳实践--基础篇"
+author: "曾健明"
+date: "`r Sys.Date()`"
+documentclass: ctexbook
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+colorlinks: yes
+lot: yes
+lof: yes
+geometry: [b5paper, tmargin=2.5cm, bmargin=2.5cm, lmargin=3.5cm, rmargin=2.5cm]
+site: bookdown::bookdown_site
+description: "一个简单的中文书示例。"
+github-repo: jmzeng1341/best_practices_in_bioinformatics_basic
+#cover-image: images/cover.jpg
+---
+
+```{r setup, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, formatR.indent = 2, width = 55, digits = 4
+)
+
+# 填上你需要用到的包，如 c('ggplot2', 'dplyr')
+lapply(c('Rsamtools'), function(pkg) {
+  if (system.file(package = pkg) == '') install.packages(pkg)
+})
+```
+
+# 前言 {-}
+
+最终还是出了这样一本书，本来是不太愿意花时间整理这些太基础的知识点。但最近带领一个实验室湿实验工作者转行学习生物信息学的时候，他总是问我第一步该做什么！
+
+我回答他应该先了解一下测序原理，再了解一些常见的生物信息学格式，最后再学几个基础编程语言。
+
+他追问道：测序原理哪里去看呢？常见的生物信息学格式有哪些，我是不是应该买一本书呢？
+
+我才赫然发现，生物信息学领域居然没有这样一本小白文，方便湿实验工作者转行学习生物信息学的枕边书，既然缺乏，那我就做这个补充吧。
+
+生物信息学的重头戏就是处理各种各样的数据，第 \@ref(sequencing) 章介绍了生物信息学主流数据产生方法，包括多种多样的芯片技术，二代测序技术和三代测序技术。既然数据的来源是如此的丰富多样，而且还有考虑到各大科研院校的交流问题，就必然会产生各种各样的数据存储形式来规范化交流，第 \@ref(filetype) 章会详细介绍fastq,fasta,sam,bam,vcf,gff,gtf,bed,MAF等，理解了它们才能真正的入门生物信息学。
+
+我用了两个 R 包编译这本书，分别是 **knitr**\index{knitr} [@xie2015] 和 **bookdown**\index{bookdown} [@R-bookdown]。以下是我的 R 进程信息：
+
+```{r}
+sessionInfo()
+```
+
+## 致谢 {-}
+
+非常感谢[生信菜鸟团](http://www.bio-info-trainee.com/)以及[生信技能树](http://www.biotrainee.com/)对我的帮助。艾玛，要不是他们神一样的队友，我两年前就写完这本书了。
+
+```{block2, type='flushright', html.tag='p'}
+曾健明 
+于 珠海横琴某渔村
+```
+

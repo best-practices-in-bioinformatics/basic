@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>生物信息学最佳实践–基础篇</title>
+  <meta name="description" content="一个简单的中文书示例。">
+  <meta name="generator" content="bookdown 0.4 and GitBook 2.6.7">
+
+  <meta property="og:title" content="生物信息学最佳实践–基础篇" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="一个简单的中文书示例。" />
+  <meta name="github-repo" content="jmzeng1341/best_practices_in_bioinformatics_basic" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="生物信息学最佳实践–基础篇" />
+  
+  <meta name="twitter:description" content="一个简单的中文书示例。" />
+  
+
+<meta name="author" content="曾健明">
+
+
+<meta name="date" content="2017-07-11">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="biology.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery/jquery.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">中文书示例</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>前言</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#e887b4e8b0a2"><i class="fa fa-check"></i>致谢</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i>作者简介</a></li>
+<li class="chapter" data-level="1" data-path="sequencing.html"><a href="sequencing.html"><i class="fa fa-check"></i><b>1</b> 数据产生</a><ul>
+<li class="chapter" data-level="1.1" data-path="sequencing.html"><a href="sequencing.html#section-1.1"><i class="fa fa-check"></i><b>1.1</b> 芯片技术</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="sequencing.html"><a href="sequencing.html#section-1.1.1"><i class="fa fa-check"></i><b>1.1.1</b> 三大芯片制造商</a></li>
+<li class="chapter" data-level="1.1.2" data-path="sequencing.html"><a href="sequencing.html#section-1.1.2"><i class="fa fa-check"></i><b>1.1.2</b> 表达芯片</a></li>
+<li class="chapter" data-level="1.1.3" data-path="sequencing.html"><a href="sequencing.html#section-1.1.3"><i class="fa fa-check"></i><b>1.1.3</b> 基因分型芯片</a></li>
+<li class="chapter" data-level="1.1.4" data-path="sequencing.html"><a href="sequencing.html#cnv"><i class="fa fa-check"></i><b>1.1.4</b> CNV芯片</a></li>
+<li class="chapter" data-level="1.1.5" data-path="sequencing.html"><a href="sequencing.html#section-1.1.5"><i class="fa fa-check"></i><b>1.1.5</b> 甲基化芯片</a></li>
+<li class="chapter" data-level="1.1.6" data-path="sequencing.html"><a href="sequencing.html#section-1.1.6"><i class="fa fa-check"></i><b>1.1.6</b> 其它芯片</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="sequencing.html"><a href="sequencing.html#section-1.2"><i class="fa fa-check"></i><b>1.2</b> 二代测序技术</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="sequencing.html"><a href="sequencing.html#section-1.2.1"><i class="fa fa-check"></i><b>1.2.1</b> 三大主流测序仪</a></li>
+<li class="chapter" data-level="1.2.2" data-path="sequencing.html"><a href="sequencing.html#illumina"><i class="fa fa-check"></i><b>1.2.2</b> 最流行的是illumina</a></li>
+<li class="chapter" data-level="1.2.3" data-path="sequencing.html"><a href="sequencing.html#section-1.2.3"><i class="fa fa-check"></i><b>1.2.3</b> 其它二代测序仪</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="sequencing.html"><a href="sequencing.html#section-1.3"><i class="fa fa-check"></i><b>1.3</b> 三代测序</a></li>
+<li class="chapter" data-level="1.4" data-path="sequencing.html"><a href="sequencing.html#pacbio"><i class="fa fa-check"></i><b>1.4</b> pacbio一家独大</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="filetype.html"><a href="filetype.html"><i class="fa fa-check"></i><b>2</b> 数据存放类型</a><ul>
+<li class="chapter" data-level="2.1" data-path="filetype.html"><a href="filetype.html#fasta-"><i class="fa fa-check"></i><b>2.1</b> FASTA 格式</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="filetype.html"><a href="filetype.html#section-2.1.1"><i class="fa fa-check"></i><b>2.1.1</b> 格式</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="filetype.html"><a href="filetype.html#fastq-"><i class="fa fa-check"></i><b>2.2</b> FASTQ 格式</a></li>
+<li class="chapter" data-level="2.3" data-path="filetype.html"><a href="filetype.html#sam-"><i class="fa fa-check"></i><b>2.3</b> SAM 格式</a></li>
+<li class="chapter" data-level="2.4" data-path="filetype.html"><a href="filetype.html#bam-"><i class="fa fa-check"></i><b>2.4</b> BAM 格式</a></li>
+<li class="chapter" data-level="2.5" data-path="filetype.html"><a href="filetype.html#vcf-"><i class="fa fa-check"></i><b>2.5</b> VCF 格式</a></li>
+<li class="chapter" data-level="2.6" data-path="filetype.html"><a href="filetype.html#gtf"><i class="fa fa-check"></i><b>2.6</b> gtf</a></li>
+<li class="chapter" data-level="2.7" data-path="filetype.html"><a href="filetype.html#bed"><i class="fa fa-check"></i><b>2.7</b> bed</a></li>
+<li class="chapter" data-level="2.8" data-path="filetype.html"><a href="filetype.html#section-2.8"><i class="fa fa-check"></i><b>2.8</b> 其它格式</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="database.html"><a href="database.html"><i class="fa fa-check"></i><b>3</b> 生物信息学数据库资源</a><ul>
+<li class="chapter" data-level="3.1" data-path="database.html"><a href="database.html#id"><i class="fa fa-check"></i><b>3.1</b> 基因ID</a></li>
+<li class="chapter" data-level="3.2" data-path="database.html"><a href="database.html#section-3.2"><i class="fa fa-check"></i><b>3.2</b> 参考基因组版本</a></li>
+<li class="chapter" data-level="3.3" data-path="database.html"><a href="database.html#ncbi"><i class="fa fa-check"></i><b>3.3</b> NCBI</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="database.html"><a href="database.html#geo"><i class="fa fa-check"></i><b>3.3.1</b> GEO</a></li>
+<li class="chapter" data-level="3.3.2" data-path="database.html"><a href="database.html#sra"><i class="fa fa-check"></i><b>3.3.2</b> SRA</a></li>
+<li class="chapter" data-level="3.3.3" data-path="database.html"><a href="database.html#dbsnp"><i class="fa fa-check"></i><b>3.3.3</b> DBsnp</a></li>
+<li class="chapter" data-level="3.3.4" data-path="database.html"><a href="database.html#refseq"><i class="fa fa-check"></i><b>3.3.4</b> refseq</a></li>
+<li class="chapter" data-level="3.3.5" data-path="database.html"><a href="database.html#entrez"><i class="fa fa-check"></i><b>3.3.5</b> ENTREZ</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="database.html"><a href="database.html#ensembl"><i class="fa fa-check"></i><b>3.4</b> ENSEMBL</a></li>
+<li class="chapter" data-level="3.5" data-path="database.html"><a href="database.html#ucsc"><i class="fa fa-check"></i><b>3.5</b> UCSC</a></li>
+<li class="chapter" data-level="3.6" data-path="database.html"><a href="database.html#gencode"><i class="fa fa-check"></i><b>3.6</b> GENCODE</a></li>
+<li class="chapter" data-level="3.7" data-path="database.html"><a href="database.html#encode"><i class="fa fa-check"></i><b>3.7</b> ENCODE</a></li>
+<li class="chapter" data-level="3.8" data-path="database.html"><a href="database.html#tcga"><i class="fa fa-check"></i><b>3.8</b> TCGA</a></li>
+<li class="chapter" data-level="3.9" data-path="database.html"><a href="database.html#genome"><i class="fa fa-check"></i><b>3.9</b> 1000 GENOME</a></li>
+<li class="chapter" data-level="3.10" data-path="database.html"><a href="database.html#section"><i class="fa fa-check"></i><b>3.10</b> </a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="statistics.html"><a href="statistics.html"><i class="fa fa-check"></i><b>4</b> 统计</a><ul>
+<li class="chapter" data-level="4.1" data-path="statistics.html"><a href="statistics.html#section-4.1"><i class="fa fa-check"></i><b>4.1</b> 基本统计概念</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="statistics.html"><a href="statistics.html#section-4.1.1"><i class="fa fa-check"></i><b>4.1.1</b> 统计度量</a></li>
+<li class="chapter" data-level="4.1.2" data-path="statistics.html"><a href="statistics.html#section-4.1.2"><i class="fa fa-check"></i><b>4.1.2</b> 统计分布</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="statistics.html"><a href="statistics.html#section-4.2"><i class="fa fa-check"></i><b>4.2</b> 常用统计方法</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="statistics.html"><a href="statistics.html#section-4.2.1"><i class="fa fa-check"></i><b>4.2.1</b> 差异分析</a></li>
+<li class="chapter" data-level="4.2.2" data-path="statistics.html"><a href="statistics.html#section-4.2.2"><i class="fa fa-check"></i><b>4.2.2</b> 生存分析</a></li>
+<li class="chapter" data-level="4.2.3" data-path="statistics.html"><a href="statistics.html#section-4.2.3"><i class="fa fa-check"></i><b>4.2.3</b> 主成分分析</a></li>
+<li class="chapter" data-level="4.2.4" data-path="statistics.html"><a href="statistics.html#section-4.2.4"><i class="fa fa-check"></i><b>4.2.4</b> 进化树</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="computering.html"><a href="computering.html"><i class="fa fa-check"></i><b>5</b> 计算资源及编程</a><ul>
+<li class="chapter" data-level="5.1" data-path="computering.html"><a href="computering.html#section-5.1"><i class="fa fa-check"></i><b>5.1</b> 硬件配置</a></li>
+<li class="chapter" data-level="5.2" data-path="computering.html"><a href="computering.html#section-5.2"><i class="fa fa-check"></i><b>5.2</b> 编程语言</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="computering.html"><a href="computering.html#shell"><i class="fa fa-check"></i><b>5.2.1</b> shell</a></li>
+<li class="chapter" data-level="5.2.2" data-path="computering.html"><a href="computering.html#r"><i class="fa fa-check"></i><b>5.2.2</b> R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="computering.html"><a href="computering.html#perl"><i class="fa fa-check"></i><b>5.2.3</b> perl</a></li>
+<li class="chapter" data-level="5.2.4" data-path="computering.html"><a href="computering.html#python"><i class="fa fa-check"></i><b>5.2.4</b> python</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="biology.html"><a href="biology.html"><i class="fa fa-check"></i><b>6</b> 数据存放类型</a><ul>
+<li class="chapter" data-level="6.1" data-path="biology.html"><a href="biology.html#fasta"><i class="fa fa-check"></i><b>6.1</b> fasta</a></li>
+<li class="chapter" data-level="6.2" data-path="biology.html"><a href="biology.html#fastq"><i class="fa fa-check"></i><b>6.2</b> fastq</a></li>
+<li class="chapter" data-level="6.3" data-path="biology.html"><a href="biology.html#sam"><i class="fa fa-check"></i><b>6.3</b> sam</a></li>
+<li class="chapter" data-level="6.4" data-path="biology.html"><a href="biology.html#section-1"><i class="fa fa-check"></i><b>6.4</b> </a></li>
+</ul></li>
+<li class="appendix"><span><b>附录</b></span></li>
+<li class="chapter" data-level="A" data-path="sound.html"><a href="sound.html"><i class="fa fa-check"></i><b>A</b> 余音绕梁</a></li>
+<li><a href="references.html#references"><U+53C2><U+8003><U+6587><U+732E></a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">本书由 bookdown 强力驱动</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">生物信息学最佳实践–基础篇</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sound" class="section level1">
+<h1><span class="header-section-number">A</span> 余音绕梁</h1>
+<p>呐，到这里朕的书差不多写完了，但还有几句话要交待，所以开个附录，再啰嗦几句，各位客官稍安勿躁、扶稳坐好。</p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="biology.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/lunr.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yihui/bookdown-chinese/edit/master/07-hmm.Rmd",
+"text": "<e7><bc><96><e8><be><91>"
+},
+"download": ["bookdown.pdf", "bookdown.epub"],
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
