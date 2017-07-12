@@ -9,7 +9,22 @@
 ## 编程语言
 
 ### shell
+
+![](image/C5/Wechat_biotrainee_shell.png)
+
+
 ### R
+
+![](image/C5/Wechat_biotrainee_R.png)
+
+
 ### perl
+
+![](image/C5/Wechat_biotrainee_perl.png)
+
+
 ### python
+
+
+![](image/C5/Wechat_biotrainee_python.png)
 
