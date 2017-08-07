@@ -12,8 +12,8 @@ lof: yes
 geometry: [b5paper, tmargin=2.5cm, bmargin=2.5cm, lmargin=3.5cm, rmargin=2.5cm]
 site: bookdown::bookdown_site
 description: "对应着生信技能树论坛的6个基础板块，包括数据产出，数据规范，数据库资源，统计学，计算机以及生物学基础"
-github-repo: jmzeng1341/best_practices_in_bioinformatics_basic
-cover-image: images/biotrainee_LOGO.PNG.jpeg
+github-repo: best-practices-in-bioinformatics/basic
+cover-image: cover.png
 ---
 
 ```{r setup, include=FALSE}
