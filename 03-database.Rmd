@@ -2,7 +2,192 @@
 
 做数据分析常常会需要用到参考基因组和注释文件，还会需要分析公共数据，了解常见的生物信息学数据库资源也是非常有必要的！
 
-## 基因ID
+## 基因ID 
+
+到目前为止，仅仅是人类研究，就有两万五左右的蛋白编码基因，这些基因可以合成是十几万种蛋白质，还有近十万的编码lncRNA的基因，近万的miRNA等非编码基因。基因在进化中具有中心地位，所以对于基因的命名也显得至关重要。
+
+每个领域的研究不一致，并没有一个统一的命名方式。
+
+而且为了研究基因，还有产生探针捕获的技术，各个厂商的探针ID也是五花八门。
+
+在疾病研究领域，也需要独特的ID。
+
+一些功能数据库也会对自己的样本，基因重新编码ID。
+
+常见的基础数据ID (entrez ID, Symbol, RefSeq, probeset, PubmedID,OminID,Accnum)
+
+
+为什么要有这么多的基因ID呢？基因就像每个人一样，都是独特的个体。它在不同的地点扮演不同的角色。故自然有不同的ID，有的根据它的位置区分。比如：王总。有的根据它的特征区分比如：吝啬王。这样就会出现很多的称呼，即ID.，但他说的都是同一个人哦。
+
+基因也是一样的，当在表达谱数据的时候，他的名字就是探针，当在ENSEMBL中时，就是ENSG开头加数字的格式，所以在不同的数据库中会有不同的命名故就会有很多的基因ID.
+
+### 数百种ID
+
+其中GeneCards数据库里面列出了128种数据库ID，虽然很全面，但并非都是重点，希望大家把学习时间花在刀刃上。
+而且，我觉得大部分人看到了下面这些密密麻麻的ID，肯定是要疯掉的。
+一般初学者常见的ID转换工具就是DAVID了，但其实可以自己用R编程的各种包来做转换，这样自己知道自己在做什么，也了解ID是如何定义的。
+![密密麻麻的分子ID](image/C3/bioDBnet.jpg)
+
+### 常见的数据库ID
+
+虽然有综合性的数据库收集整理了百余种ID，使得它们之间的对应及转换得以顺利进行，但大部分数据分析过程中并不会用到所有的数据ID，最常见的如下表。
+ 
+|ID 示例|	ID 来源|
+| -----|:-------------:| 
+|ENSG00000116717	|Ensemble ID|
+|GA45A_HUMAN	|UniProtKB/Swiss-Prot, entry name
+|A5PJB2_BOVIN	|UniProtKB/TrEMBL, entry name
+|A2BC19, P12345, A0A022YWF9	|UniProt, accession number
+|GLA, GLB, UGT1A1	|HGNC Gene Symbol
+|U12345, AF123456	|GenBank, NCBI, accession number
+|NT_123456, NM_123456, NP_123456	|RefSeq, NCBI, accession number|
+|10598, 717|	Entrez ID,  NCBI|
+|uc001ett, uc031tla.1	|UCSC ID|
+
+Ensembl stable ID 的结构是根据不同物种设置的前缀, 加上数据所指的类型, 如基因蛋白质, 再加上一系列的数字. 有的时候可以有不同的版本, 则在 Ensembl ID 后面加上小数点和版本号.
+
+#### 常用物种前缀
+
+前缀 |学名
+---|---
+ENSCEL | Caenorhabditis elegans (Caenorhabditis elegans)
+ENSCAF | Canis lupus familiaris (Dog)
+ENSDAR | Danio rerio (Zebrafish)
+FB | Drosophila melanogaster (Fruitfly)
+ENS| Homo sapiens (Human)
+ENSMUS |Mus musculus (Mouse)
+ENSRNO |Rattus norvegicus (Rat)
+ENSXET|Xenopus tropicalis (Xenopus)
+
+
+#### 类型前缀
+
+前缀 | 类型
+---|---
+E | exon
+FM |Ensembl protein family
+G | gene
+GT| gene tree
+P|protein
+R |	regulatory feature
+T| transcript
+
+UniProt 中录入的数据都被分配了一个唯一的 entry name.
+
+UniProtKB/Swiss-Prot entry name
+
+UniProtKB/Swiss-Prot entry name 是最多有 11 位包含大写字母的字符串, 一般有着 "X_Y" 的形式, 其中 "X" 是最多五个便于记忆的蛋白质编号, "_" 是下划线, "Y" 是最多五个便于记忆的物种编号.
+
+#### 蛋白质编号示例如下:
+
+Code(X)	 | Recommended protein name|Gene name
+---|---|---|
+B2MG | Beta-2-microglobulin|B2M
+HBA | Hemoglobin subunit alpha|HBA1
+INS | Insulin	|INS
+CAD17 |Cadherin-17|CDH17
+
+#### 物种编号示例如下:
+
+Code | Species
+---|---
+BOVIN | Bovine
+CHICK | Chicken
+ECOLI| Escherichia coli
+HORSE| Horse
+HUMAN | Homo sapiens
+MAIZE|	Maize (Zea mays)
+MOUSE| Mouse
+PEA | Garden pea (Pisum sativum)
+PIG| Pig
+RABIT |Rabbit
+RAT | Rat
+SHEEP |Sheep
+SOYBN | Soybean (Glycine max)
+TOBAC | Common tobacco (Nicotina tabacum)
+WHEAT |Wheat (Triticum aestivum)
+YEAST|Baker’s yeast (Saccharomyces cerevisiae)
+HUGO | Gene Nomenclature Committee
+
+ 
+#### Gene Symbol
+
+Gene Symbol 是用来表示基因的编码, 由大写字母构成, 或由大写字母和数字构成, 首字母均应该是字母.
+
+如: GLA "galactosidase, alpha"; GLB "galactosidase, beta"; UGT1A1 "UDP glycosyltransferase 1 family, polypeptide A1" 再到 UGT1A13 代表了 13 个不同的 gene symbol.
+
+#### GenBank Accession Number
+
+GenBank 的通用 accession number 通常是由一个大写字母加上 5 个数字的组合, 或者两个大写字母加上 6 个数字的组合.
+
+#### RefSeq Accession Number
+
+RefSeq 有一套特殊的 Accesion Number. 形式是: [A-Z]{2}[_][0-9]{6:}, 两个大写字母, 一个下划线, 6 个或更多的数字.
+
+Accession 
+
+前缀| 类型|说明
+---|---|---
+ AC_ | Genomic |Complete genomic molecule, usually alternate assembly
+NC_	|Genomic |	Complete genomic molecule, usually reference assembly
+NG_|	Genomi c|	Incomplete genomic region
+NT_	|Genomic |	Contig or scaffold, clone-based or WGS
+NW_	|Genomic|	Contig or scaffold, primarily WGS
+NS_|	Genomic	|Environmental sequence
+NZ_	|Genomic|	Unfinished WGS
+NM_	|mRNA   |	
+NR_	|RNA    |	
+XM_	|mRNA   |	Predicted model
+XR_	|RNA    |	Predicted model
+AP_	|Protein|	Annotated on AC_ alternate assembly
+NP_	|Protein|	Associated with an NM_ or NC_ accession
+YP_|Protein	|
+XP_	|Protein|	Predicted model, associated with an XM_ accession
+ZP_ |Protein|	Predicted model, annotated on NZ_ genomic records
+
+#### Entrez ID
+
+
+Entrez 是 NCBI 使用的能够对众多数据库进行联合搜索的搜索引擎, 其对不同的 Gene 进行了编号, 每个 gene 的编号就是 entrez gene id. 由于 entrez id 相对稳定, 所以也被众多其他数据库, 如 KEGG 等采用. Entrez Gene ID 就是一系列数字, 也比较容易辨识. R 或网站都有众多的工具可以帮助从不同的 ID 转换为 entrez id 或者反向转换.
+生信菜鸟团的博客《NCBI的基因entrezID相关文件介绍》讲解了Entrez ID主要的信息文件。可以直接搜索。
+一个简单的Entrezid对应的别的ID,例子如下：
+
+ gene_id  | symbol|chromosome 
+---|---|---
+ 352937  | dio2 |20 
+
+上表中geneid即为 Entrezid. 在ID转换中有重要的作用。
+
+#### UCSC ID
+
+由小写字母和数字构成, 起始均为 uc, 然后是三位数字, 接着又是三位小写字母, 最后有小数点和数字构成版本号.
+如: uc010qfk.3, uc010qfk.3. 这个ID几乎被抛弃不用了，只是因为UCSC是三大数据库之一而已。
+
+### ID 转换
+
+最重要的就是怎么实现ID转换。常用的id有entrez gene ID, HUGO symbol, refseq ID, ensembl ID。他们之间进行转换，做一些后续的分析。一般初学者用的ID转换的工具就是DAVID，R里面关于ID转换常用的包为org.Hs.eg.db这一类的包。
+在生信技能树论坛里，健明发的《ID转换大全》和《生信人必须了解的各种ID表示方式》以及《生信编程直播第8题-几个ID转换咯》里面有实战的代码，务必运行一遍。在论坛直接搜索即可。
+
+方法1：直接在DAVID网站，粘贴转换
+
+方法2：用R包。不管是什么ID转换，都是找到对应关系，然后match一下即可！--《生信编程直播第8题-几个ID转换咯》有完整代码
+
+方法3：用R包，基于org.Xx.eg.db系列包，进行ID转换。--《ID转换大全》由完整代码
+
+总之：
+
+```
+entrez gene ID 文盲不会写汉字，只能运用纯数字     
+Ensembl ID 有文化，身前物种做玉坠
+refseq ID最懒惰，一躺在中间，字母在两边
+Gene Symbol大写字母加数字，一生平庸最常见
+```
+
+直达车：
+
+http://www.biotrainee.com/thread-941-1-1.html
+http://www.biotrainee.com/thread-862-1-1.html
+
 
 ## 参考基因组版本
 
@@ -10,11 +195,368 @@
 
 ## NCBI
 
+NCBI (National Center for Biotechnology Information，美国国立生物技术信息中心）于1988年11月4日建立，是NIH（美国国立卫生研究院）的NLM（国立医学图书馆）的一个分支。目的是通过提供在线生物学数据和生物信息学分析工具来帮助人类更好的认知生物学问题。
+目前有将近40个在线的文库和分子生物学数据库，包括：PubMed, PubMed Central, and GenBank等。网址： https://www.ncbi.nlm.nih.gov/
+
+一、任务：
+
+* 1. 为储存和分析分子生物学、生物化学、遗传学知识创建自动化系统；
+* 2. 从事研究基于计算机的信息处理过程的高级方法，用于分析生物学上重要的分子和化合物的结构与功能；
+* 3. 促进生物学研究人员和医护人员应用数据库和软件；
+* 4. 努力协作以获取世界范围内的生物技术信息。
+
+二、内容
+
+1.文献数据库
+
+包括：PubMed,PubMed Central,Books等
+
+2.序列资源库
+
+包括人，小鼠，果蝇，线虫等各种物种的基因组数据库；
+包含DNA，RNA，蛋白等各种类型的数据
+如：SNP,GEO,SRA等
+
+3.常用序列分析工具
+
+Entrez -- 数据挖掘的工文本条件查询工具（Text Term Searching）
+来自于超过10万个种物的核酸和蛋白序列数据，连同蛋白三维结构，基因组图谱信息和文献信息检索
+网址：https://www.ncbi.nlm.nih.gov/gquery/
+
+BLAST -- 序列比对工具 https://blast.ncbi.nlm.nih.gov/Blast.cgi
+
+4.数据下载与上传
+
+数据下载接口：ftp://ftp.ncbi.nlm.nih.gov/
+
+上传的工具有：Sequin，tbl2asn等，链接地址：https://www.ncbi.nlm.nih.gov/guide/data-software/
+
+5.其他合作项目
+
+
+我们比较常用的就是检索文献，检索序列，比对序列。了解更多内容可以参考官网手册：https://www.ncbi.nlm.nih.gov/books/NBK143764/
+
+参考资料：
+https://baike.baidu.com/item/NCBI/3598184?fr=aladdin
+https://www.ncbi.nlm.nih.gov/books/NBK143764/
+
 ### GEO
+
+基因表达数据库(GEO,Gene Expression Omnibus database，https://www.ncbi.nlm.nih.gov/geo/)是由NCBI负责维护的一个数据库，设计初衷是为了收集整理各种表达芯片数据，但是后来也加入了甲基化芯片，lncRNA，miRNA，CNV芯片等各种芯片，甚至高通量测序数据,是目前最大、最全面的公共基因表达数据资源。所有的数据均可以在ftp站点下载：ftp://ftp-trace.ncbi.nih.gov/geo/
+
+首先，我们在GEO的主页（ https://www.ncbi.nlm.nih.gov/geo/ ）可以看到：
+
+``
+    Browse Content
+    Repository Browser
+    DataSets: 4348
+    Series: 87717
+    Platforms: 17572
+    Samples: 2165066
+``
+
+截止到2017年8月17日，统计信息如上，可以看到数据量很恐怖了。
+
+
+#### 一、GEO数据库基础知识
+
+```
+    GEO Dataset (GDS) 数据集的ID号
+    GEO Series (GSE) study的ID号
+    GEO Platform (GPL) 芯片平台
+    GEO Sample (GSM) 样本ID号
+```
+
+这些数据都可以在ftp里面直接下载。
+
+####  二、数据上传
+上传的方式：
+
+1. 网页
+2. Excel表格
+3. 软件
+4. MINiML格式上传
+
+详细上传方法，参见：https://www.ncbi.nlm.nih.gov/geo/info/submission.html
+
+####  三、数据挖掘
+
+1. Entrez GEO-DataSets
+
+网址：
+http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gds
+收录整个实验数据，可以通过技术类型，作者，物种和实验变量等信息来进行搜索。一旦相关数据被查询到，可以通过提供上面的小工具做一些分析，比如：热电图分析，表达分析，亚群的影响等
+
+2.Entrez GEO-Profiles
+
+网址：https://www.ncbi.nlm.nih.gov/geoprofiles/
+收录单个基因的表达谱数据。可以通过基因名字，GenBank编号，SAGE标签，GEO编号等来进行搜索
+
+3.GEO BLAST
+
+GEO Blast界面容许用户根据核酸序列的相似性来搜索相关的GEO-Profiles
+所有的BLAST结果中“E”的标签代表这个数据跟GEO-Profiles表达数据相关。
+
+4. 数据下载
+
+我们一般是拿到了GSE的study ID号，然后直接把什么的url修改一下，就可以看到关于该study的所以描述信息，是用的什么测序平台(芯片数据，或者高通量测序)，测了多少个样本，来自于哪篇文章！
+所有需要的数据均可以下载，而且都是在上面的ftp里面可以根据规律去找到的，甚至可以自己拼接下载的url链接，来做批量化处理！
+例如：用GSE75528，则在https://www.ncbi.nlm.nih.gov/geo/  官网上直接搜索GSE75528
+或直接输入 https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE75528
+
+如果是芯片数据，那么就需要自己仔细看GPL平台里面关于每个探针对应的注释信息，才能利用好别人的数据。
+如果是高通量测序数据，一般要同步进入该GSE对应的SRA里面去下载sra数据，然后转为fastq格式数据，自己做处理！
+
+
+####  四、其他
+
+1.联系方式
+
+上传数据或查询数据有问题，可以联系 geo@ncbi.nlm.nih.gov
+
+2.写一个Python脚本下载GEO数据
+
+脚本逻辑很简单：
+
+1. 根据GEO accession找到FTP地址
+
+2. 用wget循环下载FTP地址下的数据
+
+```
+#!/bin/python3
+import refrom urllib.request
+import urlopen
+import os
+def main(geo):
+# find the FTP address from [url=https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GEO]https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GEO[/url]
+   response = urlopen("https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc={}".format(geo))
+    pattern = re.compile("<a href=\"(.*?)\">\(ftp\)</a>")
+    # use wget from shell to download SRA data
+   ftp_address = re.search(pattern,response.read().decode('utf-8')).group(1)
+    os.system(' wget -nd -r 1 -A *.sra ' + ftp_address)
+
+if __name__ == '__main__':
+    from sys import argv
+    main(argv[1])
+```
+
+3. 数据分析
+
+5行代码搞定GEO学习总结版：http://www.biotrainee.com/thread-612-1-1.html
+
+
+参考资料：
+
+http://www.bio-info-trainee.com/1835.html
+https://www.ncbi.nlm.nih.gov/geo/info/GEOHandoutFinal.pdf
 
 ### SRA
 
+跟GEO类似,NCBI的SRA（Sequence ReadArchive，https://www.ncbi.nlm.nih.gov/sra/ ）数据库是专门用于存储二代测序的原始数据，包括 454, IonTorrent, Illumina, SOLiD, Helicos and CompleteGenomics等。 除了原始序列数据外，SRA现在也存在raw reads在参考基因的aligment information。
+
+该数据库也是International Nucleotide Sequence Database Collaboration (INSDC) 的一部分。INSDC包含：NCBI Sequence Read Archive (SRA), European Bioinformatics Institute (EBI), 和 DNA Database of Japan (DDBJ)。数据提交给其中任何一个数据库中后，数据都是共享的。
+
+
+#### 一、数据库结构
+
+每个数据库都有自己最小的可发表单元。例如：PubMed最小可发表单元是一篇文献，SRA中最小可发表单元是一次实验（标签为：SRX#）。
+
+NCBI中SRA数据结构的层次关系：Studies,Experiments, Samples，Runs:
+
+```
+Studies是就实验目标而言的，一个study可能包含多个experiment。
+Experiments包含了样本，DNA source，测序平台，数据处理等信息。
+一个experiment可能包含一个或多个runs。
+Runs 表示测序仪运行所产生的reads.
+```
+
+SRA数据库用不同的前缀加以区分：ERP or SRP for Studies, SRS for samples, SRX for Experiments, and SRR for Runs。
+
+#### 二、数据上传
+
+1.登陆NCBI账号
+
+2. 注册你的项目和生物样本
+
+    注册项目：https://www.ncbi.nlm.nih.gov/bioproject/
+    注册样本：https://www.ncbi.nlm.nih.gov/biosample/
+	
+3.上传SRA数据
+
+    上传SRA metadata (关于该项目、实验的等信息)
+    上传序列数据
+
+更详细的说明，参见 https://www.ncbi.nlm.nih.gov/sra/docs/submit/
+
+### 三、数据下载
+
+如果要下载每个study对应的runs的所有数据，我们需要下载安装SRA Toolkit！
+
+链接地址http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software
+
+SRA toolkit常用命令的说明文档见http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc。
+
+这里我们需要使用prefetch命令进行下载
+
+```
+$prefetch SRR776503  SRR776505  SRR776506
+```
+
+下载完成后，会在你的工作主目录下生成一个ncbi的文件夹。
+
+
+Sra子文件夹中的.sra文件就是对应的runs文件。
+‘.sra’的后缀是SRA数据库对fastq文件的特殊压缩。使用前，我们需要将其解压为fastq文件。SRA Toolkit 包含了解压函数fastq-dump :
+```
+$fastq-dump SRR776503.sra
+
+```
+
+
+通过命令行来下载
+```
+    for ((i=204;i<=209;i++)) ;do wget ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP017/SRP017311/SRR620$i/SRR620$i.sra;done
+    ls *sra |while read id; do ~/biosoft/sratoolkit/sratoolkit.2.6.3-centos_linux64/bin/fastq-dump --split-3 $id;done
+```
+
+#### 四、其他
+
+1. 上传或下载数据遇到问题，可咨询：
+
+ sra@ncbi.nlm.nih.gov
+
+
+参考资料：
+
+http://www.biotrainee.com/thread-800-1-1.html      
+
+https://www.ncbi.nlm.nih.gov/sra/docs/
+
+
 ### DBsnp
+
+
+单核苷酸多态性（single nucleotide polymorphism，SNP） 主要是指在基因组水平上由单个核苷酸的变异所引起的DNA序列多态性。它是人类可遗传变异中最常见的一种，占所有已知多态性的90%以上。dbSNP(The Single Nucleotide Polymorphism database) 是一个公共的核酸多态性的数据库，它是关于单碱基替换以及短插入、删除多态性的资源库。网址：https://www.ncbi.nlm.nih.gov/projects/SNP。
+
+#### 一、最新版本
+
+人的dbsnp目前已更新到150版本
+
+150版本基本信息
+
+|Organism| dbSNP Build| Genome Build| Number of  Submissions(ss#'s)|Number of RefSNP Clusters (rs#'s) ( # validated)|Number of (rs#'s) in gene|Number of (ss#'s) with genotype|Number of (ss#'s) with frequency
+|-------|-------|-------|-------|-------|-------|-------|-------|
+|Homo sapiens|	150|38.3|907,234,193|325,660,549 (107,926,145)|	191,665,918|73,917,935|130,169,906|
+
+下载地址：ftp://ftp.ncbi.nlm.nih.gov/snp/
+
+#### 二、目录结构
+点击：ftp://ftp.ncbi.nlm.nih.gov/snp/  则进入snp网址。dbSNP包含了许多目录，其中最有用的是：organisms/、database/、specs/
+相关详细信息见ftp://ftp.ncbi.nih.gov/snp/00readme.txt
+
+1. FTP的“specs/”目录包含重要的文件的格式，内容及其基本介绍。
+
+2. FTP的“organisms/”目录包含了一列有SNP数据的生物体目录，其按通用名后接NCBI分类id号来组织的。（要知道，DBsnp不光包含人的数据哦，还有bacteria,tuna等物种的snp信息;人类物种ID是9606，可以看到variation位点信息有基于hg19和hg38的两种下载方式，如果还有其它需求，可以自己用基因组坐标转换工具。）
+
+3. 点击特定的生物体子目录即可访问其中的ftp报表文件，你还可以选择同一个物种的不同版本。比如你点击了human_9606目录，那么你会发现人体组织子目录包含以下子目录：ASN1_bin/、ASN1_flat/、XML/、VCF/、chr_rpts/、gene_report/、Genome_report/、rs_fasta/、ss_fasta/、genotype_by_gene/、genotype/、haplotypes/、database/、misc/、Enterz/
+
+
+* ASN1_bin : ASN.1 二进制格式的RefSNP文档综述 （.bin）
+* ASN1_flat :从ASN.1 二进制格式而来的按染色体排序的RefSNP docsum(.flat)
+* XML： 提供refSNP簇的具体查询信息以及NCBI SNP交换格式的簇成员(.xml)
+* chr_rpts ：包含特定染色体上的RefSNPs 的完整列表(.txt)
+* genotype ：以基因型交换XML格式提供提交的SNPs的submitter和基因型信息(.xml)
+* genome_reports ：包含生物体SNP密度分布的概要报告以及每个基因中的SNPs的概要报告(无后缀或.rpt或.log）
+* ss_fasta ：包含FASTA格式的生物体的所有可用的submitted SNP（ss）序列数据（.fas)
+* rs_fasta ：包含FASTA格式的人类所有可用的参考SNP （RS）序列数据（.fas)
+
+##### chr_rpts 中的txt文件内容：
+1. RefSNP id (rs#)rs代号
+2. mapweight where 匹配个数
+
+    * 1 = Unmapped
+    * 2 = Mapped to single position in genome
+    * 3 = Mapped to 2 positions on a single chromosome
+    * 4 = Mapped to 3-10 positions in genome (possible paralog hits)
+    * 5 = Mapped to >10 positions in genome.  
+3. snp_type where   snp类型
+4. Total number of chromosomes hit by this RefSNP during mapping   匹配到的染色体个数
+5. Total number of contigs hit by this RefSNP during mapping  匹配到的conting个数
+6. Total number of hits to genome by this RefSNP during mapping  匹配到基因组的个数
+7. Chromosome for this hit to genome   匹配到的染色体
+8. Contig accession for this hit to genome  匹配到conting 序号
+9. Position of RefSNP in contig coordinates  在conting中匹配到突变的位置
+10. Position of RefSNP in chromosome coordinates (used to order report)  在染色体中匹配到突变的位置
+    
+    * x, a single number, indicates a feature at base position x
+    * x..y, denotes a feature that spans from x to y inclusive.
+    * x^y, denotes a feature that is inserted between bases x and y
+11. Genes at this same position on the chromosome    匹配到的基因名字
+12. Genotypes available in dbSNP for this RefSNP   基因型是否可知
+    * 1 = yes
+    * 0 = no
+
+##### bed中包含各个染色体上的snp,如下：
+
+1. chrom:  The name of the chromosome (e.g. chr1, chr2, etc.).
+2. chromStart:  The Reference SNP (rs) start position on the chromosome.
+Note: The first base in a chromosome is numbered 0.
+3. chromEnd:  The rs end position on the chromosome.
+Optional Fields:
+4. name:  The dbSNP Reference SNP (rs) ID
+5. score:  dbSNP does not assign a score value, so this field will always
+contain a 0 .    
+6. strand:  This field defines strand orientation as either + or -.
+
+##### 了解VCF
+```
+#CHROM POS  ID     REF  ALT  QUAL       FILTER      INFO
+1       948136    rs267598747   G      A      .        .         RS=267598747;RSPOS=948136;dbSNPBuildID=137;SSR=0;SAO=3;VP=0x050060000305000002100120;GENEINFO=NOC2L:26155;WGT=1;VC=SNV;PM;REF;SYN;ASP;LSD;CLNALLE=1;CLNHGVS=NC_000001.11:g.948136G>A;CLNSRC=.;CLNORIGIN=2;CLNSRCID=.;CLNSIG=1;CLNDSDB=MedGen:SNOMED_CT;CLNDSDBID=C0025202:2092003;CLNDBN=Malignant_melanoma;CLNREVSTAT=no_assertion_provided;CLNACC=RCV000064926.2
+``` 
+它包含的内容：染色体，突变的位置，rs代号，突变过程，info。其中info包含了突变是否为同义突变？
+突变实在coding 区还是内含子或UTR？
+也包含了CLNSIG（0 - Uncertain significance, 1 - not provided, 2 - Benign, 3 - Likely benign, 4 - Likely pathogenic, 5 - Pathogenic, 6 - drug response, 7 - histocompatibility, 255 - other）；CLNDSDB（Variant disease database name）；CLNDBN（Variant disease name）
+
+
+#### 三、查询	
+
+ http://www.ncbi.nlm.nih.gov/SNP/
+ 是NCBI做好的一个网页版查询工具，因为下载一个 variation位点信息记录文件动辄就是十几个G，一般人也不会处理那个文件，不知道从里面应该如何提取需要的信息，这时候学习它的网页版查询工具也挺好的。
+
+在UCSC里面也有对dbsnp数据库的介绍，主要是从数据库设计的角度来理解，里面详细介绍了每一列具体的意义，值得大家仔细学习。
+http://genome.ucsc.edu/cgi-bin/hgTables?db=hg19&hgta_group=varRep&hgta_track=snp146&hgta_table=snp146&hgta_doSchema=describe+table+schema
+http://genome.ucsc.edu/cgi-bin/hgTables?db=hg19&hgta_group=varRep&hgta_track=snp141&hgta_table=snp141&hgta_doSchema=describe+table+schema
+但是如果真想从数据库语言的角度来理解，需要看它的schema了：很复杂：ftp://ftp.ncbi.nih.gov/snp/database/erd_dbSNP.pdf
+
+ sql的代码也可以下载：ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606/database/organism_schema/
+还根据gene来分genotype：ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606/genotype_by_gene/
+
+#### 四、命名
+关于snp位点的命名其实并不统一，大家在文献中一般用的都是习惯或者说惯用名称。这里只介绍NCBI的rs号。NCBI里对所有提交的snp进行分类考证之后，都会给出一个rs号，也可称作参考snp，并给出snp的具体信息，包括前后序列，位置信息，分布频率等，应该说用这个rs号是比较容易确定搞明白的。 一般写法是这样: dbSNP后面跟featureID。featureID一般是rs/ss后跟7-8位数字， 比如: rs12345678或者dbSNP|rs12345678 。
+
+最后值得一提的是，除了dbsnp对variation规定了ID号，还有几个其它偏门的ID号也可以来描述变异位点的。
+
+NCBI的dbsnp，以rs和ss开头
+illumina的kgp开头
+ESP的以esp开头
+kgp是illumina中华八芯片的
+
+#### 五、其他：
+有任何疑问可联系：snp-admin@ncbi.nlm.nih.gov
+
+#### 参考资料：
+
+http://www.bio-info-trainee.com/1863.html
+
+http://blog.sina.com.cn/s/blog_751bd9440102w6rm.html
+
+https://www.ncbi.nlm.nih.gov/books/NBK21088/
+
+
+
+
+
+
 
 ### refseq
 
@@ -31,7 +573,4 @@
 ## TCGA
 
 ## 1000 GENOME
-
-##
-
  
