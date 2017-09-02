@@ -16,7 +16,7 @@
 如果是MAC电脑，建议用自带的终端即可，还可以用FileZilla软件进行文件传输。
 
 如果是超算中心提供账号即可使用，不需要看攻略了，自然会有专门的对应的培训。
-如果是1到5人课题组，找到练习，IBM等商家自然会给详细报价，设置会上门进行ppt讲解。
+如果是1到5人课题组，找到联想，IBM等商家自然会拿到详细报价，甚至他们会上门进行ppt讲解。
 那么需要在本文详细讲解的就是个人服务器，预算2万左右，改如何配置。
 
 生信领域所涉及的计算往往是非持续性的，我相对较熟悉的RNASeq中计算量较大的就是比对步骤了，而比对往往只需要一次就可以！
@@ -210,28 +210,27 @@ echo $PATH        ### 再查看
 vim /etc/profile
 在最后，添加:
 export PATH="/usr/local/webserver/mysql/bin:$PATH"
-保存，退出，然后运行：                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+保存，退出，然后运行：           
 source /etc/profile，不报错则成功。
 ```
 
 当然，还有很多其它的环境变量，如下：
 ```
-PATH：             决定了shell将到哪些目录中寻找命令或程序
+PATH：        决定了shell将到哪些目录中寻找命令或程序
 ROOTPATH:     这个变量的功能和PATH相同，但它只罗列出超级用户（root）键入命令时所需检查的目录。
-HOME：            当前用户主目录
-USER:               查看当前的用户
-LOGNAME：    查看当前用户的登录名。
-UID：                当前用户的识别字，取值是由数位构成的字串。
-SHELL：           是指当前用户用的是哪种Shell。
-TERM ：           终端的类型。
-PWD                 当前工作目录的绝对路径名，该变量的取值随cd命令的使用而变化。
-MAIL：             是指当前用户的邮件存放目录。
-HISTSIZE：     是指保存历史命令记录的条数
-HOSTNAME： 是指主机的名称，许多应用程序如果要用到主机名的话，通常是从这个环境变量中来取得的。
-PS1：              是基本提示符，对于root用户是#，对于普通用户是$，也可以使用一些更复杂的值。
-PS2：              是附属提示符，默认是“>”。可以通过修改此环境变量来修改当前的命令符，比如下列命令会将提示符
-						修改成字符串“Hello,My NewPrompt :) ”。# PS1=" Hello,My NewPrompt :) "
-IFS：               输入域分隔符。当shell读取输入时，用来分隔单词的一组字符，它们通常是空格、制表符和换行符。
+HOME：        当前用户主目录
+USER:         查看当前的用户
+LOGNAME：     查看当前用户的登录名。
+UID：         当前用户的识别字，取值是由数位构成的字串。
+SHELL：       是指当前用户用的是哪种Shell。
+TERM ：       终端的类型。
+PWD           当前工作目录的绝对路径名，该变量的取值随cd命令的使用而变化。
+MAIL：        是指当前用户的邮件存放目录。
+HISTSIZE：    是指保存历史命令记录的条数
+HOSTNAME：    是指主机的名称，许多应用程序如果要用到主机名的话，通常是从这个环境变量中来取得的。
+PS1：         是基本提示符，对于root用户是#，对于普通用户是$，也可以使用一些更复杂的值。
+PS2：         是附属提示符，默认是“>”。可以通过修改此环境变量来修改当前的命令符，比如下列命令会将提示符修改成字符串“Hello,My NewPrompt :) ”。# PS1=" Hello,My NewPrompt :) "
+IFS：         输入域分隔符。当shell读取输入时，用来分隔单词的一组字符，它们通常是空格、制表符和换行符。
 ```
 
 ## 编程语言
@@ -246,15 +245,18 @@ Linux系统在生物信息学数据处理中的重要性就不用我多说了，
 
 这一阶段的主要目的就是去可视化，熟悉黑白命令行界面。
 
-如何远程连接服务器(使用Xshell，SecureCRT，Putty，VNC~~~)，了解你在服务器上面有什么权限。
+如何远程连接服务器(使用Xshell，SecureCRT，Putty，VNC等等)，了解你在服务器上面有什么权限。
+
 左右鼠标单击双击如何实现？磁盘文件浏览如何实现？文件操作如何实现？绝对路径和相对路径区别？
+
 需要了解的常见的Linux命令：
 ```
 pwd/ls/cd/mv/rm/cp/mkdir/rmdir/man/locate/head/tail/less/more 
 cut/paste/join/sort/uniq/wc/cat/diff/cmp/alias 
 wget/ssh/scp/curl/ftp/lftp/mysql/
 ```
-大家可以搜索(每天一个linux命令的博客)来跟着练习，或者看一些Linux视频(百度云盘(http://pan.baidu.com/s/1jIvwRD8 )共享了一大堆)，或者关注一些Linux学习相关公众号，加入一些linux社区，论坛，当然如果你只是简单了解，搞生物信息学其实没必要那么深入理解，跟着一本像样的入门书籍（建议看鸟哥Linux私房菜），完整的学习即可！
+
+大家可以搜**每天一个linux命令的博客**来跟着练习，或者看一些Linux视频(百度云盘(http://pan.baidu.com/s/1jIvwRD8 )共享了一大堆)，或者关注一些Linux学习相关公众号，加入一些linux社区，论坛，当然如果你只是简单了解，搞生物信息学其实没必要那么深入理解，跟着一本像样的入门书籍（建议看鸟哥Linux私房菜），完整的学习即可！
 
 需要深度理解的概念有：
 ```
@@ -276,7 +278,6 @@ wget/ssh/scp/curl/ftp/lftp/mysql/
 blast软件如何安装以及使用？
 比对结果如何看？结果如何过滤？两次结果如何比较？ 
 ```
-
 
 建议自己安装bio-linux系统，里面会自带很多生物信息学测试数据(fastq,fasta,sam,bam,vcf,gff,gtf,bed,MAF……)，安装系统的过程也是熟悉linux的过程，熟悉这些数据格式既能加强生物信息学技巧，也能练习linux操作。
 
@@ -537,29 +538,36 @@ while(<>){
 perl 是一个非常精简的语言，自定义的函数非常少，连min max这样常见的函数都没有，如果你需要使用这样的功能，要么自己写一个函数，要么使用加强版的包，perl的包非常多。 
 
 下面列出一些，我常用的函数：
+```
 程序必备： use/die/warn/print/open/close/<>/ 
 数学函数：sin/cos/log/abs/rand/srand/sqrt 
 字符串函数 ：uc/lc/scaler/index/rindex/length/pos/substr/sprintf/chop/chomp/hex/int/oct/ord/chr/unpack/unencode 
 defined/undef
+```
 
 > 系统操作相关 
 
 perl语言是跨平台的，因为它的执行靠的是perl解释器，而perl的解释器可以安装在任何机器上面。所以可以用perl来代替很多系统管理工作。
+```
 系统命令调用 
 文件句柄操作(STDIN,STDOUT,STDERR,ARGV,DATA,) 
 系统文件管理(mkdir/chdir/opendir/closedir/readdir/telldir/rmdir/)
+```
 
 > 一些高级技巧 
 
+```
 自定义函数 sub , 参数传递，数组传递，返回值 
 模块操作(模块安装，加载，模块路径，模块函数引用) 
 引用（变量的变量） 
 选择一个好的编辑器-编译器，editplus，notepad++，jEdit，编程习惯的养成。 
 搞清楚perl版本的问题，还有程序编码的问题，中文显示的问题。 
+```
 
 > 程序调试
 
-perl常见模块学习 
+> perl常见模块学习 
+
 perl和LWP/HTML做网络爬虫必备，重点是DOM如何解析； 
 perl和CGI编程，做网站的神器，重点是html基础知识； 
 DBI相关数据库，用perl来操作mysql等，当然，重点是mysql知识； 
