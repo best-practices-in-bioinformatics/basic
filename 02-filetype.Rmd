@@ -284,11 +284,11 @@ SAM分为两部分，注释信息（header section ）和比对结果部分 （a
 通常是把FASTQ文件格式的测序数据比对到对应的参考基因组版本得到的。
 注释信息并不是SAM文件的重点，是该SAM文件产生以及被处理过程的一个记录，规定以@开头，用不同的tag表示不同的信息，主要有：
 
-* @HD，说明符合标准的版本、对比序列的排列顺序；
-* @SQ，参考序列说明；
-* @RG，比对上的序列（read）说明；
-* @PG，使用的程序说明；
-* @CO，任意的说明信息。
+* \@HD，说明符合标准的版本、对比序列的排列顺序；
+* \@SQ，参考序列说明；
+* \@RG，比对上的序列（read）说明；
+* \@PG，使用的程序说明；
+* \@CO，任意的说明信息。
 
 一个简单的SAM文件例子如下：
 
@@ -386,7 +386,7 @@ M”表示 match或 mismatch；
 
 11. QUAL，序列的质量信息，格式同FASTQ一样。read质量的ASCII编码。
 
-12. 可选字段（optional fields)，格式如：TAG:TYPE:VALUE，其中TAG有两个大写字母组成，每个TAG代表一类信息，每一行一个TAG只能出现一次，TYPE表示TAG对应值的类型，可以是字符串、整数、字节、数组等。
+12. 可选字段（optional fields)，格式如``TAG:TYPE:VALUE``，其中TAG有两个大写字母组成，每个TAG代表一类信息，每一行一个TAG只能出现一次，TYPE表示TAG对应值的类型，可以是字符串、整数、字节、数组等。
 
 
 ### SAM要处理好的问题：
@@ -673,11 +673,13 @@ GTF文件的第9列同GFF文件不同，虽然同样是标签与值配对的情�
 ```
 
 速记口诀
+
 ```
-* GTF,GFF 9列数据来组成*
-*结果前8列都相同*
-*GFF 9列间以tab 来分割，第9列用等号*
-*GTF不服气，标签与值用空格分离，特征之间也用分号分开;要问特立独行谁最牛，GTF排第一！*
+GTF,GFF 9列数据来组成
+结果前8列都相同
+GFF 9列间以tab 来分割，第9列用等号
+GTF不服气，标签与值用空格分离，特征之间也用分号分开;
+要问特立独行谁最牛，GTF排第一！
 ```
 
 有趣小故事：
@@ -768,8 +770,190 @@ http://ju.outofmemory.cn/entry/193943
 ## MAF
 
 MAF格式本来并不是一个常见的文本文件格式，只是因为癌症研究实在是太热门了，对它的理解也变得需求旺盛起来了。
+MAF文件可能有两种格式 ，可能是47列，或者120列，第一行一般都是 头文件，注释着每一列的信息，的确，信息量有点略大。如下：
 
+```
+     1	Hugo_Symbol
+     2	Entrez_Gene_Id
+     3	Center
+     4	NCBI_Build
+     5	Chromosome
+     6	Start_Position
+     7	End_Position
+     8	Strand
+     9	Consequence
+    10	Variant_Classification
+    11	Variant_Type
+    12	Reference_Allele
+    13	Tumor_Seq_Allele1
+    14	Tumor_Seq_Allele2
+    15	dbSNP_RS
+    16	dbSNP_Val_Status
+    17	Tumor_Sample_Barcode
+    18	Matched_Norm_Sample_Barcode
+    19	Match_Norm_Seq_Allele1
+    20	Match_Norm_Seq_Allele2
+    21	Tumor_Validation_Allele1
+    22	Tumor_Validation_Allele2
+    23	Match_Norm_Validation_Allele1
+    24	Match_Norm_Validation_Allele2
+    25	Verification_Status
+    26	Validation_Status
+    27	Mutation_Status
+    28	Sequencing_Phase
+    29	Sequence_Source
+    30	Validation_Method
+    31	Score
+    32	BAM_File
+    33	Sequencer
+    34	t_ref_count
+    35	t_alt_count
+    36	n_ref_count
+    37	n_alt_count
+    38	HGVSc
+    39	HGVSp
+    40	HGVSp_Short
+    41	Transcript_ID
+    42	RefSeq
+    43	Protein_position
+    44	Codons
+    45	Hotspot
+    46	cDNA_change
+    47	Amino_Acid_Change
+```
+
+```
+     1	Hugo_Symbol
+     2	Entrez_Gene_Id
+     3	Center
+     4	NCBI_Build
+     5	Chromosome
+     6	Start_Position
+     7	End_Position
+     8	Strand
+     9	Variant_Classification
+    10	Variant_Type
+    11	Reference_Allele
+    12	Tumor_Seq_Allele1
+    13	Tumor_Seq_Allele2
+    14	dbSNP_RS
+    15	dbSNP_Val_Status
+    16	Tumor_Sample_Barcode
+    17	Matched_Norm_Sample_Barcode
+    18	Match_Norm_Seq_Allele1
+    19	Match_Norm_Seq_Allele2
+    20	Tumor_Validation_Allele1
+    21	Tumor_Validation_Allele2
+    22	Match_Norm_Validation_Allele1
+    23	Match_Norm_Validation_Allele2
+    24	Verification_Status
+    25	Validation_Status
+    26	Mutation_Status
+    27	Sequencing_Phase
+    28	Sequence_Source
+    29	Validation_Method
+    30	Score
+    31	BAM_File
+    32	Sequencer
+    33	Tumor_Sample_UUID
+    34	Matched_Norm_Sample_UUID
+    35	HGVSc
+    36	HGVSp
+    37	HGVSp_Short
+    38	Transcript_ID
+    39	Exon_Number
+    40	t_depth
+    41	t_ref_count
+    42	t_alt_count
+    43	n_depth
+    44	n_ref_count
+    45	n_alt_count
+    46	all_effects
+    47	Allele
+    48	Gene
+    49	Feature
+    50	Feature_type
+    51	One_Consequence
+    52	Consequence
+    53	cDNA_position
+    54	CDS_position
+    55	Protein_position
+    56	Amino_acids
+    57	Codons
+    58	Existing_variation
+    59	ALLELE_NUM
+    60	DISTANCE
+    61	TRANSCRIPT_STRAND
+    62	SYMBOL
+    63	SYMBOL_SOURCE
+    64	HGNC_ID
+    65	BIOTYPE
+    66	CANONICAL
+    67	CCDS
+    68	ENSP
+    69	SWISSPROT
+    70	TREMBL
+    71	UNIPARC
+    72	RefSeq
+    73	SIFT
+    74	PolyPhen
+    75	EXON
+    76	INTRON
+    77	DOMAINS
+    78	GMAF
+    79	AFR_MAF
+    80	AMR_MAF
+    81	ASN_MAF
+    82	EAS_MAF
+    83	EUR_MAF
+    84	SAS_MAF
+    85	AA_MAF
+    86	EA_MAF
+    87	CLIN_SIG
+    88	SOMATIC
+    89	PUBMED
+    90	MOTIF_NAME
+    91	MOTIF_POS
+    92	HIGH_INF_POS
+    93	MOTIF_SCORE_CHANGE
+    94	IMPACT
+    95	PICK
+    96	VARIANT_CLASS
+    97	TSL
+    98	HGVS_OFFSET
+    99	PHENO
+   100	MINIMISED
+   101	ExAC_AF
+   102	ExAC_AF_Adj
+   103	ExAC_AF_AFR
+   104	ExAC_AF_AMR
+   105	ExAC_AF_EAS
+   106	ExAC_AF_FIN
+   107	ExAC_AF_NFE
+   108	ExAC_AF_OTH
+   109	ExAC_AF_SAS
+   110	GENE_PHENO
+   111	FILTER
+   112	CONTEXT
+   113	src_vcf_id
+   114	tumor_bam_uuid
+   115	normal_bam_uuid
+   116	case_id
+   117	GDC_FILTER
+   118	COSMIC
+   119	MC3_Overlap
+   120	GDC_Validation_Status
+```
+
+
+
+参考链接：
+
+https://software.broadinstitute.org/software/igv/MutationAnnotationFormat
+
+https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+%28MAF%29+Specification
  
 ## 其它格式
+这个就多了去了。
 
 
