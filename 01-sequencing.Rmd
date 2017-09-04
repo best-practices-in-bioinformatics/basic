@@ -9,7 +9,7 @@
 ![平台流行程度](image/C1/GEO_platform_top50.png)
 
 由上表可以看出，到目前为止（2017年）**累积应用**最广泛仍然是mRNA的表达谱检测芯片，以affymetrix的 Human Genome U133 Plus 2.0 Array和illumina的HumanHT-12 V4.0 expression beadchip为代表。
-高通量测序作为后起之秀已经逐渐在超过芯片数据样本量了，而且高通量测序几乎都是illumina的测序仪产出的，包括HiSeq 2000/2500，虽然HiSeq X10并没有排在前面，原因其实是GEO公布的数据与现实有两到三年的时差，因为测序数据需要发表文章之后才会公布，而且可以设置一到两年的释放期限。
+高通量测序作为后起之秀已经逐渐在超过芯片数据样本量了，而且高通量测序几乎都是illumina的测序仪产出的，包括HiSeq 2000/2500，nextSeq500,MiSeq等等。虽然HiSeq X10并没有排在前面，原因其实是GEO公布的数据与现实有两到三年的时差，因为测序数据需要发表文章之后才会公布，而且可以设置一到两年的释放期限。
 
 值得一提的是HiSeq X10作为目前通量最高的测序仪，其大多测的是人类癌症病人相关数据，而这些数据因为隐私问题，很多都是不予公开的，需要注册申请才能下载。
 
@@ -110,11 +110,12 @@ Agilent的表达谱芯片，是用荧光素直接标记的，检测灵敏度高�
 用于研究基因表达的芯片可以有两种：① cDNA芯片；② 寡核苷酸芯片。
 
 
-早期的芯片主要是hgu系列，包括95,133
-出货量最大的应该是hgu133plus2系列了，如下
+早期的芯片主要是hgu系列，包括95,133 出货量最大的应该是hgu133plus2系列了，如下
+
 ![](image/C1/affymetrix-133plus2-array.png)
 
 统称为旧版的affymetrix芯片，用R语言的affy包即可读取进行数据处理，我曾经写过教程：[用affy包读取affymetix的基因表达芯片数据-CEL格式数据](http://www.bio-info-trainee.com/1580.html)
+
 ```
 library(affy)
 #perform mas5 normalization
@@ -144,6 +145,7 @@ write.exprs(eset,file="data.txt")
 ```
 
 affymetrix还开发了更新版的表达谱检测芯片，HST2.0，据文献报道其很多方面都优于转录组测序，不过芯片设计比较复杂，如下：
+
 ![](image/C1/affymetrix-human2.0ST-characterization.png)
 
 不过，illumina的表达谱芯片也是非常出名的，比如Illumina HumanHT-12 V4.0 expression beadchip。 
@@ -152,17 +154,16 @@ affymetrix还开发了更新版的表达谱检测芯片，HST2.0，据文献报�
 
 上述表达谱芯片在GEO里面的代表性数据有：
 
-https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE11072  2009-gastric cancer SBC Human 16K cDNA Microarray
+GEO地址| 数据描述
+---    |---
+[GSE11072](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE11072) |  2009-gastric cancer SBC Human 16K cDNA Microarray
+[GSE42872](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42872) |  2015-melanoma-vemurafenib HuGene-1_0-st 
+[GSE2467](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE24673) |  2015-hub-gene-mcode-retinoblastoma  HuGene-1_0-st 
+[GSE22863](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE22863) |  2011-NSCLC HuGene-1_0-st 
+GSE622221, GSE4180414, GSE5140122 | A total of 117 samples (54 cases and 63 controls) Affymetrix Human Genome U133 Plus 2.0 Array  2015-HCC
+[GSE21815](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE21815) |  2016-CRC Agilent-014850 Whole Human Genome Microarray 4x44K
 
-https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42872 2015-melanoma-vemurafenib HuGene-1_0-st 
-
-https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE24673 2015-hub-gene-mcode-retinoblastoma  HuGene-1_0-st 
-
-https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE22863  2011-NSCLC HuGene-1_0-st 
-
-GSE622221, GSE4180414, GSE5140122 A total of 117 samples (54 cases and 63 controls) Affymetrix Human Genome U133 Plus 2.0 Array  2015-HCC
-
-https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE21815  2016-CRC Agilent-014850 Whole Human Genome Microarray 4x44K
+公布这些数据的文章里面都有对这些数据处理的方法的详细描述，以及对应的分析结果。
 
 
 
@@ -189,9 +190,12 @@ Axiom®基因分型解决方案为您提供多种芯片。您可以选择要研�
 芯片推荐：Infinium OmniZhongHua-8 Kit
 
 覆盖了中国人特有常见和稀有变异，是第一款人类种群特异的全基因组芯片。经过优化的标签SNP内容来自HapMap所有三个阶段以及千人基因组计划（1kGP），可用于在中国人种群中探索全新的疾病和性状关联。特别覆盖中国人81%的常见变异（MAF>5%）和60%的稀有变异（MAF> 2.5%），适合全基因组关联研究（GWAS）。采用Illumina专利的BeadArrayTM技术，可提供非常高的数据质量，平均检出率>99%，重复率>99.9%。
+
+illumina的Omni系列芯片经过了许多年的市场迭代，能检测的位点也越来越多，下面是它的一个简单的汇总表格。
  
 ![illumina的Omni系列芯片进化史](image/C1/illumina_omni_array_list.png)
-https://www.illumina.com/Documents/products/datasheets/datasheet_gwas_roadmap.pdf
+
+参考：https://www.illumina.com/Documents/products/datasheets/datasheet_gwas_roadmap.pdf
 
 ### CNV芯片
 
@@ -200,9 +204,9 @@ CNV 是基因组结构变异 ( SV ) 的重要组成部分。CNV 位点的突变�
 大量研究表明，尤其是肿瘤，与拷贝数变异密切先关。
 能检测CNV的手段主要有：全基因组测序、生物芯片、CNVseq、CNVplex、AccuCopy、质谱法、Taqman法。
 
-其中最出名的要属Affymetrix SNP6.0 array这款芯片 ，在TCGA计划和CCLE里面都有。芯片特有超过180万个遗传变异标记，包括单核苷酸多态性（SNP）以及拷贝数变异（CNV）。
+其中最出名的要属Affymetrix SNP6.0 array这款芯片 ，在TCGA计划和CCLE里面都有。芯片特有超过180万个遗传变异标记，包括单核苷酸多态性（SNP）以及拷贝数变异（CNV）。对CCLE数据库可以做的分析非常多，强烈建议初学者花时间好好了解一下，[我博客也写过教程](http://www.bio-info-trainee.com/1327.html)
  
-
+值得一提的是拷贝数变异的检测目前是以芯片技术为标准，NGS技术仍然是落后于芯片技术，在这一点上面。对于Affymetrix SNP6.0 array这款芯片得到也是CEL文件的原始数据，可以走PICNIC软件的流程来进行分析，得到最后的拷贝数变异的片段。
 
 ### 甲基化芯片
 
@@ -227,11 +231,13 @@ DNA甲基化已成为当前分子生物学的研究热点之一。而芯片是�
 * ``高质量的实验数据``：使用Infinium技术，无其它甲基化DNA捕获方法常有的偏向性，同时采用Infinium I和Infinium II探针设计，进一步保证高质量的实验数据；
 * ``兼容FFPE样本``，支持LIMS及自动化系统。
 
+一个基因会设计多个探针，尤其是结构复杂的基因，一般会在启动子区域，utr区域，外显子，内含子等genebody上面设计探针，如果想把探针ID对应到具体的基因的具体区域，需要去其芯片官网找**manifest文件**。
+
 ### miRNA芯片
 
 > microRNA(microRNA)是一种小的内源性非编码RNA分子，大约由21-25个核苷酸组成。通过与靶基因的3’UTR配对，促进mRNA的降解或抑制mRNA的翻译，从而抑制靶基因的表达。
 
-现在，miRBase共收录223个物种的28645个microRNA前体，35828个成熟microRNA (miRBase, v21, 2014年6月)。
+现在，miRBase共收录223个物种的28645个microRNA前体，35828个成熟microRNA (miRBase, v21, 2014年6月)。这些数据可以在它的[官网](ftp://mirbase.org/pub/mirbase/21/)直接下载.
 
 为miRNA研究设计芯片的主要是Agilent公司，比较成熟的产品是Agilent microRNA芯片（V21.0）产品信息
 
@@ -245,7 +251,7 @@ DNA甲基化已成为当前分子生物学的研究热点之一。而芯片是�
 
 ## 二代测序技术
 
->又称下一代测序就是，就是NGS啦
+>又称下一代测序，就是NGS啦
 
 2005年454公司的 Genome Sequencer 20 System，2006年illumina公司的Solexa和2007年ABI公司的SOLiD标志着第二代测序技术的诞生。
 之后陆续在2006年推出454 FLX系统、2010年推出illumina HiSeq系统和同年推出的基于半导体芯片测序技术的Ion PGM已经陆续成为当前基因测序的中坚力量。
@@ -258,11 +264,16 @@ DNA甲基化已成为当前分子生物学的研究热点之一。而芯片是�
 
 454 GS-FLX测序仪产生的序列文件格式为SFF (Standard Flowgram Format)，是一种二进制文件。虽然目前有很多软件可以直接读取SFF格式文件进行分析，但更多的软件还是需要把SFF格式转换为Fna-Qual格式，这种格式把序列和与序列对应的碱基质量分别放在以Fna和Qual为后缀的文件里(文本文件)。
 
-①.fna数据文件保存碱基序列                                      
+①.fna数据文件保存碱基序列   
+
+```
 >HKSD5CR01D6P3Ilength=70 xy=1599_2828 region=1 run=R_2012_03_15_01_23_26_GGAGTAGCATGCGTGACGAATCGTAGTTCCGACCATAACGATGCCGACCTTTGACCA
+```
 
 ②qual数据文件保存碱基质量值
+```
 >HKSD5CR01D6P3Ilength=70 xy=1599_2828 region=1 run=R_2012_03_15_01_23_26_40 40 40 40 40 40 4040 40 40 40 40 40 40 40 40 40 40 40 40 39 39 39 40 40 40 34 34 34 34 40 30 3030 40 39 39 39 38 38 37 40 40 38 38 32 24 17 17 20 20 26 30 30 36 36 37
+```
 
 随着测序成本的不断降低，尽管读长偏长，但成本过于昂贵的454测序技术逐渐退出了科研界。
 然而，虽然454的生命科学测序业务早已关停，454带来的影响却仍不容磨灭。
@@ -280,17 +291,42 @@ SOLiD技术，其主要核心是油包水PCR和基于“双碱基编码原理”
 
 SOLiD技术的原始数据格式是csfasta及与其匹配的qual，可以利用[python脚本](http://edison.cremag.org/resources/seq-analysis/tools/solid2fastq/solid2fastq.py)或者[perl脚本](http://www.bbmriwiki.nl/svn/bwa_45_patched/solid2fastq.pl)
 将其转为csfastq(color space fastq)，与fastq格式一致，四行记录一碱基序列，区别在于第二行不是碱基序列，而是color的编码，如下：
+
+```
 @SRR2967009.1 100_1000_1168_F3
 T10011023211201220121202030102221012302121010131001
 +
 2@@@@>@?@@@@<@@//;@@/@9?@8@=@@@6;6@66;<@6@67?2?;/@
+```
+
 colorspace编码规则为：
 
 虽然csfastq与目前流行的fastq格式记录的测序序列不同，但是csfastq文件也可作为fastqc的输入文件进行质控,并可利用多款软件进行后续分析，如SHRiMP、Sequel、BFAST和Bowtie等等。
  
-### 最流行的是illumina
+### 一家独大：illumina及其数据
 
-illumina在NGS乃至整个测序市场中的霸主地位已毋庸置疑。引用illumina官方说法：“世界上90%以上的测序数据都由Illumina仪器产生”，不较真的话，这句话确实在某种程度上反应了illumina雄踞NGS市场的现状。因此，我们用较大篇幅为大家分享illumina下机数据的格式和处理方法。
+illumina在NGS乃至整个测序市场中的霸主地位已毋庸置疑。引用illumina官方说法：“世界上90%以上的测序数据都由Illumina仪器产生”，不较真的话，这句话确实在某种程度上反应了illumina雄踞NGS市场的现状。尤其是HiSeq系列测序仪的问世，以通量高，产量大，生产规模著称，能够快速、经济的进行大规模平行测序，在大型全基因组测序，全转录组，全外显子组测序，靶向基因测序方面优势明显。
+
+下面是illumina测序仪产品发布的时间线：
+
+发布日期|测序仪型号
+---|---
+2010.01| HiSeq 2000
+2011.02| MiSeq
+2012.01| HiSeq 2500
+2013.11| MiSeq Dx
+2014.01| HiSeq X Ten，NextSeq 500
+2015.01| HiSeq X Five，HiSeq 3000，HiSeq 4000，NextSeq 550，MiSeq FGx
+2016.01| MiniSeq
+2017.01| NovaSeqTM系列
+
+
+HiSeq 3000/4000系统则基于成熟的HiSeq 2500系统，采用创新的有序流动槽技术最大限度提高效率，3.5天内可完成12个基因组、100个转录组或180个外显子组测序。HiSeq 3000/HiSeq 4000测序系统为生产级测序能力设立了一个全新的标准。
+
+HiSeq X Ten系统的问世完成了人类历史上一大里程碑事件——千元基因组时代的到来。HiSeq X Ten系统是由一套共10台超高通量的HiSeq X仪器组成，每年能带来超过18,000个人类基因组，而每个基因组的价格约为1000美元，让癌症和复杂疾病的研究达到新的水平。虽然目前GEO里面的数据HiSeq X Ten测序仪产出的数据并不是独占鳌头，但也只是时间问题。
+
+NovaSeq系列测序仪问世，毫无疑问标志着测序新纪元的到来，旨在将基因组测序的价格进一步降至100美元。全新的NovaSeq系列测序系统，突破技术革新，具有可扩展的通量、灵活简便的配置和简化的操作流程，允许以更大的深度来发现罕见的遗传变异，为大规模发现复杂疾病变异打开了全新的市场。
+
 
 illumina技术核心在于桥式PCR和边合成边测序（SBS）。illumina测序系统的碱基读取也是基于化学发光法来的，给每一个碱基加入荧光基团，通过拍照捕捉发光的碱基，如此就得到了DNA的原始序列信息。
 
@@ -308,11 +344,11 @@ Fastq是一种文件文件，如果Fastq文件大小在M级，一般可以直接
 首行*illumina sequence identifier**记录的信息比较复杂
 
 illumina sequence identifier中包含了此次测序的信息，根据平台不同包含的信息有所区别，一般来说可能包含以下的部分元素：
+```
 @<instrument>:<run number>:<flowcell ID>:<lane>:<tile>:<x-pos>:<y-pos>:<UMI> <read>:<is filtered>:<control number>:<index>
+```
 
-我们再回头看上面的例子，就可以对应查看这条序列文件中的测序信息了：
-
-我们再回头看上面的例子，就可以对应查看这条序列文件中的测序信息了：
+我们再回头看上面的例子，就可以对应查看这条序列文件中的测序信息了： 
 
 |标识符|解释|  
 |-----|:---:|
@@ -325,36 +361,64 @@ illumina sequence identifier中包含了此次测序的信息，根据平台不�
 |#0|index number for a multiplexed sample (0 for no indexing)|
 |/1|the member of a pair, /1 or /2 (paired-end or mate-pair reads only)|
 
-注：Run、Flowcell、Lane和tile的详细辨析，
+注：Run、Flowcell、Lane和tile的详细辨析，我们在第2章节还会更详细的讲解fastq格式的数据。
+
 
 ## 2.5代测序
 
-Ion Torrent平台最初由Jonathan Rothberg于2007年开发，几经转手，2013年后归属Thermo Fisher，是他们家的掌中宝。目前有2010年发布的PGM，2012年发布Proton，2015年发布了Ion S5/XL。主要利用半导体芯片（无需荧光标记）技术，具有经济、快速、简单、规模可扩展的特点，适用于临床诊断和医学等使用场景，目前国内已有达安OEM版本DA8600。
+> Ion Torrent  测序仪是第一个不需要光学系统的商业测序仪，所采用的技术为半导体测序，通过半导体芯片直接将化学信号转换为数字信号。是非常适合扩增子测序的革命性技术。它是一种经济、快速、简单、规模可扩展的测序技术。因为测序时间短，仪器设备便宜等特点而被各种研究所采用。
+
+**一、前世今生**
+
+Ion Torrent平台最初由Jonathan Rothberg于2007年开发，几经转手，2013年后归属Thermo Fisher，是他们家的掌中宝。目前有2010年发布的PGM，2012年发布Proton，2015年发布了Ion S5/XL。主要利用半导体芯片（无需荧光标记）技术，具有经济、快速、简单、规模可扩展的特点，适用于临床诊断和医学等使用场景，目前国内已有达安OEM版本DA8600。值得一提的是部分ion torrent测序仪受到了CFDA的认证。
+
+**二、半导体测序原理** 
 
 Ion Torrent的核心是半导体芯片测序技术，该技术采集的信号为pH值的变化，其他第二代测序技术主要是通过拍照采集荧光信号。该技术的主要优点是快速，主要缺点与Roche公司的454技术相同，在判读单碱基重复序列时存在困难。
- 
+
+自然情况下，DNA聚合酶将一个核苷酸渗入到DNA分子中就会释放出一个H+，导致局部可检验的PH值发生变化。如果发生结合，就会释放H+,相应的溶液PH值会发生改变，被离子传感器检测到，从而转换为数字信号。
+
+
+如果检测DNA链上有两个相同的碱基，检测到的电压双倍，芯片则记录两个相同的碱基。
+
+如果模板到的下个核苷酸与微芯片流的核苷酸不匹配，则检测不到电压，也不会记录碱基。
+
+
+
+**三、优缺点** 
+
+torrent测序仪拥有图形化的用户界面，便捷的操作方式，商业化的试剂盒，这肯定是专门为医院的朋友们准备的，他们不需要具体的代码与分析原理，只需要按照protocol一步步照着做，点点按钮就能生成可用的临床报告了，应该说想法是好的，客户定位是准确的。但是我觉得NGS从实验到分析那么多步骤，如果不懂NGS分析原理与流程，对图形化的参数与文件不了解，很可能得不到理想的分析结果从而对torrent丧失信心。而torrent软件相对比较封闭，专业的数据分析人员不太好下手，所以普遍对torrent数据敬而远之。
+
+
 
 ## 三代测序
-层出不穷的三代小鲜肉中，表现最为亮眼的莫过于2010年推出的PacBio RS系列和2012年推出的Nanopore MinION。
-2015年PacBio又推出了万众瞩目的Sequel，Nanopore也在2017年推出了GridION，为更方便、快捷、准确、经济的测序提供了无限可能。
-### pacbio一家独大
+
+层出不穷的三代小鲜肉中，表现最为亮眼的莫过于2010年推出的PacBio RS系列和2012年推出的Nanopore MinION。2015年PacBio又推出了万众瞩目的Sequel。
+能进入三代测序仪队列的还有Nanopore公司，也在2017年推出了GridION，为更方便、快捷、准确、经济的测序提供了无限可能。
+
+### 异军突起的pacbio
+
 PacBio SMRT技术其实也应用了边合成边测序的思想，并以SMRT芯片为测序载体。测序时，不需要对目标DNA进行PCR扩增，而是直接在目标片段两端加上两个发卡结构的接头，形成一个连续的环状结构。也因此，PacBio系统在读长上显示了极大的优势。目前比较受市场热捧的三代测序是PacBio的RSⅡ和2015年推出的Sequel。
 
 PacBio下机产生的序列文件以HDF5格式存储。可以采用h5dump命令来查看H5文件内容。
 
-1. 查看碱基序列：
-h5dump –d /PulseData/BaseCalls/Basecall raw.h5 > Basecall.info ,文件内容如下：
+**1. 查看碱基序列：**
+
+用代码``h5dump –d /PulseData/BaseCalls/Basecall raw.h5 > Basecall.info`` ,文件内容如下：
+
+```
 DATA {(0): 67, 71,67, 67, 65, 71, 67, 71, 65, 65, 84, 71, 71, 67, 84, 71, 67, (17): 71, 71, 71,71, 65, 65, 71, 67, 65, 71, 65, 65, 65, 84, 84, 65, 84, (34): 67, 67, 71, 84,65, 65, 65, 67, 84, 71, 84, 84, 71, 67, 84, 71, 67,
+```
+
 该文件采用的ASCII码的编码方式存储的碱基序列：A=> 65, C=>67, G=>71, T=>84。
 
-2. 查看碱基质量值：
-h5dump -d /PulseData/BaseCalls/QualityValue raw.h5 > Basecall.quality,
+**2. 查看碱基质量值：**
 
-文件内容如下,其碱基质量值采用与illumina技术一致：
+用代码``h5dump -d /PulseData/BaseCalls/QualityValue raw.h5 > Basecall.quality``,文件内容如下,其碱基质量值采用与illumina技术一致：
 
 DATA {(0): 51, 44,42, 44, 24, 24, 51, 51, 51, 51, 50, 20, 20, 20, 50, 51, 51, (17): 48, 48, 48,47, 9, 9, 9, 51, 51, 46, 31, 31, 31, 31, 44, 51, 51, 30, (35): 30, 51, 51, 7,7, 7, 7, 51, 51, 44, 44, 44, 51, 51, 50, 27, 27, 26,
 
-### 长到天际：Nanopore及其序列数据
+### 长到天际的Nanopore 
 
 
 Oxford Nanopore 公司2005年在英国牛津成立，其运用的纳米孔测序技术使得DNA链在一个单通道中就能够被解码和识别，而不需要将长链打断成小短链。由于实现了DNA聚合酶内在自身的延续性和反应速度，Nanopore读长更长速度更快；同时由于能直接检测每个碱基的特征性电流，因而能对修饰碱基进行测序，对于表观遗传学研究具有极高的价值；因此，这款长到天际的测序仪，非常有潜力横扫当前测序格局。
