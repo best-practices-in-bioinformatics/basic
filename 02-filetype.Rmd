@@ -512,7 +512,7 @@ FILTER：使用上一个QUAL值来进行过滤的话，是不够的。GATK能使
 
 INFO： 这一行是variant的详细信息，内容很多，以下再具体详述。
 
-FORMAT 和 sample1 ：这两行合起来提供了 sample1 这个sample的基因型的信息。’sample1′代表这该名称的样品，是由SAM/BAM文件中的@RG下的 SM 标签决定的。
+FORMAT 和 sample1 ：这两行合起来提供了 sample1 这个sample的基因型的信息。’sample1′代表这该名称的样品，是由SAM/BAM文件中的\@RG下的 SM 标签决定的。
 (当然并不是所有的VCF都是由一个BAM文件产生，比如数据库dbSNP提供的vcf文件，就没有样本信息啦)
 
 ### 第8列的INFO
@@ -952,7 +952,117 @@ MAF文件可能有两种格式 ，可能是47列，或者120列，第一行一�
 https://software.broadinstitute.org/software/igv/MutationAnnotationFormat
 
 https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+%28MAF%29+Specification
+
+## GenePred
+
+> 学习GenePred之前可以再回顾一下**GFF**和**GTF**两种文件文件
+
+###  GFF/GTF  {-}
+
+大多数生物信息学数据的分析和挖掘都十分依赖注释信息，注释文件的好坏对分析结果有着非常重要的影响。目前，大家常用的有**GFF**和**GTF**两种文件。其中**GTF**格式是对**GFF**格式文件的精炼和规范。
+
+
+**GFF**文件要求每一行数据必须有由tab键分隔的九个字段，每一个字段代表的含义如下所示。
+
+|     名称      |                    描述                    |           简译            |
+| :---------: | :--------------------------------------: | :---------------------: |
+| **seqname** | The name of the sequence. Must be a chromosome or scaffold |          序列名称           |
+| **source**  | The program that generated this feature  |          数据来源           |
+| **feature** | The name of this type of feature. Some examples of standard feature types are "CDS" "start_codon" "stop_codon" and "exon" |          属性类型           |
+|  **start**  | The starting position of the feature in the sequence. **The first base is numbered 1** |          片段起点           |
+|   **end**   | The ending position of the feature (**inclusive**). |          片段终点           |
+|  **score**  | A score between 0 and 1000. If the track line *useScore* attribute is set to 1 for this annotation data set, the *score* value will determine the level of gray in which this feature is displayed (higher numbers = darker gray) |           得分            |
+| **strand**  | Valid entries include "+", "-", or "." (for don't know/don't care). |           方向            |
+|  **frame**  | If the feature is a coding exon, *frame* should be a number between 0-2 that represents the reading frame of the first base. If the feature is not a coding exon, the value should be ".". |        *仅对CDS有效*        |
+|  **group**  | All lines with the same group are linked together into a single item. | 多个键值对（等号链接）组成的描述信息，分号分隔 |
+
+GTF文件前8列和GFF文件相同，第9列信息标签和值用空格分开，不同信息用分号分隔。
+
+###  GenePred  {-}
+
+那什么是** GenePred table** 格式呢？ 这种格式主要用在基因浏览器中基因预测的track。如果有可变剪切的情况，那表格的每一行就是一个 transcript 的全部信息。
+
+具体解释如下
+```
+table genePred
+"A gene prediction."
+    (
+    string  name;               "Name of gene"
+    string  chrom;              "Chromosome name"
+    char[1] strand;             "+ or - for strand"
+    uint    txStart;            "Transcription start position"
+    uint    txEnd;              "Transcription end position"
+    uint    cdsStart;           "Coding region start"
+    uint    cdsEnd;             "Coding region end"
+    uint    exonCount;          "Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    )
+```
+
+如果觉得抽象，我们可以用示例来进行一下对比。小编在这里首先将模式植物拟南芥的gtf文件转化为gpd格式。`head -n 1` 看一下gpd文件第一行的样式。
+
+```
+#gpd
+AT1G01010.1	Chr1	+	3630	5899	3759	5630	6	3630,3995,4485,4705,5173,5438,	3913,4276,4605,5095,5326,5899
+```
+
+再来`grep`一下gtf文件中有**AT1G01010.1**信息的那些行是什么样
+
+```
+#gtf
+Chr1	Araport11	5UTR	3631	3759	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	3631	3913	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	start_codon	3760	3762	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	3760	3913	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	3996	4276	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	3996	4276	.	+	2	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	4486	4605	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	4486	4605	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	4706	5095	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	4706	5095	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	5174	5326	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	5174	5326	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	5439	5630	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	5439	5899	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	stop_codon	5628	5630	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	3UTR	5631	5899	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+```
+
+我们可以看出，在GTF中，AT1G01010.1这个transcript共有6个CDS，那么对应到相应gpd文件AT1G01010.1这一行的第8列就是6，而第9列和第10列则是这6个CDS对应的起始和终止位置。
+
+细心的朋友可能会发现，GTF文件中CDS起始位置在GenePred table中统统少了1，这其实就是两种文件的起始位置从1开始还是从0开始计数的区别。
+
+对GTF和GendPred有了一个初步的了解，我们来看一下作者的原文。
+
+---
+
+## 作者正文  {-}
+
+GTF的产生和流行有其历史的原因。但是从技术角度来讲，这个文件格式是个非常差劲的格式。
+
+GTF格式非常冗余。以人类转录组为例，Gencode V22的GTF文件为1.2G，压缩之后只有40M。大家知道压缩软件的压缩比是和软件的冗余程度。很少有文件能够压缩到1/30的大小。可见GTF格式多么冗余。GTF格式（及其早期版本GFF等）有很好的替代格式。从信息量上来讲：GTF 等价于 GenePred （Bed12) + Gene_Anno_table。
+
+GenePred是Jimmy Kent创建UCSC genome browser的时候建立的文件格式。UCSC的文件格式定义是非常smart的，包括之后我可能会讲到的2bit，bigwig格式。
+
+
+### GTF vs GenePred  {-}
+
+- 从文件大小上来看，压缩前：GTF（1.2G) >> Genepred(23M) + Gene_Anno_table (2.8M)。压缩后：GTF(40M) >> GenePred(7.8M) +Gene_Anno_table (580K)
+- 从可读性来讲，GTF是以gene interval 为单位（行），每行可以是gene，transcript，exon，intron，utr等各种信息，看起来什么都在里面，很全面，其实可读性非常差，而且容易产生各种错误。GenePred格式是以transcript为单位，每行就是一个transcript，简洁直观。
+- 从程序处理的角度来讲：以GTF文件作为输入的程序，如果换成以GenePred格式为输入，编程的难度会降低一个数量级，运算时间会快很多，代码的可读性强很多。
+
+
+GTF 转换成GenePred：
+
+```
+gtfToGenePred -genePredExt -ignoreGroupsWithoutExons -geneNameAsName2 test.gtf test.gpd
+```
+
+Gene_Anno_table: 其实就是把GTF的所有transcript行的第9列转换变成一个表格。
+
  
+  
 ## 其它格式
 这个就多了去了。
 

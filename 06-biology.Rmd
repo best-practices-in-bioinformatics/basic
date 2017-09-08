@@ -22,9 +22,1608 @@
 
 ### 基因组
 
-### 转录组组
+### 转录组
+
+#### 全转录组是什么？
+
+全转录组即包含mRNA，small RNA，lncRNA，circRNA的测序。
+
+全转录组之所以这么火的原因就在于大家逐渐意识到单一的mRNA或ncRNA研究已无法满足科研需求，需要结合多种RNA信息进行整合分析，探索潜在的调控网络机制。而全转录组测序无疑成为阐释生物学问题的利器
+
+#### 转录组入门笔记
+
+# 计算机及软件安装 {-}
+
+
+#### RNA-seq 检测变异之 GATK 最佳实践流程
+
+
+## RNA-seq 序列比对  {-}
+
+对 RNA-seq 产出的数据进行变异检测分析，与常规重测序的主要区别就在序列比对这一步，因为 RNA-seq 的数据是来自转录本的，比对到参考基因组需要跨越转录剪切位点，所以 RNA-seq 进行变异检测的重点就在于跨剪切位点的精确序列比对。
+
+文献 [systematic evaluation of spliced alignment programs for RNA-seq data](http://www.nature.com/nmeth/journal/v10/n12/full/nmeth.2722.html) 中对 RNA-seq 数据常用的 11 款比对软件进行了详细测试，包括 STAR 2-pass，而 GATK 对 RNA-seq 数据变异检测的最佳实践流程中选用了 STAR 2-pass 这一方法进行比对，STAR 发表的文章至今已被引用 1900 余次，这款软件的比对速度很快，也是 [ENCODE](https://www.encodeproject.org/) 项目的御用比对软件。
+
+STAR 2-pass 模式需要进行两次序列比对，建立两次参考基因组索引。它的思路是第一次建参考基因组索引之后进行初步的序列比对，根据初步比对结果得到该样本所有的剪切位点信息，包括参考基因组注释 GTF 中已知的剪切位点和比对时新发现的剪切位点，然后利用第一次比对得到的剪切位点信息重新对参考基因组建立索引，然后进行第二次的序列比对，这样可以得到更精确的比对结果。
+
+这里使用了一个测试数据演示流程，第一次对参考基因组建索引：
+```shell
+# star 1-pass index
+STAR --runThreadN 8 --runMode genomeGenerate \
+        --genomeDir ./star_index/ \
+        --genomeFastaFiles ./genome/chrX.fa \
+        --sjdbGTFfile ./genes/chrX.gtf
+```
+
+然后进行第一次序列比对：
+```shell
+#star 1-pass align
+STAR --runThreadN 8 --genomeDir ./star_index/ \
+        --readFilesIn ./samples/ERR188044_chrX_1.fastq.gz ./samples/ERR188044_chrX_2.fastq.gz \
+        --readFilesCommand zcat \
+        --outFileNamePrefix ./star_1pass/ERR188044
+```
+
+之后根据第一次比对得到的所有剪切位点，重新对参考基因组建立索引：
+```shell
+# star 2-pass index
+STAR --runThreadN 8 --runMode genomeGenerate \
+        --genomeDir ./star_index_2pass/ \
+        --genomeFastaFiles ./genome/chrX.fa \
+        --sjdbFileChrStartEnd ./star_1pass/ERR188044SJ.out.tab
+```
+
+再进行 STAR 二次序列比对：
+```shell
+# star 2-pass align
+STAR --runThreadN 8 --genomeDir ./star_index_2pass/ \
+        --readFilesIn ./samples/ERR188044_chrX_1.fastq.gz ./samples/ERR188044_chrX_2.fastq.gz \
+        --readFilesCommand zcat \
+        --outFileNamePrefix ./star_2pass/ERR188044
+```
+
+由于后面要用 GATK 进行 call 变异，还需要对比对结果 SAM 文件进行一些处理，这些都可以用 picard 来做，包括 SAM 头文件添加 \@RG 标签，SAM 文件排序并转 BAM 格式，然后标记 duplicate：
+```shell
+# picard Add read groups, sort, mark duplicates, and create index
+java -jar picard.jar AddOrReplaceReadGroups \
+        I=./star_2pass/ERR188044Aligned.out.sam \
+        O=./star_2pass/ERR188044_rg_added_sorted.bam \
+        SO=coordinate \
+        RGID=ERR188044 \
+        RGLB=rna \
+        RGPL=illumina \
+        RGPU=hiseq \
+        RGSM=ERR188044 
+
+java -jar picard.jar MarkDuplicates \
+        I=./star_2pass/ERR188044_rg_added_sorted.bam \
+        O=./star_2pass/ERR188044_dedup.bam  \
+        CREATE_INDEX=true \
+        VALIDATION_STRINGENCY=SILENT \
+        M=./star_2pass/ERR188044_dedup.metrics
+```
+到此序列比对就完成了。
+
+---
+## 使用 GATK 进行变异检测  {-}
+
+感觉 GATK 里面的工具都很慢（相对于其他的软件特别慢！），都是单线程在跑，有的虽然可以设置为多线程但是感觉没啥速度上的提升，所以要有点耐心……
+
+由于 STAR 软件使用的 MAPQ 标准与 GATK 不同，而且比对时会有 reads 的片段落到内含子区间，需要进行一步 MAPQ 同步和 reads 剪切，使用 GATK 专为 RNA-seq 应用开发的工具 `SplitNCigarReads` 进行操作，它会将落在内含子区间的 reads 片段直接切除，并对 MAPQ 进行调整。DNA 测序的重测序应用中也有序列比对软件的 MAPQ 与 GATK 无法直接对接的情况，需要进行调整。
+```shell
+# samtools faidx chrX.fa
+# samtools dict chrX.fa
+java -jar GenomeAnalysisTK.jar -T SplitNCigarReads \
+        -R ./genome/chrX.fa \
+        -I ./star_2pass/ERR188044_dedup.bam \
+        -o ./star_2pass/ERR188044_dedup_split.bam \
+        -rf ReassignOneMappingQuality \
+        -RMQF 255 \
+        -RMQT 60 \
+        -U ALLOW_N_CIGAR_READS
+```
+
+之后就是可选的 Indel Realignment，对已知的 indel 区域附近的 reads 重新比对，可以稍微提高 indel 检测的真阳性率，如果时间紧张也可以不做，这一步影响很轻微 :)
+```shell
+# 可选步骤 IndelRealign
+java -jar GenomeAnalysisTK.jar -T RealignerTargetCreator \
+        -R ./genome/chrX.fa \
+        -I ./star_2pass/ERR188044_dedup_split.bam \
+        -o ./star_2pass/ERR188044_realign_interval.list \
+        -known Mills_and_1000G_gold_standard.indels.hg19.sites.vcf 
+
+java -jar GenomeAnalysisTK.jar -T IndelRealigner \
+        -R ./genome/chrX.fa \
+        -I ./star_2pass/ERR188044_dedup_split.bam \
+        -known Mills_and_1000G_gold_standard.indels.hg19.sites.vcf \
+        -o ./star_2pass/ERR188044_realign.bam \
+        -targetIntervals ./star_2pass/ERR188044_realign_interval.list
+
+        
+```
+
+然后还是可选的 BQSR，这一步操作主要是针对测序质量不太好的数据，进行碱基质量再校准，如果对自己的测序数据质量足够自信可以省略，2500 之后 Hiseq 仪器的数据质量都挺不错的，可以根据 FastQC 结果来决定。这一步省了又能节省时间 :)
+```shell
+# 可选步骤 BQSR
+java -jar GenomeAnalysisTK.jar \
+        -T BaseRecalibrator \
+        -R ./genome/chrX.fa \
+        -I ./star_2pass/ERR188044_realign.bam \
+        -knownSites 1000G_phase1.snps.high_confidence.hg19.sites.vcf \
+        -knownSites Mills_and_1000G_gold_standard.indels.hg19.sites.vcf \
+        -o ./star_2pass/ERR188044_recal_data.table
+
+java -jar GenomeAnalysisTK.jar  \
+        -T PrintReads \
+        -R ./genome/chrX.fa \
+        -I ./star_2pass/ERR188044_realign.bam \
+        -BQSR ./star_2pass/ERR188044_recal_data.table \
+        -o ./star_2pass/ERR188044_BQSR.bam
+
+```
+
+比如下面的数据就可以放心的省略这两步了：
+
+![R1 数据质量够好][1]
+
+![R2 数据质量也够好][2]
+
+现在终于可以进行变异检测了，GATK 官网说 HC 表现比 UC 好，所以这里用 HC 进行变异检测：
+```shell
+java -jar GenomeAnalysisTK.jar -T HaplotypeCaller \
+        -R ./genome/chrX.fa \
+        -I ./star_2pass/ERR188044_dedup_split.bam \
+        -dontUseSoftClippedBases \
+        -stand_call_conf 20.0 \
+        -o ./star_2pass/ERR188044.vcf
+
+```
+call 完变异之后再进行过滤：
+```shell
+java -jar GenomeAnalysisTK.jar \
+        -T VariantFiltration \
+        -R ./genome/chrX.fa \
+        -V ./star_2pass/ERR188044.vcf \
+        -window 35 \
+        -cluster 3 \
+        -filterName FS -filter "FS > 30.0" \
+        -filterName QD -filter "QD < 2.0" \
+        -o ./star_2pass/ERR188044_filtered.vcf
+```
+然后就拿到变异检测结果了，可以用 ANNOVAR 或 SnpEff 或 VEP 进行注释，根据自己的需要进行筛选了。
+
+
+  [1]: http://static.zybuluo.com/wangpeng905/tiitfgpjnuvyvfdnvvnud319/R1_QC.png
+  [2]: http://static.zybuluo.com/wangpeng905/iqx3yy6wf72dmodirjnjvs6j/R2_QC.png
+  
+  
+  
+#### 自学miRNA-seq八讲
+
+## 第一讲：文献选择与解读  {-}
+
+前阵子逛BioStar论坛的时候看到了一个关于miRNA分析的问题，提问者从NCBI的SRA中下载文献提供的原始数据，然后处理的时候出现了问题。我看到他列出的数据来自iron torrent测序仪，而且我以前也没有做过miRNA-seq的数据分析， 就自学了一下。因为我有RNA-seq的基础，所以理解学习起来比较简单。
+
+在这里记录自己的学习过程，希望对需要的朋友有帮助。
+
+这里选择的文章是2014年发表的，作者用ET-1刺激human iPSCs (hiPSC-CMs) 细胞前后，观察miRNA和mRNA表达量的变化，我并没有细看文章的生物学意义，仅仅从数据分析的角度解读一下这篇文章，mRNA表达量用的是Affymetrix Human Genome U133 Plus 2.0 Array，分析起来特别容易。得到表达矩阵，然后用limma这个包找差异表达基因即可。
+
+但是miRNA分析起来就有点麻烦了，作者用的是iron torrent测序仪。不过从SRA数据中心下载的是已经去掉接头的fastq格式测序数据，所以这里其实并不需要考虑测序仪的特异性。
+
+### 关于该文章的几个资料 {-}
+
+- paper : http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0108051
+- Aggarwal P, Turner A, Matter A, Kattman SJ et al. RNA expression profiling of human iPSC-derived cardiomyocytes in a cardiac hypertrophy model. PLoS One 2014;9(9):e108051. PMID: 25255322
+- The accession numbers are 1. SuperSeries (mRNA+miRNA) - GSE60293
+- mRNA expression array - GSE60291  (Affymetrix Human Genome U133 Plus 2.0 Array)
+- miRNA-Seq - GSE60292  (Ion Torrent)
+- GEO   : http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE60292
+- FTP   : ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP045/SRP045420
+
+接下来我们要知道文章做了哪些分析，然后才能自己模仿看是否可以得到同样的分析结果。
+
+### 文章数据处理流程 {-}
+
+- Ion Torrent's Torrent Suite version 3.6 was used for basecalling
+- Raw sequencing reads were aligned using the SHRiMP2 aligner and were aligned against the human reference genome (hg19) for novel miRNA prediction and then against a custom reference sequence file containing miRBase v.20 known human miRNA hairpins, tRNA, rRNA, adapter sequences and predicted novel miRNA sequences.(Genome_build: hg19, miRBase v.20 human miRNA hairpins)
+- The miRDeep2 package (default parameters) was used to predict novel (as yet undescribed) miRNAs
+- Alignments with less than 17 bp matches and a custom 3′ end phred q-score threshold of 17 were filtered out.
+- miRNA quanitification was done using HTSeq v0.5.3p3 using the default union parameter.
+  Differential miRNA expression was analyzed using the DESeq (v.1.12.1) R/Bioconductor package
+- In this study, differentially expressed genes that had a false discovery rate cutoff at 10% (FDR< = 0.1), a log2 fold change greater than 1.5 and less than −1.5 were considered significant.
+- Target gene prediction was performed using the TargetScan (version 6.2) database
+- We also used miRTarBase (version 4.3), to identify targets that have been experimentally validated
+- miR-Deep2 and miReap predict exact precursor sequence according from mature sequence 
+
+
+
+ 文章提到了fastq数据**质量控制**标准，**数据比对**工具，比对的**参考基因组**（两条比对线路），**获得miRNA表达量**，**miRNA预测**，**miRNA靶基因预测**。
+
+这也是我们学习miRNA-seq的数据分析的标准套路， 而且作者给出了所有的分析结果，我们完全可以通过自己的学习来重现他的分析过程。
+
+
+
+- Supplementary_files_format_and_content: tab-delimited text files containing raw read counts for known mature human miRNAs.（表达矩阵）
+
+- We detected 836 known human mature miRNAs in the control-CMs and 769 in the ET1-CMs
+
+- Based on our miRNA-Seq data, we predicted 506 sequences to be potentially novel, as yet undescribed miRNAs.
+
+- In order to validate the expression profiles of the miRNAs detected, we performed RT-qPCR on a subset of five known human mature and five of our predicted novel miRNAs.
+
+- we obtained a total of 1,922 predicted miRNA-mRNA pairs represented by 309 genes and 174 known mature human miRNAs. 
+
+当然仅仅是套路分析还不够，所以他进行了 miRNA和mRNA 进行网络分析并做了少量湿实验来验证，最后还扯了一些生物学意义。
+
+---
+
+## 第二讲：搜集学习资料 {-}
+
+因为我是完全从零开始入门miRNA-seq分析，所以收集的资料比较齐全。
+
+首先看了部分中文资料，**了解miRNA测序是怎么回事，该分析什么，然后主要围绕着第一讲文献里的分析步骤来搜索资料。**
+
+### miRNA定义 {-}
+
+我首先找到了miRNA定义：[http://nar.oxfordjournals.org/content/34/suppl_1/D135.full ](http://nar.oxfordjournals.org/content/34/suppl_1/D135.full)
+
+>  MicroRNAs (miRNAs) are **small RNA molecules**, which are **∼22 nt sequences**  that have an important role in the translational regulation and degradation of mRNA by the base's pairing to the 3′-untranslated regions (3′-UTR) of the mRNAs. The miRNAs are derived from the **precursor transcripts of ∼70–120 nt sequences**, which fold to **form as stem–loop structures**, which are thought to be highly conserved in the evolution of genomes. Previous analyses have suggested that **∼1% of all human genes are miRNA genes,** which regulate the production of protein for 10% or more of all human coding genes。
+
+### 选择参考序列 {-}
+
+然后我比较纠结的问题是参考序列如何选择，因为miRNA序列很少，把它map到3G大小的人类基因组有点浪费计算资源，正好我的服务器又坏了，不想太麻烦，想用自己的个人电脑搞定这个学习过程。
+
+我看到很多帖子提到的都是用bowtie比对到**参考miRNA数据库**(miRNA count: 28645 entries)  [http://www.mirbase.org/](http://www.mirbase.org/) ，从这个数据库，我明白了前体miRNA和成熟的miRNA的区别，前体miRNA长度一般是**70–120 **碱基，一般是茎环结果，也就是发夹结构，所以叫做hairpin。成熟之后，一般**22 个碱基，**在miRNA数据库很容易下载到这些数据，目前人类这个物种已知的成熟miRNA共有2588条序列，而前体miRNA共有1881条序列，我下载（下载时间2016年6月 ）的代码如下所示：
+
+```
+wget ftp://mirbase.org/pub/mirbase/CURRENT/hairpin.fa.gz   ##　28645　reads
+wget ftp://mirbase.org/pub/mirbase/CURRENT/mature.fa.zip   ##   35828 reads 
+wget ftp://mirbase.org/pub/mirbase/CURRENT/hairpin.fa.zip
+wget ftp://mirbase.org/pub/mirbase/CURRENT/genomes/hsa.gff3 ##
+wget ftp://mirbase.org/pub/mirbase/CURRENT/miFam.dat.zip
+grep sapiens mature.fa |wc  　# 2588 
+grep sapiens hairpin.fa |wc       # 1881 
+## Homo sapiens
+perl -alne '{if(/^>/){if(/Homo/){$tmp=1}else{$tmp=0}};next if $tmp!=1;s/U/T/g if !/>/;print }' hairpin.fa >hairpin.human.fa
+perl -alne '{if(/^>/){if(/Homo/){$tmp=1}else{$tmp=0}};next if $tmp!=1;s/U/T/g if !/>/;print }' mature.fa >mature.human.fa
+# 这里值得一提的是miRBase数据库下载的序列，居然都是用U表示的，也就是说就是miRNA序列，而不是转录成该miRNA的基因序列，而我们测序的都是基因序列。
+```
+
+通过这个代码制作的**hairpin.human.fa** 和 **mature.human.fa** 就是本次数据分析的参考基因组。
+
+在搜集资料的过程中，我看到了一篇文献讲挖掘1000genomes的数据找到位于miRNA的snp位点
+
+[https://genomemedicine.biomedcentral.com/articles/10.1186/gm363](https://genomemedicine.biomedcentral.com/articles/10.1186/gm363) 
+
+看起来比较新奇，不过跟本次学习过程没有关系，我就是记录一下，有空回来学习学习。
+
+
+
+**博客讲解如何分析miRNA数据**
+
+- [http://genomespot.blogspot.com/2013/08/quick-alignment-of-microrna-seq-data-to.html](http://genomespot.blogspot.com/2013/08/quick-alignment-of-microrna-seq-data-to.html)
+
+**公司数据分析流程：**
+
+- [http://bioinfo5.ugr.es/miRanalyzer/miRanalyzer_tutorial.html](http://bioinfo5.ugr.es/miRanalyzer/miRanalyzer_tutorial.html)
+
+- [http://www.partek.com/sites/default/files/Assets/UserGuideMicroRNAPipeline.pdf](http://www.partek.com/sites/default/files/Assets/UserGuideMicroRNAPipeline.pdf)
+
+- [http://partek.com/Tutorials/microarray/microRNA/miRNA_tutorial.pdf](http://partek.com/Tutorials/microarray/microRNA/miRNA_tutorial.pdf)
+
+- [http://www.arraystar.com/reviews/microrna-sequencing-data-analysis-guideline/](http://www.arraystar.com/reviews/microrna-sequencing-data-analysis-guideline/)
+
+- [http://bioinfo5.ugr.es/sRNAbench/sRNAbench_tutorial.pdf](http://bioinfo5.ugr.es/sRNAbench/sRNAbench_tutorial.pdf)
+
+- [http://seqcluster.readthedocs.io/mirna_annotation.html](http://seqcluster.readthedocs.io/mirna_annotation.html)
+
+**耶鲁大学**
+
+- [http://www.yale.edu/giraldezlab/miRNA.html](http://www.yale.edu/giraldezlab/miRNA.html)
+
+**南方基因**
+
+-  [http://www.southgene.com/newsshow.php?cid=55&id=73](http://www.southgene.com/newsshow.php?cid=55&id=73)
+
+**miRNA研究整套方案** 
+
+- [http://wenku.baidu.com/view/5f38577a31b765ce05081429.html?re=view](http://wenku.baidu.com/view/5f38577a31b765ce05081429.html?re=view)
+
+**Biostar 讨论帖子**
+
+- [https://www.biostars.org/p/3344/](https://www.biostars.org/p/3344/)
+
+- [https://www.biostars.org/p/98486/](https://www.biostars.org/p/98486/)
+
+**miRNA-seq数据处理实战指南**
+
+- [http://bib.oxfordjournals.org/content/early/2015/04/17/bib.bbv019.full](http://bib.oxfordjournals.org/content/early/2015/04/17/bib.bbv019.full)
+
+**直接用一个包搞定**
+
+[- http://bioconductor.org/packages/release/bioc/html/easyRNASeq.html](http://bioconductor.org/packages/release/bioc/html/easyRNASeq.html)
+
+**github流程**：miRNA Analysis Pipeline v0.2.7
+
+- [https://github.com/bcgsc/mirna/tree/master/v0.2.7](https://github.com/bcgsc/mirna/tree/master/v0.2.7)
+
+- [https://tools.thermofisher.com/content/sfs/manuals/CO25176_0512.pdf](https://tools.thermofisher.com/content/sfs/manuals/CO25176_0512.pdf)
+
+**miRNA annotation**
+
+- [http://seqcluster.readthedocs.io/mirna_annotation.html](http://seqcluster.readthedocs.io/mirna_annotation.html)
+
+**网页版分析工具**
+
+- [https://wiki.uio.no/projects/clsi/images/2/2f/HTS_2014_miRNA_analysis_Lifeportal_14_final.pdf](https://wiki.uio.no/projects/clsi/images/2/2f/HTS_2014_miRNA_analysis_Lifeportal_14_final.pdf)
+- [http://www.training.prace-ri.eu/uploads/tx_pracetmo/NGSdataAnalysisWithChipster.pdf](http://www.training.prace-ri.eu/uploads/tx_pracetmo/NGSdataAnalysisWithChipster.pdf)
+
+**可视化IGV User Guide**
+
+- [http://www.broadinstitute.org/igv/book/export/html/6](http://www.broadinstitute.org/igv/book/export/html/6)
+
+比较特殊的是新的miRNA预测，miRNA靶基因预测，这块软件太多并没有成型的流程和标准。
+
+---
+
+## 第三讲：下载公共数据 {-}
+
+前面已经讲到了该文章的数据已经上传到NCBI的SRA数据中心，所以直接根据索引号下载，然后用**SRAtoolkit**转出我们想要的fastq测序数据即可。
+
+下载的数据一般要进行质量控制，可视化展现一下质量如何，然后根据大题测序质量进行简单过滤。所以需要提前安装一些软件来完成这些任务，包括：**sratoolkit /fastx_toolkit /fastqc/bowtie2/hg19/miRBase/SHRiMP**
+
+下面是我用新服务器下载安装软件的一些代码记录，因为fastx_toolkit /fastqc我已经安装过，就不列代码了
+
+```
+## pre-step: download sratoolkit /fastx_toolkit_0.0.13/fastqc/bowtie2/hg19/miRBase/SHRiMP
+## http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software
+## http://www.ncbi.nlm.nih.gov/books/NBK158900/
+## 我这里特意挑选的二进制版本程序下载的，这样直接解压就可以用，但是需要挑选适合自己的操作系统的程序。
+cd ~/biosoft
+mkdir sratoolkit &&  cd sratoolkit
+wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.6.3/sratoolkit.2.6.3-centos_linux64.tar.gz
+##
+##  Length: 63453761 (61M) [application/x-gzip]
+##  Saving to: "sratoolkit.2.6.3-centos_linux64.tar.gz"
+tar zxvf sratoolkit.2.6.3-centos_linux64.tar.gz
+cd ~/biosoft
+mkdir bowtie &&  cd bowtie
+wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.2.9/bowtie2-2.2.9-linux-x86_64.zip/download
+#Length: 27073243 (26M) [application/octet-stream]
+#Saving to: "download"
+mv download  bowtie2-2.2.9-linux-x86_64.zip
+unzip bowtie2-2.2.9-linux-x86_64.zip
+## http://compbio.cs.toronto.edu/shrimp/
+mkdir SHRiMP &&  cd SHRiMP
+wget http://compbio.cs.toronto.edu/shrimp/releases/SHRiMP_2_2_3.lx26.x86_64.tar.gz
+tar zxvf SHRiMP_2_2_3.lx26.x86_64.tar.gz 
+cd SHRiMP_2_2_3
+export SHRIMP_FOLDER=$PWD  ## 这个软件使用的时候比较奇葩，需要设置到环境变量，不能简单的调用全路径
+```
+
+**SHRiMP**这个软件比较小众，我也是第一次听说过。
+
+本来我计划是能用bowtie搞定，但是第一次比对出了一个bug，就是下载的miRNA序列里面的U没有转换成T，所以导致比对率非常之低。于是我不得不根据文章里面记录的软件SHRiMP 来做比对，最后发现比对率完全没有改善，搞得我都在怀疑是不是作者乱来了。
+
+下面是下载数据，质量控制的代码，希望大家可以照着运行一下。
+
+```
+## step1 : download raw data
+mkdir miRNA_test && cd miRNA_test
+echo {14..19} |sed 's/ /\n/g' |while read id; \
+do  wget "ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP045/SRP045420/SRR15427$id/SRR15427$id.sra"  ;\
+done
+## step2 :  change sra data to fastq files.
+## 主要是用shell脚本来批量下载
+ls *sra |while read id; do ~/biosoft/sratoolkit/sratoolkit.2.6.3-centos_linux64/bin/fastq-dump $id;done
+rm *sra
+##  33M --> 247M
+#Read 1866654 spots for SRR1542714.sra
+#Written 1866654 spots for SRR1542714.sra
+## step3 : download the results from paper
+## http://www.bio-info-trainee.com/1571.html
+## ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE1nnn/GSE1009/suppl/GSE1009_RAW.tar
+mkdir paper_results && cd paper_results
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE60nnn/GSE60292/suppl/GSE60292_RAW.tar
+## tar xvf GSE60292_RAW.tar
+ls *gz |while read id ; do (echo $id;zcat $id | cut -f 2 |perl -alne '{$t+=$_;}END{print $t}');done
+ls *gz |xargs gunzip
+## step4 : quality assessment
+ls *fastq | while read id ; do ~/biosoft/fastqc/FastQC/fastqc $id;done
+## Sequence length 8-109
+## %GC 52
+## Adapter Content passed
+## write a script : :: cat >filter.sh
+ls *fastq |while read id
+do
+echo $id
+~/biosoft/fastx_toolkit_0.0.13/bin/fastq_quality_filter -v -q 20 -p 80 -Q33  -i $id -o tmp ;
+~/biosoft/fastx_toolkit_0.0.13/bin/fastx_trimmer -v -f 1 -l 27 -i tmp  -Q33 -z -o ${id%%.*}_clean.fq.gz ;
+done
+rm tmp
+## discarded 12%~~49%%
+ls *_clean.fq.gz | while read id ; do ~/biosoft/fastqc/FastQC/fastqc $id;done
+mkdir QC_results
+mv *zip *html QC_results
+```
+
+这个代码是我自己根据文章的理解写出的，因为我本身不擅长miRNA数据分析，所以在进行QC的时候参数选择可能并不是那么友好.
+
+```
+~/biosoft/fastx_toolkit_0.0.13/bin/fastq_quality_filter -v -q 20 -p 80 -Q33  -i $id -o tmp ;
+~/biosoft/fastx_toolkit_0.0.13/bin/fastx_trimmer -v -f 1 -l 27 -i tmp  -Q33 -z -o ${id%%.*}_clean.fq.gz ;
+```
+
+最后得到的**clean.fq.gz**系列文件，就是我需要进行比对的序列。
+
+---
+
+## 第四讲：测序数据比对 {-}
+
+序列比对是大多数类型数据分析的核心，如果要利用好测序数据，比对细节非常重要，我这里只是研读一篇文章也就没有对比对细节过多考虑，只是列出自己的代码和自己的几点思考，力求重现文章作者的分析结果。
+
+对miRNA-seq数据有两条比对策略：
+
+1. 下载miRBase数据库里面的已知miRNA序列来进行比对
+
+2. 直接比对到参考基因组(比如人类的是hg19/hg38)
+
+前面的比对非常简单，而且很容易就可以数出已经的所以miRNA序列的表达量；后面的比对有点耗时，而且算表达量的时候也不是很方便，但是它的优点是可以来预测新的miRNA，所以大多数文章都会把这两条路给走一下。
+
+本文选择的是SHRiMP这个小众软件，起初我并没有在意，就用的bowtie2而已，参考基因组就用了miRBase数据库下载的人类的参考序列。
+
+```
+## step5 : alignment to miRBase v21 (hairpin.human.fa/mature.human.fa )
+#### step5.1 using bowtie2 to do alignment
+mkdir  bowtie2_index &&  cd bowtie2_index
+~/biosoft/bowtie/bowtie2-2.2.9/bowtie2-build ../hairpin.human.fa hairpin_human
+~/biosoft/bowtie/bowtie2-2.2.9/bowtie2-build ../mature.human.fa  mature_human
+ls *_clean.fq.gz | while read id ; do  ~/biosoft/bowtie/bowtie2-2.2.9/bowtie2 -x miRBase/bowtie2_index/hairpin_human -U $id   -S ${id%%.*}.hairpin.sam ; done
+## overall alignment rate:  10.20% / 5.71%/ 10.18%/ 4.36% / 10.02% / 4.95%  (before convert U to T )
+## overall alignment rate:  51.77% / 70.38%/51.45% /61.14%/ 52.20% / 65.85% (after convert U to T )
+ls *_clean.fq.gz | while read id ; do  ~/biosoft/bowtie/bowtie2-2.2.9/bowtie2 -x miRBase/bowtie2_index/mature_human  -U $id   -S ${id%%.*}.mature.sam ; done
+## overall alignment rate:  6.67% / 3.78% / 6.70% / 2.80%/ 6.55% / 3.23%    (before convert U to T )
+## overall alignment rate:  34.94% / 46.16%/ 35.00%/ 38.50% / 35.46% /42.41%(after convert U to T )
+#### step5.2 using SHRiMP to do alignment
+##    http://compbio.cs.toronto.edu/shrimp/README
+##    3.5 Mapping cDNA reads against a miRNA database
+cd ~/biosoft/SHRiMP/SHRiMP_2_2_3
+export SHRIMP_FOLDER=$PWD
+cd -
+##　　We project the database with:
+$SHRIMP_FOLDER/utils/project-db.py --seed 00111111001111111100,00111111110011111100,00111111111100111100,00111111111111001100,00111111111111110000 \
+ --h-flag --shrimp-mode ls miRBase/hairpin.human.fa
+##
+$SHRIMP_FOLDER/bin/gmapper-ls -L  hairpin.human-ls SRR1542716.fastq  --qv-offset 33   \
+-o 1 -H -E -a -1 -q -30 -g -30 --qv-offset 33 --strata -N 8  >map.out 2>map.log
+```
+
+大家可以看到我们把测序reads比对到前体miRNA和成熟的miRNA结果是有略微区别的，**因为一个前体miRNA可以形成多个成熟的miRNA，而并不是所有的成熟的miRNA形式都被记录在数据库，所以一般推荐比对到前体miRNA数据库，这样还可以预测新的成熟miRNA，也是非常有意义的。**
+
+另外非常重要的一点是，把U变成T前后比对率差异非常大，这其实是一个非常蠢的错误，我就不多说了。但是做到这一步，其实可以跟文章来做验证，文章有提到比对率，比对的序列。
+
+我也是在博客里面看到这个信息的：
+
+> Thank you so  much!. Yes I contacted the lab-guy and he just said that trimmed the first 4 bp and last 4bp. ( as you found)
+> So  I firstly trimmed the adapter sequences(TGGAATTCTCGGGTGCCAAGGAACTCCAGTCAC)
+> And then, trimmed the first 4bp and last 4bp from reads, which leads to the 22bp peak of read-length distribution(instead of 24bp)
+> Anyhow, I tried to map with bowtie2 again.
+```
+> bowtie2 --local -N 1 -L 16
+> -x ../miRNA_reference/hairpin_UtoT.fa
+> -U first4bptrimmed_A1-SmallRNA_S1_L001_R1_001_Illuminaadpatertrim.fastq
+> -S f4_trimmed.sam
+```
+
+> I also changed hairpin.fa file (U to T) 
+> Oh.. thank you David,
+> Finallly, I got
+
+```
+>  2565353 reads; of these:
+>  2565353 (100.00%) were unpaired; of these:
+>  479292 (18.68%) aligned 0 times
+>  11959 (0.47%) aligned exactly 1 time
+>  2074102 (80.85%) aligned >1 times
+>  81.32% overall alignment rate
+```
+
+---
+
+## 第五讲：获取miRNA表达量 {-}
+
+得到比对后的sam/bam文件只能算是level2的数据，一般我们给他人share的结果也是直接给表达矩阵的， miRNA分析跟mRNA分析类似，但是它的表达矩阵更好获取一点。
+
+如果是mRNA，我们一般会跟基因组来比较，而基因组就是24条参考染色体，想知道具体比对到了哪个基因，需要根据基因组注释文件来写程序提取表达量信息，现在比较流行的是htseq这个软件，我前面也写过教程如何安装和使用，这里就不啰嗦了。但是对于miRNA，因为我比对的就是那1881条前体miRNA序列，所以直接分析比对的sam/bam文件就可以知道每条参考miRNA序列的表达量了。 
+
+```
+## step6: counts the reads which mapping to each miRNA reference.
+## we need to exclude unmapped as well as multiple-mapped  reads
+## XS:i:<n> Alignment score for second-best alignment. Can be negative. Can be greater than 0 in --local mode
+## NM:i:1   ## NM i Edit distance to the reference, including ambiguous bases but excluding clipping
+#The following command exclude unmapped (-F 4) as well as multiple-mapped (grep -v “XS:”) reads
+#samtools view -F 4 input.bam | grep -v "XS:" | wc -l
+## 180466//1520320
+##cat >count.hairpin.sh
+ls *hairpin.sam  | while read id
+do
+samtools view  -SF 4 $id |perl -alne '{$h{$F[2]}++}END{print "$_\t$h{$_}" foreach sort keys %h }'  > ${id%%_*}.hairpin.counts
+done
+## bash count.hairpin.sh
+##cat >count.mature.sh
+ls *mature.sam  | while read id
+do
+samtools view  -SF 4 $id |perl -alne '{$h{$F[2]}++}END{print "$_\t$h{$_}" foreach sort keys %h }'  > ${id%%_*}.mature.counts
+done
+## bash count.mature.sh
+```
+
+上面的代码，是我自己写的脚本来算表达量，非常简单，因为我没有考虑细节，直接想得到各个样本测序数据的表达量而已。如果是比对到了参考基因组，就要根据miRNA的gff注释文件用htseq等软件来计算表达量。
+
+得到了表达量，就可以跟文献来做比较
+
+```
+### step7: compare the results with paper's
+GSM1470353: control-CM, experiment1; Homo sapiens; miRNA-Seq   SRR1542714
+GSM1470354: ET1-CM, experiment1; Homo sapiens; miRNA-Seq  SRR1542715
+GSM1470355: control-CM, experiment2; Homo sapiens; miRNA-SeqSRR1542716
+GSM1470356: ET1-CM, experiment2; Homo sapiens; miRNA-Seq SRR1542717
+GSM1470357: control-CM, experiment3; Homo sapiens; miRNA-Seq SRR1542718
+GSM1470358: ET1-CM, experiment3; Homo sapiens; miRNA-Seq SRR1542719
+### 下面我用R语言来检验一下，我得到的分析结果跟文章发表的结果的区别。
+a=read.table("bowtie_bam/SRR1542714.mature.counts")
+b=read.table("paper_results/GSM1470353_iPS_010313_Unstim_known_miRNA_counts.txt")
+plot(log(tmp[,2]),log(tmp[,3]))
+cor(tmp[,2],tmp[,3])
+##[1] 0.8413439
+```
+
+相关性还不错，总算没有分析错。
+
+这个代码是我自己根据文章的理解写出的，因为我本身不擅长miRNA数据分析，所以在进行alignment的时候参数选择可能并不是那么友好。
+
+---
+
+## 第六讲：miRNA表达量差异分析 {-}
+
+这一讲是miRNA-seq数据分析的分水岭，前面的5讲说的是读文献下载数据比对，然后计算表达量，属于常规的流程分析，一般在公司测序之后都可以拿到分析结果，或者文献也会给出下载结果。
+
+但是单纯的分析一个样本意义不大，一般来说，我们做研究都是针对于不同状态下的miRNA表达量差异分析，然后做注释，功能分析，网络分析，这才是重点和难点。
+
+我这里就直接拿文献处理好的miRNA表达量来展示如何做下游分析，首先就是差异分析。
+
+根据文献，我们可以知道样本的分类情况是
+
+> GSM1470353: control-CM, experiment1; Homo sapiens; miRNA-Seq   SRR1542714
+>
+> GSM1470354: ET1-CM, experiment1; Homo sapiens; miRNA-Seq  SRR1542715
+>
+> GSM1470355: control-CM, experiment2; Homo sapiens; miRNA-SeqSRR1542716
+>
+> GSM1470356: ET1-CM, experiment2; Homo sapiens; miRNA-Seq SRR1542717
+>
+> GSM1470357: control-CM, experiment3; Homo sapiens; miRNA-Seq SRR1542718
+>
+> GSM1470358: ET1-CM, experiment3; Homo sapiens; miRNA-Seq SRR1542719
+>
+> 可以看到是6个样本的测序数据，分成两组，就是ET1刺激了CM细胞系前后对比而已！
+
+同时，我们也拿到了这6个样本的表达矩阵，计量单位是counts的reads数，所以我们一般会选用DESeq2，edgeR这样的常用包来做差异分析，当然，做差异分析的工具还有十几个，我这里只是拿一根最顺手的举例子，就是**DESeq2**。
+
+下面的代码有点长，因为我在bioconductor系列教程里面多次提到了DESeq2使用方法，这里就只贴出代码，反正我要说的重点是，我们通过差异分析得到了差异miRNA列表
+
+```
+### step8: differential expression analysis by R package for miRNA expression patterns:
+## 文章里面提到的结果是：
+MicroRNA sequencing revealed over 250 known and 34 predicted novel miRNAs to be differentially expressed between ET-1 stimulated and unstimulated control hiPSC-CMs.
+## (FDR < 0.1 and 1.5 fold change)
+rm(list=ls())
+setwd('J:\\miRNA_test\\paper_results')  ##把从GEO里面下载的文献结果放在这里
+sampleIDs=c()
+groupList=c()
+allFiles=list.files(pattern = '.txt')
+i=allFiles[1]
+sampleID=strsplit(i,"_")[[1]][1]
+treat=strsplit(i,"_")[[1]][4]
+dat=read.table(i,stringsAsFactors = F)
+colnames(dat)=c('miRNA',sampleID)
+groupList=c(groupList,treat)
+for (i in allFiles[-1]){
+sampleID=strsplit(i,"_")[[1]][1]
+treat=strsplit(i,"_")[[1]][4]
+a=read.table(i,stringsAsFactors = F)
+colnames(a)=c('miRNA',sampleID)
+dat=merge(dat,a,by='miRNA')
+groupList=c(groupList,treat)
+}
+### 上面的代码只是为了把6个独立的表达文件给合并成一个表达矩阵
+## we need to filter the low expression level miRNA
+exprSet=dat[,-1]
+rownames(exprSet)=dat[,1]
+suppressMessages(library(DESeq2))
+exprSet=ceiling(exprSet)
+(colData <- data.frame(row.names=colnames(exprSet), groupList=groupList))
+## DESeq2就是这么简单的用
+dds <- DESeqDataSetFromMatrix(countData = exprSet,
+colData = colData,
+design = ~ groupList)
+dds <- DESeq(dds)
+png("qc_dispersions.png", 1000, 1000, pointsize=20)
+plotDispEsts(dds, main="Dispersion plot")
+dev.off()
+res <- results(dds)
+## 画一些图，相当于做QC吧
+png("RAWvsNORM.png")
+rld <- rlogTransformation(dds)
+exprSet_new=assay(rld)
+par(cex = 0.7)
+n.sample=ncol(exprSet)
+if(n.sample>40) par(cex = 0.5)
+cols <- rainbow(n.sample*1.2)
+par(mfrow=c(2,2))
+boxplot(exprSet,  col = cols,main="expression value",las=2)
+boxplot(exprSet_new, col = cols,main="expression value",las=2)
+hist(exprSet[,1])
+hist(exprSet_new[,1])
+dev.off()library(RColorBrewer)
+(mycols <- brewer.pal(8, "Dark2")[1:length(unique(groupList))])
+# Sample distance heatmap
+sampleDists <- as.matrix(dist(t(exprSet_new)))
+#install.packages("gplots",repos = "http://cran.us.r-project.org")
+library(gplots)
+png("qc-heatmap-samples.png", w=1000, h=1000, pointsize=20)
+heatmap.2(as.matrix(sampleDists), key=F, trace="none",
+col=colorpanel(100, "black", "white"),
+ColSideColors=mycols[groupList], RowSideColors=mycols[groupList],
+margin=c(10, 10), main="Sample Distance Matrix")
+dev.off()
+
+png("MA.png")
+DESeq2::plotMA(res, main="DESeq2", ylim=c(-2,2))
+dev.off()
+## 重点就是这里啦，得到了差异分析的结果
+resOrdered <- res[order(res$padj),]
+resOrdered=as.data.frame(resOrdered)
+write.csv(resOrdered,"deseq2.results.csv",quote = F)
+
+##下面也是一些图，主要是看看样本之间的差异情况
+library(limma)
+plotMDS(log(counts(dds, normalized=TRUE) + 1))
+plotMDS(log(counts(dds, normalized=TRUE) + 1) - log(t( t(assays(dds)[["mu"]]) / sizeFactors(dds) ) + 1))
+plotMDS( assays(dds)[["counts"]] )  ## raw count
+plotMDS( assays(dds)[["mu"]] ) ##- fitted values.
+```
+
+最后我们得到的差异分析结果：**deseq2.results.csv**，就可以跟进FDR和fold change来挑选符合要求的差异miRNA。
+
+---
+
+## 第七讲：miRNA样本配对mRNA表达量获取 {-}
+
+这一讲其实算不上自学miRNA-seq分析，本质是affymetrix的mRNA表达芯片数据分析，而且还是最常用的那种GPL570   HG-U133_Plus_2，但因为是跟miRNA样本配对检测而且后面会利用到这两个数据分析结果来做共表达网络分析等等，所以就贴出对该芯片数据的分析结果。
+
+文章里面也提到了 Messenger RNA expression analysis identified 731 probe sets with significant differential expression，作者挑选的差异分析结果的显著基因列表如下 http://journals.plos.org/plosone/article/asset?unique&id=info:doi/10.1371/journal.pone.0108051.s002
+mRNA expression array - GSE60291  (Affymetrix Human Genome U133 Plus 2.0 Array)
+
+hgu133plus2 芯片数据很常见，可以从GEO里面下载该study的原始测序数据，然后用**affy,limma**包来分析，也可以直接用**GEOquery**包来下载作者分析好的表达矩阵，然后直接做差异分析。我这里选择的是后者，而且我跟作者分析方法有一点区别是，我先把探针都注释好了基因，然后只挑最大表达量的基因。而作者是直接对探针为单位的的表达矩阵进行差异分析，对分析结果里面的探针进行基因注释。我这里无法给出哪种方法好的绝对评价。代码如下
+
+```
+m(list=ls())
+library(GEOquery)
+library(limma)
+GSE60291 <- getGEO('GSE60291', destdir=".",getGPL = F)
+
+#下面是表达矩阵
+exprSet=exprs(GSE60291[[1]])
+library("annotate")
+GSE60291[[1]]
+## 下面是分组信息
+pdata=pData(GSE60291[[1]])
+treatment=factor(unlist(lapply(pdata$title,function(x) strsplit(as.character(x),"-")[[1]][1])))
+#treatment=relevel(treatment,'control')
+## 下面做基因注释
+platformDB='hgu133plus2.db'
+library(platformDB, character.only=TRUE)
+probeset <- featureNames(GSE60291[[1]])
+#EGID <- as.numeric(lookUp(probeset, platformDB, "ENTREZID"))
+SYMBOL <-  lookUp(probeset, platformDB, "SYMBOL")
+## 下面对每个基因挑选最大表达量探针
+a=cbind(SYMBOL,exprSet)
+## remove the duplicated probeset
+rmDupID <-function(a=matrix(c(1,1:5,2,2:6,2,3:7),ncol=6)){
+exprSet=a[,-1]
+rowMeans=apply(exprSet,1,function(x) mean(as.numeric(x),na.rm=T))
+a=a[order(rowMeans,decreasing=T),]
+exprSet=a[!duplicated(a[,1]),]
+#
+exprSet=exprSet[!is.na(exprSet[,1]),]
+rownames(exprSet)=exprSet[,1]
+exprSet=exprSet[,-1]
+return(exprSet)
+}
+exprSet=rmDupID(a)
+rn=rownames(exprSet)
+exprSet=apply(exprSet,2,as.numeric)
+rownames(exprSet)=rn
+exprSet[1:4,1:4]
+#exprSet=log(exprSet) ## based on e
+boxplot(exprSet,las=2)
+## 下面用limma包来进行芯片数据差异分析
+design=model.matrix(~ treatment)
+fit=lmFit(exprSet,design)
+fit=eBayes(fit)
+#vennDiagram(decideTests(fit))
+DEG=topTable(fit,coef=2,n=Inf,adjust='BH')
+dim(DEG[abs(DEG[,1])>1.2 & DEG[,5]<0.05,])  ## 806 genes
+write.csv(DEG,"ET1-normal.DEG.csv")
+```
+
+得到的**ET1-normal.DEG.csv** 文件就是我们的差异分析结果，可以跟文章提供的差异结果做比较，几乎一模一样。
+
+如果根据logFC:1.2 和pValue:0.05来挑选，可以拿到806个基因。
+
+---
+
+## 第八讲：miRNA-mRNA表达相关下游分析 {-}
+
+通过前面的分析，我们已经量化了ET1刺激前后的细胞的miRNA和mRNA表达水平，也通过成熟的统计学分析分别得到了差异miRNA和mRNA，这时候我们就需要换一个参考文献了，因为前面提到的那篇文章分析的不够细致，我这里选择了浙江大学的一篇TCGA数据挖掘分析文章：
+
+[Identifying miRNA/mRNA negative regulation pairs in colorectal cancer](http://www.nature.com/articles/srep12995%20)
+
+里面首先查找miRNA-mRNA基因对，因为miRNA主要还是负向调控mRNA表达，所以根据我们得到的两个表达矩阵做相关性分析，很容易得到符合统计学意义的miRNA-mRNA基因对，具体分析内容如下
+
+- 把得到的差异miRNA的表达量画一个热图，看看它是否能显著的分类
+- 用miRWalk2.0等数据库或者根据来获取这些差异miRNA的validated target genes
+- 然后看看这些**pairs of miRNA- target genes的表达量相关系数**，选取显著正相关或者负相关的pairs
+- 这些被选取的pairs of miRNA- target genes拿去做**富集分析**
+- 最后这些pairs of miRNA- target genes做**PPI网络分析**
+
+首先我们看第一个热图的实现
+
+```
+resOrdered=na.omit(resOrdered)
+DEmiRNA=resOrdered[abs(resOrdered$log2FoldChange)>log2(1.5) & resOrdered$padj <0.01 ,]
+write.csv(resOrdered,"deseq2.results.csv",quote = F)
+DEmiRNAexprSet=exprSet[rownames(DEmiRNA),]
+write.csv(DEmiRNAexprSet,'DEmiRNAexprSet.csv')
+
+DEmiRNAexprSet=read.csv('DEmiRNAexprSet.csv',stringsAsFactors = F)
+exprSet=as.matrix(DEmiRNAexprSet[,2:7])
+rownames(exprSet)=rownames(DEmiRNAexprSet)
+heatmap(exprSet)
+gplots::heatmap.2(exprSet)
+library(pheatmap)
+## http://biit.cs.ut.ee/clustvis/
+```
+
+因为我前面保存的表达量就基于counts的，所以画热图还需要进行normalization，我这里懒得弄了，就用了一个网页版工具可以自动生成热图：http://biit.cs.ut.ee/clustvis/
+
+![miRNA-heatmap](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/miRNA-heatmap.png)
+
+
+
+感觉还不错，可以很清楚的看到ET1刺激前后细胞中miRNA表达量变化
+
+然后就是检验我们感兴趣的有显著差异的miRNA的target genes，这时候有两种方法：一个是先由数据库得到已经被检验的miRNA的target genes；另一种是根据miRNA和mRNA表达量的相关性来预测。
+
+用数据库来查找MiRNA的作用基因，非常多的工具，比较常用的有**TargetScan/miRTarBase** 
+
+- http://nar.oxfordjournals.org/content/early/2015/11/19/nar.gkv1258.full
+- http://mirtarbase.mbc.nctu.edu.tw/
+- http://mirtarbase.mbc.nctu.edu.tw/cache/download/6.1/hsa_MTI.xlsx
+- http://www.targetscan.org/vert_71/ (version 7.1 (June 2016))
+
+我还看到过一个整合工具： **miRecords ** (DIANA-microT, MicroInspector, miRanda, MirTarget2, miTarget, NBmiRTar, PicTar, PITA, RNA22, RNAhybrid and TargetScan/TargertScanS)里面提到了查找miRNA的作用基因这一过程，高假阳性，至少被5种工具支持，才算是真的。
+
+还有很多类似的工具，**miRWalk2，psRNATarget**网页版工具。
+
+最后值得一提的是中山大学的：[ starBase  ](http://starbase.sysu.edu.cn/panCancer.php)
+
+>  Pan-Cancer Analysis Platform is designed for deciphering Pan-Cancer Networks of lncRNAs, miRNAs, ceRNAs and RNA-binding proteins (RBPs) by mining clinical and expression profiles of 14 cancer types (>6000 samples) from The Cancer Genome Atlas (TCGA) Data Portal (all data available without limitations).
+
+虽然我没有仔细的用，但是看介绍好牛的样子。
+
+还有一个R包：**miRLAB**，它是先通过算所有配对的**miRNA- genes的表达量相关系数**，选取显著正相关或者负相关的pairs，然后反过来通过已知数据库来验证。
+
+后面我就不讲了，主要看你得到miRNA的时候其它生物学数据是否充分，如果是癌症病人，有生存相关数据，可以做生存分析，如果你同时测了甲基化数据，可以做甲基化相关分析。
+
+如果只是单纯的miRNA测序数据，可以回过头去研究一下de novo的miRNA预测的步骤，也是研究重点。
+
 
 ### 表观组
+
+##### 自学ChIP-seq分析九讲
+
+## 第一讲：文献选择与解读 {-}
+
+
+**文献；CARM1 Methylates Chromatin Remodeling Factor BAF155 to Enhance Tumor Progression and Metastasis** 
+
+我很早以前想自学CHIP-seq的时候关注过这篇文章，那时候懂得还不多，甚至都没有仔细看这篇文章就随便下载了数据进行分析，也只是跑一些软件而已。这次仔细阅读这篇文章才发现里面门道很多，尤其是ChIP-seq的实验基础和表观遗传学的生物学基础知识。
+
+作者首先实验证明了用small haripin RNA来knockout CARM1 只能达到90%的敲除效果，有趣的是，对CARM1的功能影响非常小，说明只需要极少量的CARM1就可以发挥很好的作用，因此作者通过zinc finger nuclease这种基因组编辑技术设计了100%敲除CARM1的实验材料，
+
+这样就能比较CARM1有无时各种蛋白被催化状态了，其中SWI/SNF(BAF) chromatin remodeling complex  染色质重构复合物的一个亚基 BAF155，非常明显的只有在CARM1这个基因完好无损的细胞系里面才能被正常的甲基化。作者证明了BAF155是CARM1这个基因非常好的一个底物， 而且通过巧妙的实验设计，证明了BAF155这个蛋白的第1064位氨基酸(R) 是 CARM1的作用位点。
+
+因为早就有各种文献说明了SWI/SNF(BAF) chromatin remodeling complex  染色质重构复合物在癌症的重要作用， 所以作者也很自然想探究BAF155在癌症的功能详情，这里作者选择的是**ChIP-seq**技术。BAF155是一种转录因子(transcription factor)（能与基因5端上游特定序列专一性结合，从而保证目的基因以特定的强度在特定的时间与空间表达的蛋白质分子）。ChIP-seq技术最适合来探究BAF155这样转录因子的功能，所以作者构造了一种细胞系（MCF7），它的BAF155蛋白的第1064位氨基酸(R) 突变而无法被CARM1这个基因催化而甲基化，然后比较突变的细胞系和野生型细胞系的BAF155的ChIP-seq结果，这样就可以研究BAF155这个转录因子，是否必须要被CARM1这个基因催化而甲基化后才能行使生物学功能。
+
+作者用me-BAF155特异性抗体+western bloting 证明了正常的野生型MCF7细胞系里面有~74%的BAF155被甲基化。
+
+有一个细胞系SKOV3，可以正常表达除了BAF155之外的其余14种SWI/SNF(BAF) chromatin remodeling complex  染色质重构复合物，而不管是把突变的细胞系和野生型细胞系的BAF155混在里面都可以促进染色质重构复合物的组装，所以甲基化与否并不影响这个染色质重构复合物的组装，重点应该研究的是甲基化会影响BAF155在基因组其它地方结合。
+
+结果显示，突变的细胞系和野生型细胞系种BAF155在基因组结合位置(peaks)还是有较大的overlap的，重点是看它们的peaks在各种基因组区域(基因上下游，5,3端UTR，启动子，内含子，外显子，基因间区域，microRNA区域)分布情况的差别，还有它们距离转录起始位点的距离的分布区别，还有它们注释到的基因区别，已经基因富集到什么通路等等。
+
+虽然作者在人的细胞系(MCF7)上面做ChIP-seq，但是在老鼠细胞系(MDA-MB-231)做了mRNA芯片数据分析，BAF155这个蛋白的第1064位氨基酸(R) 突变细胞系和野生型细胞系，用的是Affymetrix HG U133 Plus 2.0这个常用平台。
+
+which was hybridized to Affymetrix HG U133 Plus 2.0 microarrays containing 54,675 probesets for >47,000 transcripts and variants, including 38,500 human genes.
+
+To identify genes differentially expressed between MDA-MB-231-BAF155WT and MDA-MB-231-BAF155R1064K
+
+表达矩阵下载地址：[http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4004525/bin/NIHMS556863-supplement-03.xlsx](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4004525/bin/NIHMS556863-supplement-03.xlsx)
+
+我简单摘抄作者ChIP-seq数据的生物信息学分析结果
+
+- All samples were mapped from fastq files using BOWTIE [-m 1 -- best] to mm9 [UCSCmouse genome build 9]
+
+- Sequences were mapped to the human genome (hg19) using BOWTIE (--best –m 1) to yield unique alignments
+
+- Peaks were called by using HOMER [[http://biowhat.ucsd.edu/homer/](http://biowhat.ucsd.edu/homer/)] and QuEST [[http://mendel.stanford.edu/sidowlab/downloads/quest/](http://mendel.stanford.edu/sidowlab/downloads/quest/)].
+
+**用到的软件有**
+
+- **QuEST 2.4 **(Valouev et al., 2008) was run using the recommend settings for transcription factor (TF) like binding with the following exceptions:
+
+  kde_bandwith=30, region_size=600, ChIP threshold=35, enrichment fold=3, rescue fold=3.
+
+- **HOMER **(Heinz et al., 2010) analysis was run using the default settings for peak finding.
+
+  False Discovery Rate (FDR) cut off was **0.001 (0.1%) for all peaks. **
+
+  The tag density for each factor was **normalized to 1x107 tags** and displayed using the UCSC genome browser.
+
+- **Motif analysis** (de novo and known), was performed using the** HOMER software and Genomatix. **
+
+- **Peak overlaps **were processed with HOMER and Galaxy (Giardine et al., 2005).
+
+- **Peak comparisons **between replicates were processed with EdgeR statistical package in R
+
+以上就是我们接下来需要学习的流程化分析步骤，下面我给一个主要流程的截图，但主要是实验是如何设计
+
+这里有一个文章发表了关于CHIP-seq的流程的：[http://biow.sb-roscoff.fr/ecole_bioinfo/protected/jacques.van-helden/ThomasChollier_NatProtoc_2012_peak-motifs.pdf](http://biow.sb-roscoff.fr/ecole_bioinfo/protected/jacques.van-helden/ThomasChollier_NatProtoc_2012_peak-motifs.pdf)
+
+[![Chip-seq-workflow](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/Chip-seq-workflow.png)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/Chip-seq-workflow.png)
+
+
+
+**同时我还推荐大家看几篇相关文献**
+
+- Genome-wide maps of chromatin state in pluripotent and lineage-committed cells. [http://www.nature.com/nature/journal/v448/n7153/pdf/nature06008.pdf](http://www.nature.com/nature/journal/v448/n7153/pdf/nature06008.pdf)
+- Mapping and analysis of chromatin state dynamics in nine human cell types(GSE26386): [http://www.nature.com/nature/journal/v473/n7345/full/nature09906.html](http://www.nature.com/nature/journal/v473/n7345/full/nature09906.html)
+- Promiscuous RNA binding by Polycomb Repressive Complex 2 [http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3823624/pdf/nihms517229.pdf](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3823624/pdf/nihms517229.pdf)
+
+---
+
+## 第二讲：资料收集 {-}
+
+
+
+CHIP-seq的确是非常完善的NGS流程，各种资料层出不穷。
+
+大家首先可以看下面几个完整流程的PPT来对CHIP-seq流程有个大致的印象，我对前面提到的文献数据处理的几个要点，就跟下面这个图片类似。
+
+
+
+![chip-seq-workflow-all-5-steps](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/chip-seq-workflow-all-5-steps.jpg)
+
+
+
+- QuEST is a statistical software for analysis of ChIP-Seq data with data and analysis results visualization through UCSC Genome Browser.  [http://www-hsc.usc.edu/](http://www-hsc.usc.edu/)~valouev/QuEST/QuEST.html
+
+- peak calling 阈值的选择： [http://www.nature.com/nprot/journal/v7/n1/fig_tab/nprot.2011.420_F2.html](http://www.nature.com/nprot/journal/v7/n1/fig_tab/nprot.2011.420_F2.html)
+
+- MeDIP-seq and histone modification ChIP-seq analysis  [http://crazyhottommy.blogspot.com/2014/01/medip-seq-and-histone-modification-chip.html](http://crazyhottommy.blogspot.com/2014/01/medip-seq-and-histone-modification-chip.html)
+
+- 2011-review-CHIP-seq-high-quaility-data: [http://www.nature.com/ni/journal/v12/n10/full/ni.2117.html?message-global=remove](http://www.nature.com/ni/journal/v12/n10/full/ni.2117.html?message-global=remove)
+
+- 不同处理条件的CHIP-seq的差异peaks分析： [http://www.slideshare.net/thefacultyl/diffreps-automated-chipseq-differential-analysis-package](http://www.slideshare.net/thefacultyl/diffreps-automated-chipseq-differential-analysis-package)
+
+- 一个实际的CHIP-seq数据分析例子： [http://www.biologie.ens.fr/](http://www.biologie.ens.fr/)~mthomas/other/chip-seq-training/
+
+- [http://biow.sb-roscoff.fr/ecole_bioinfo/training_material/chip-seq/documents/presentation_chipseq.pdf](http://biow.sb-roscoff.fr/ecole_bioinfo/training_material/chip-seq/documents/presentation_chipseq.pdf)
+
+- [http://ecole-bioinfo-aviesan.sb-roscoff.fr/sites/ecole-bioinfo-aviesan.sb-roscoff.fr/files/files/chipseq_CarlHerrmann_Roscoff2015.pdf](http://ecole-bioinfo-aviesan.sb-roscoff.fr/sites/ecole-bioinfo-aviesan.sb-roscoff.fr/files/files/chipseq_CarlHerrmann_Roscoff2015.pdf)
+
+- [http://ecole-bioinfo-aviesan.sb-roscoff.fr/sites/ecole-bioinfo-aviesan.sb-roscoff.fr/files/files/defrance-ChIP-seq_annotation.pdf](http://ecole-bioinfo-aviesan.sb-roscoff.fr/sites/ecole-bioinfo-aviesan.sb-roscoff.fr/files/files/defrance-ChIP-seq_annotation.pdf)
+
+然后下面的各种资料，是针对CHIP-seq流程的各个环境的，还有一些是针对于表观遗传学知识
+
+- ppt : [http://159.149.160.51/epigen_milano/epigen_barozzi.pdf](http://159.149.160.51/epigen_milano/epigen_barozzi.pdf)
+
+- best practise: [http://bioinformatics-core-shared-training.github.io/cruk-bioinf-sschool/](http://bioinformatics-core-shared-training.github.io/cruk-bioinf-sschool/)
+
+- pipeline : [https://github.com/shenlab-sinai/chip-seq_preprocess](https://github.com/shenlab-sinai/chip-seq_preprocess)
+
+- [https://sites.google.com/site/anshul...e/projects/idr](https://sites.google.com/site/anshul...e/projects/idr)  ## samtools view -b -F 1548 -q 30 chipSampleRep1.bam
+
+- pipeline : [http://daudin.icmb.utexas.edu/wiki/index.php/ChIPseq_prep_and_map](http://daudin.icmb.utexas.edu/wiki/index.php/ChIPseq_prep_and_map)
+
+- pipeline : [https://github.com/BradyLab/ChipSeq/blob/master/chipseq.sh](https://github.com/BradyLab/ChipSeq/blob/master/chipseq.sh)
+
+- [https://github.com/crukci-bioinformatics/chipseq-pipeline](https://github.com/crukci-bioinformatics/chipseq-pipeline)
+
+- [https://github.com/ENCODE-DCC/chip-seq-pipeline](https://github.com/ENCODE-DCC/chip-seq-pipeline)
+
+- Hands-on introduction to ChIP-seq analysis - VIB Training   [http://www.biologie.ens.fr/](http://www.biologie.ens.fr/)~mthomas/other/chip-seq-training/
+
+- video(A Step-by-Step Guide to ChIP-Seq Data Analysis Webinar) : [http://www.abcam.com/webinars/a-step-by-step-guide-to-chip-seq-data-analysis-webinar](http://www.abcam.com/webinars/a-step-by-step-guide-to-chip-seq-data-analysis-webinar)
+
+- Using ChIP-Seq to identify and/or quantify bound regions (peaks)  [http://barcwiki.wi.mit.edu/wiki/SOPs/chip_seq_peaks](http://barcwiki.wi.mit.edu/wiki/SOPs/chip_seq_peaks)
+
+- [http://jura.wi.mit.edu/bio/education/hot_topics/ChIPseq/ChIPSeq_HotTopics.pdf](http://jura.wi.mit.edu/bio/education/hot_topics/ChIPseq/ChIPSeq_HotTopics.pdf)
+
+- [http://pedagogix-tagc.univ-mrs.fr/courses/ASG1/practicals/chip-seq/mapping_tutorial.html](http://pedagogix-tagc.univ-mrs.fr/courses/ASG1/practicals/chip-seq/mapping_tutorial.html)
+
+- 公开课： [https://www.coursera.org/learn/galaxy-project/lecture/FUzcg/chip-sequence-analysis-with-macs](https://www.coursera.org/learn/galaxy-project/lecture/FUzcg/chip-sequence-analysis-with-macs)
+
+- EBI的教程：[https://www.ebi.ac.uk/training/online/course/ebi-next-generation-sequencing-practical-course/chip-seq-analysis/chip-seq-practical](https://www.ebi.ac.uk/training/online/course/ebi-next-generation-sequencing-practical-course/chip-seq-analysis/chip-seq-practical)
+
+
+- 台湾教程：[http://lsl.sinica.edu.tw/Services/Class/files/20151118475_2.pdf](http://lsl.sinica.edu.tw/Services/Class/files/20151118475_2.pdf) 徐唯哲 Paul Wei-Che HSU
+
+- peak finder软件大全：
+[http://wodaklab.org/nextgen/data/peakfinders.html](http://wodaklab.org/nextgen/data/peakfinders.html)
+ 
+- [https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/47aq5pp5mzza5vb/PDFs/Tuesday_MB_ChIP-Seq_Intro.pdf](https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/47aq5pp5mzza5vb/PDFs/Tuesday_MB_ChIP-Seq_Intro.pdf)
+
+- paper： Large-Scale Quality Analysis of Published ChIP-seq Data [http://www.g3journal.org/content/4/2/209.full](http://www.g3journal.org/content/4/2/209.full)
+
+- paper： Chip-seq data analysis: from quality check to motif discovery and more [http://ccg.vital-it.ch/var/sib_april15/cases/landt12/strand_correlation.html](http://ccg.vital-it.ch/var/sib_april15/cases/landt12/strand_correlation.html)
+
+- Workshop hands on session(RNA-Seq / ChIP-Seq  ) :  [https://hpc.oit.uci.edu/biolinux/handson.docx](https://hpc.oit.uci.edu/biolinux/handson.docx)
+
+- [http://www.gqinnovationcenter.com/documents/bioinformatics/ChIPseq.pptx](http://www.gqinnovationcenter.com/documents/bioinformatics/ChIPseq.pptx)
+
+- paper supplement : [http://genome.cshlp.org/content/suppl/2015/10/02/gr.192005.115.DC1/Supplemental_Information.docx](http://genome.cshlp.org/content/suppl/2015/10/02/gr.192005.115.DC1/Supplemental_Information.docx)
+
+- [http://www.illumina.com/documents/products/datasheets/datasheet_chip_sequence.pdf](http://www.illumina.com/documents/products/datasheets/datasheet_chip_sequence.pdf)
+
+- [http://www.ncbi.nlm.nih.gov/pubmed/22130887](http://www.ncbi.nlm.nih.gov/pubmed/22130887) "Analyzing ChIP-seq data: preprocessing, normalization, differential identification, and binding pattern characterization."
+
+- [http://www.ncbi.nlm.nih.gov/pubmed/22499706](http://www.ncbi.nlm.nih.gov/pubmed/22499706) "Normalization, bias correction, and peak calling for ChIP-seq." (stat heavy)
+
+- [http://www.ncbi.nlm.nih.gov/pubmed/24244136](http://www.ncbi.nlm.nih.gov/pubmed/24244136) "Practical guidelines for the comprehensive analysis of ChIP-seq data."
+
+- [http://www.ncbi.nlm.nih.gov/pubmed/25223782](http://www.ncbi.nlm.nih.gov/pubmed/25223782) "Identifying and mitigating bias in next-generation sequencing methods for chromatin biology."
+
+- [http://www.ncbi.nlm.nih.gov/pubmed/24598259](http://www.ncbi.nlm.nih.gov/pubmed/24598259) "Impact of sequencing depth in ChIP-seq experiments."
+
+- figures: [https://github.com/shenlab-sinai/ngsplot](https://github.com/shenlab-sinai/ngsplot)
+
+可视化工具
+
+- [https://github.com/daler/metaseq](https://github.com/daler/metaseq)
+
+- [http://liulab.dfci.harvard.edu/CEAS/usermanual.html](http://liulab.dfci.harvard.edu/CEAS/usermanual.html)
+
+bioconductor系列工具和教程 :
+
+- [http://faculty.ucr.edu/](http://faculty.ucr.edu/)~tgirke/HTML_Presentations/Manuals/Workshop_Dec_6_10_2012/Rchipseq/Rchipseq.pdf
+
+- [http://bioinformatics-core-shared-training.github.io/cruk-bioinf-sschool/Day4/chipqc_sweave.pdf](http://bioinformatics-core-shared-training.github.io/cruk-bioinf-sschool/Day4/chipqc_sweave.pdf)
+
+- [http://bioconductor.org/packages/release/bioc/html/chipseq.html](http://bioconductor.org/packages/release/bioc/html/chipseq.html)
+
+- [http://bioconductor.org/help/workflows/chipseqDB/](http://bioconductor.org/help/workflows/chipseqDB/)
+
+- [http://bioconductor.org/help/workflows/generegulation/](http://bioconductor.org/help/workflows/generegulation/)
+
+- [http://bioconductor.org/help/course-materials/2009/EMBLJune09/Practicals/chipseq/BasicChipSeq.pdf](http://bioconductor.org/help/course-materials/2009/EMBLJune09/Practicals/chipseq/BasicChipSeq.pdf)
+
+公司教程
+
+- [http://www.partek.com/Tutorials/microarray/Tiling/ChipSeqTutorial.pdf](http://www.partek.com/Tutorials/microarray/Tiling/ChipSeqTutorial.pdf)
+
+---
+
+## 第三讲：公共数据下载 {-}
+
+这一步跟自学其它高通量测序数据处理一样，就是仔细研读paper，在里面找到作者把原始测序数据放在了哪个公共数据库里面，一般是NCBI的GEO，SRA，本文也不例外，然后解析样本数，找到下载链接规律。
+
+```
+## step1 : download raw data
+> cd ~
+> mkdir CHIPseq_test && cd CHIPseq_test
+> mkdir rawData && cd rawData
+> ## batch download the raw data by shell script :
+> for ((i=593;i<601;i++)) ;do wget [ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP033/SRP033492/SRR1042](ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP033/SRP033492/SRR1042)$i/SRR1042$i.sra;done
+```
+
+很容易就下载了8个测序文件，每个样本的数据大小，测序量如下
+
+```
+> 621M Jun 27 14:03 SRR1042593.sra (16.9M reads)
+> 2.2G Jun 27 15:58 SRR1042594.sra (60.6M reads)
+> 541M Jun 27 16:26 SRR1042595.sra (14.6M reads)
+> 2.4G Jun 27 18:24 SRR1042596.sra (65.9M reads)
+> 814M Jun 27 18:59 SRR1042597.sra (22.2M reads)
+> 2.1G Jun 27 20:30 SRR1042598.sra (58.1M reads)
+> 883M Jun 27 21:08 SRR1042599.sra (24.0M reads)
+> 2.8G Jun 28 11:53 SRR1042600.sra (76.4M reads)
+```
+
+虽然下载的SRA格式数据也是一个很流行的标准，但它只是数据压缩的标准，几乎没有软件能直接跟SRA的格式的测序数据来进行分析，我们需要转成fastq格式，代码如下：
+
+```
+> ## step2 :  change sra data to fastq files.
+> ## cell line: MCF7 //  Illumina HiSeq 2000 //  50bp // Single ends // phred+33
+> ## [http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52964](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52964)
+> ## [ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP033/SRP033492](ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP033/SRP033492)
+> ls *sra |while read id; do ~/biosoft/sratoolkit/sratoolkit.2.6.3-centos_linux64/bin/fastq-dump $id;done
+> rm *sra
+```
+解压的详情如下，可以看到SRA格式有6~9倍的压缩了，比zip格式压缩的2~3倍高多了
+
+```
+##  621M --> 3.9G
+##  2.2G --> 14G
+##  541M --> 3.3G
+##  2.4G --> 15G
+```
+---
+
+## 第四讲：必要软件安装及结果下载 {-}
+
+博文的顺序有点乱，因为怕读到前面的公共测序数据下载这篇文章的朋友搞不清楚，我如何调用各种软件的，所以我这里强势插入一篇博客来描述这件事，当然也只是略过，我所有的软件理论上都是安装在我的home目录下的biosoft文件夹，所以你看到我一般安装程序都是:
+
+```
+cd ~/biosoft
+mkdir macs2 && cd macs2 ##指定的软件安装在指定文件夹里面
+```
+
+
+这只是我个人的安装习惯，因为我不是root，所以不能在linux系统下做太多事，我这里贴出我所有的软件安装代码：
+
+```
+## pre-step: download sratoolkit /fastx_toolkit_0.0.13/fastqc/bowtie2/bwa/MACS2/HOMER/QuEST/mm9/hg19/bedtools
+## http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software
+## http://www.ncbi.nlm.nih.gov/books/NBK158900/
+
+## Download and install sratoolkit
+cd ~/biosoft
+mkdir sratoolkit && cd sratoolkit
+wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.6.3/sratoolkit.2.6.3-centos_linux64.tar.gz
+##
+## Length: 63453761 (61M) [application/x-gzip]
+## Saving to: "sratoolkit.2.6.3-centos_linux64.tar.gz"
+tar zxvf sratoolkit.2.6.3-centos_linux64.tar.gz
+
+## Download and install bedtools
+cd ~/biosoft
+mkdir bedtools && cd bedtools
+wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+## Length: 19581105 (19M) [application/octet-stream]
+tar -zxvf bedtools-2.25.0.tar.gz
+cd bedtools2
+make
+
+## Download and install PeakRanger
+cd ~/biosoft
+mkdir PeakRanger && cd PeakRanger
+wget https://sourceforge.net/projects/ranger/files/PeakRanger-1.18-Linux-x86_64.zip/
+## Length: 1517587 (1.4M) [application/octet-stream]
+unzip PeakRanger-1.18-Linux-x86_64.zip
+~/biosoft/PeakRanger/bin/peakranger -h
+
+## Download and install bowtie
+cd ~/biosoft
+mkdir bowtie && cd bowtie
+wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.2.9/bowtie2-2.2.9-linux-x86_64.zip/download
+#Length: 27073243 (26M) [application/octet-stream]
+#Saving to: "download" ## I made a mistake here for downloading the bowtie2
+mv download bowtie2-2.2.9-linux-x86_64.zip
+unzip bowtie2-2.2.9-linux-x86_64.zip
+
+mkdir -p ~/biosoft/bowtie/hg19_index
+cd ~/biosoft/bowtie/hg19_index
+
+# download hg19 chromosome fasta files
+wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz
+# unzip and concatenate chromosome and contig fasta files
+tar zvfx chromFa.tar.gz
+cat *.fa > hg19.fa
+rm chr*.fa
+## ~/biosoft/bowtie/bowtie2-2.2.9/bowtie2-build ~/biosoft/bowtie/hg19_index/hg19.fa ~/biosoft/bowtie/hg19_index/hg19
+## Download and install BWA
+cd ~/biosoft
+mkdir bwa && cd bwa
+
+http://sourceforge.net/projects/bio-bwa/files/
+
+tar xvfj bwa-0.7.12.tar.bz2 # x extracts, v is verbose (details of what it is doing), f skips prompting for each individual file, and j tells it to unzip .bz2 files
+cd bwa-0.7.12
+make
+export PATH=$PATH:/path/to/bwa-0.7.12 # Add bwa to your PATH by editing ~/.bashrc file (or .bash_profile or .profile file)
+# /path/to/ is an placeholder. Replace with real path to BWA on your machine
+source ~/.bashrc
+# bwa index [-a bwtsw|is] index_prefix reference.fasta
+bwa index -p hg19bwaidx -a bwtsw ~/biosoft/bowtie/hg19_index/hg19.fa
+# -p index name (change this to whatever you want)
+# -a index algorithm (bwtsw for long genomes and is for short genomes)
+## Download and install macs2
+## // https://pypi.python.org/pypi/MACS2/
+cd ~/biosoft
+mkdir macs2 && cd macs2
+wget ~~~~~~~~~~~~~~~~~~~~~~MACS2-2.1.1.20160309.tar.gz
+tar zxvf MACS2-2.1.1.20160309.tar.gz
+cd MACS2-2.1.1.20160309
+python setup.py install --user
+
+#################### The log for installing MACS2:
+Creating ~/.local/lib/python2.7/site-packages/site.py
+Processing MACS2-2.1.1.20160309-py2.7-linux-x86_64.egg
+Copying MACS2-2.1.1.20160309-py2.7-linux-x86_64.egg to ~/.local/lib/python2.7/site-packages
+Adding MACS2 2.1.1.20160309 to easy-install.pth file
+Installing macs2 script to ~/.local/bin
+Finished processing dependencies for MACS2==2.1.1.20160309
+############################################################
+~/.local/bin/macs2 --help
+
+Example for regular peak calling:
+macs2 callpeak -t ChIP.bam -c Control.bam -f BAM -g hs -n test -B -q 0.01
+Example for broad peak calling:
+macs2 callpeak -t ChIP.bam -c Control.bam --broad -g hs --broad-cutoff 0.1
+
+## Download and install homer (Hypergeometric Optimization of Motif EnRichment)
+## // http://homer.salk.edu/homer/
+## // http://blog.qiubio.com:8080/archives/3024
+## pre-install: Ghostscript，seqlogo,blat
+cd ~/biosoft
+mkdir homer && cd homer
+wget http://homer.salk.edu/homer/configureHomer.pl
+perl configureHomer.pl -install
+perl configureHomer.pl -install hg19
+```
+一般来说，对我这样水平的人来说，软件安装就跟家常便饭一样，没有什么问题了，但如果你是初学者呢，肯定没那么轻松，所以请加强学习，我无法在这里讲解太具体的知识了。
+
+所有软件安装完毕后就可以下载文章对这些ChIP-seq的处理结果了，这个很重要，检验我们是否重复了人家的数据分析过程。
+
+```
+## step3 : download the results from paper
+## http://www.bio-info-trainee.com/1571.html
+mkdir paper_results && cd paper_results
+wget ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE52nnn/GSE52964/suppl/GSE52964_RAW.tar
+tar xvf GSE52964_RAW.tar
+
+ls *gz |xargs gunzip
+
+## step4 : run FastQC to check the sequencing quality.
+
+##这里可以看到我们下载的原始数据已经被作者处理好了，去了接头，去了低质量序列
+
+ls *.fastq | while read id ; do ~/biosoft/fastqc/FastQC/fastqc $id;done
+## Sequence length 51
+## %GC 39
+## Adapter Content passed
+
+The quality of the reads is pretty good, we don't need to do any filter or trim
+
+mkdir QC_results
+mv *zip *html QC_results/
+```
+
+---
+
+## 第五讲：测序数据比对 {-}
+
+比对本质是是很简单的了，各种mapping工具层出不穷，我们一般常用的就是BWA和bowtie了，我这里就挑选bowtie2吧，反正别人已经做好了各种工具效果差异的比较，我们直接用就好了，代码如下：
+
+```
+## step5 : alignment to hg19/ using bowtie2 to do alignment
+## ~/biosoft/bowtie/bowtie2-2.2.9/bowtie2-build ~/biosoft/bowtie/hg19_index /hg19.fa ~/biosoft/bowtie/hg19_index/hg19
+## cat >run_bowtie2.sh
+ls *.fastq | while read id ;
+do
+echo $id
+#~/biosoft/bowtie/bowtie2-2.2.9/bowtie2 -p 8 -x ~/biosoft/bowtie/hg19_index/hg19 -U $id -S ${id%%.*}.sam 2>${id%%.*}.align.log;
+#samtools view -bhS -q 30 ${id%%.*}.sam > ${id%%.*}.bam ## -F 1548 https://broadinstitute.github.io/picard/explain-flags.html
+# -F 0x4 remove the reads that didn't match
+samtools sort ${id%%.*}.bam ${id%%.*}.sort ## prefix for the output
+# samtools view -bhS a.sam | samtools sort -o - ./ > a.bam
+samtools index ${id%%.*}.sorted.bam
+done
+```
+这个索引~/biosoft/bowtie/hg19_index/hg19需要自己提取建立好，见前文
+
+初步比对的sam文件到底该如何过滤，我查了很多文章都没有给出个子丑寅卯，各执一词，我也没办法给大家一个标准，反正我测试了好几种，看起来call peaks的差异不大，就是得不到文章给出的那些结果！！
+
+一般来说，初步比对的sam文件只能选取unique mapping的结果，所以我用了#samtools view -bhS -q 30，但是结果并没什么改变，有人说是peak caller这些工具本身就会做这件事，所以取决于你下游分析所选择的工具。
+
+给大家看比对的日志吧：
+
+```
+SRR1042593.fastq
+16902907 reads; of these:
+16902907 (100.00%) were unpaired; of these:
+667998 (3.95%) aligned 0 times
+12467095 (73.76%) aligned exactly 1 time
+3767814 (22.29%) aligned >1 times
+96.05% overall alignment rate
+......
+SRR1042598.fastq
+58068816 reads; of these:
+58068816 (100.00%) were unpaired; of these:
+8433671 (14.52%) aligned 0 times
+37527468 (64.63%) aligned exactly 1 time
+12107677 (20.85%) aligned >1 times
+85.48% overall alignment rate
+[samopen] SAM header is present: 93 sequences.
+SRR1042599.fastq
+24019489 reads; of these:
+24019489 (100.00%) were unpaired; of these:
+1411095 (5.87%) aligned 0 times
+17528479 (72.98%) aligned exactly 1 time
+5079915 (21.15%) aligned >1 times
+94.13% overall alignment rate
+[samopen] SAM header is present: 93 sequences.
+SRR1042600.fastq
+76361026 reads; of these:
+76361026 (100.00%) were unpaired; of these:
+8442054 (11.06%) aligned 0 times
+50918615 (66.68%) aligned exactly 1 time
+17000357 (22.26%) aligned >1 times
+88.94% overall alignment rate
+[samopen] SAM header is present: 93 sequences.
+```
+
+可以看到比对非常成功。
+
+我这里就不用表格的形式来展现了，毕竟我又不是给客户写报告，大家就将就着看吧。
+
+
+
+---
+
+
+
+## 第六讲 寻找peaks {-}
+
+
+
+ChIP-seq测序的本质还是目标片段捕获测序，但跟WES不同的是，你选择的IP不同，细胞或者机体状态不同，捕获到的序列差异很大。而我们研究的重点就是捕获到的差异。我们对ChIP-seq测序数据寻找peaks的本质就是得到所有测序数据比对在全基因组之后在基因组上测序深度里面寻找比较突出的部分。比如对WES数据来说，各个外显子，或者外显子的5端到3端，理论上测序深度应该是一致的，都是50X~200X，画一个测序深度曲线，应该是近似于一条直线。但对我们的ChIP-seq测序数据来说，在所捕获的区域上面，理论上测序深度是绝对不一样的，应该是近似于一个山峰。而那些覆盖度高的地方，山顶，就是我们的IP所结合的热点，也就是我们想要找的peaks，在IGV里面看到大致是下面这样：
+
+![chipseq-0-peakdetection-large-IGV](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/chipseq-0-peakdetection-large-IGV.png)
+
+可以看到测序的reads是分布不均匀的，我们通常说的ChIP-seq测序的IP，可以是各个组蛋白上各修饰位点对应的抗体，或者是各种转录因子的抗体等等。
+
+如何定义热点呢？通俗地讲，热点是这样一些位置，这些位置多次被测得的read所覆盖（我们测的是一个细胞群体，read出现次数多，说明该位置被TF结合的几率大）。那么，read数达到多少才叫多？这就要用到统计检验来分析。假设TF在基因组上的分布是没有任何规律的，那么，测序得到的read在基因组上的分布也必然是随机的，某个碱基上覆盖的read的数目应该服从二项分布。
+
+具体统计学原理可以看这篇博客文章：[http://www.plob.org/2014/05/08/7227.html](http://www.plob.org/2014/05/08/7227.html)
+
+为了达到作者文献里面的结果，我换了**8**个软件：**MACS2/HOMER/SICERpy/PePr/SWEMBL/SISSRs/BayesPeak/PeakRanger**
+
+这里就不一一介绍peaks caller软件的安装以及使用了，因为MACS2是最常用的，所以简单贴一下我关于MACS2的学习代码：
+
+```
+## step6 : peak calling
+### step6.1: with MACS2
+## 我先看了看说明书：
+
+macs2 callpeak -t TF_1.bam -c Input.bam -n mypeaks
+We used the following options:
+-t: This is the only required parameter for MACS, refers to the name of the file with the ChIP-seq data
+-c: The control or mock data file
+-n: The name string of the experiment
+MAC2 creates 4 files (mypeaks peaks.narrowPeak, mypeaks summits.bed, mypeaks peaks.xls and mypeaks model.r)
+
+# MACS首先的工作是要确定一个模型，这个模型最关键的参数就是峰宽d。这个d就是bw(band width)，而它的一半就是shiftsize。
+### 然后根据文章确定了下载的测序数据的分类
+
+GSM1278641 Xu_MUT_rep1_BAF155_MUT        SRR1042593
+GSM1278642 Xu_MUT_rep1_Input        SRR1042594
+GSM1278643 Xu_MUT_rep2_BAF155_MUT        SRR1042595
+GSM1278644 Xu_MUT_rep2_Input        SRR1042596
+GSM1278645 Xu_WT_rep1_BAF155        SRR1042597
+GSM1278646 Xu_WT_rep1_Input        SRR1042598
+GSM1278647 Xu_WT_rep2_BAF155        SRR1042599
+GSM1278648 Xu_WT_rep2_Input         SRR1042600
+
+## 这里有个很奇怪的问题，input的测序数据居然比IP的测序数据多？？？
+
+848M Jun 28 14:31 SRR1042593.bam
+2.7G Jun 28 14:52 SRR1042594.bam
+716M Jun 28 14:58 SRR1042595.bam
+2.9G Jun 28 15:20 SRR1042596.bam
+1.1G Jun 28 15:28 SRR1042597.bam
+2.6G Jun 28 15:48 SRR1042598.bam
+1.2G Jun 28 15:58 SRR1042599.bam
+3.5G Jun 28 16:26 SRR1042600.bam
+
+## 我没有想明白为什么
+
+## http://www2.uef.fi/documents/1698400/2466431/Macs2/f4d12870-34f9-43ef-bf0d-f5d087267602
+## http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3120977/我首先用的是下面这些代码
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042594.bam -t SRR1042593.bam -f BAM -B -g hs -n Xu_MUT_rep1 2>Xu_MUT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042596.bam -t SRR1042595.bam -f BAM -B -g hs -n Xu_MUT_rep2 2>Xu_MUT_rep2.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042598.bam -t SRR1042597.bam -f BAM -B -g hs -n Xu_WT_rep1 2>Xu_WT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042600.bam -t SRR1042599.bam -f BAM -B -g hs -n Xu_WT_rep2 2>Xu_WT_rep2.masc2.log &
+
+得到的peaks少的可怜，我第一次检查，以为是因为自己没有sort 比对的bam文件导致
+
+## forget to sort the bam files:
+## 首先把bam文件sort好，构建了inde，然后继续运行！
+
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042594.sorted.bam -t SRR1042593.sorted.bam -f BAM -B -g hs -n Xu_MUT_rep1 2>Xu_MUT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042596.sorted.bam -t SRR1042595.sorted.bam -f BAM -B -g hs -n Xu_MUT_rep2 2>Xu_MUT_rep2.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042598.sorted.bam -t SRR1042597.sorted.bam -f BAM -B -g hs -n Xu_WT_rep1 2>Xu_WT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042600.sorted.bam -t SRR1042599.sorted.bam -f BAM -B -g hs -n Xu_WT_rep2 2>Xu_WT_rep2.masc2.log &
+
+##此时得到peaks跟上面为sort的bam文件得到的peaks一模一样，看来不是这个原因
+##然后我怀疑是不是作者上传数据的时候把input和IP标记反了，所以我认为的调整过来
+
+## Then change the control and treatment
+nohup time ~/.local/bin/macs2 callpeak -t SRR1042594.sorted.bam -c SRR1042593.sorted.bam -f BAM -B -g hs -n Xu_MUT_rep1 2>Xu_MUT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -t SRR1042596.sorted.bam -c SRR1042595.sorted.bam -f BAM -B -g hs -n Xu_MUT_rep2 2>Xu_MUT_rep2.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -t SRR1042598.sorted.bam -c SRR1042597.sorted.bam -f BAM -B -g hs -n Xu_WT_rep1 2>Xu_WT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -t SRR1042600.sorted.bam -c SRR1042599.sorted.bam -f BAM -B -g hs -n Xu_WT_rep2 2>Xu_WT_rep2.masc2.log &
+
+##结果，压根就没有peaks了！！！！看了作者并没有搞错
+##接下来我怀疑是自己用samtools view -bhS -q 30   处理了sam文件，这个标准太严格了！！
+## 
+## then just use the sam files.
+
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042594.sam -t SRR1042593.sam -f SAM -B -g hs -n Xu_MUT_rep1 2>Xu_MUT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042596.sam -t SRR1042595.sam -f SAM -B -g hs -n Xu_MUT_rep2 2>Xu_MUT_rep2.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042598.sam -t SRR1042597.sam -f SAM -B -g hs -n Xu_WT_rep1 2>Xu_WT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042600.sam -t SRR1042599.sam -f SAM -B -g hs -n Xu_WT_rep2 2>Xu_WT_rep2.masc2.log &
+
+## 也没有多几个peaks，最后我只能想到是我的p值太严格了
+## then chang the criteria for p values :
+
+https://github.com/taoliu/MACS/
+
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042594.sam -t SRR1042593.sam -f SAM -p 0.01 -g hs -n Xu_MUT_rep1 2>Xu_MUT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042596.sam -t SRR1042595.sam -f SAM -p 0.01 -g hs -n Xu_MUT_rep2 2>Xu_MUT_rep2.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042598.sam -t SRR1042597.sam -f SAM -p 0.01 -g hs -n Xu_WT_rep1 2>Xu_WT_rep1.masc2.log &
+nohup time ~/.local/bin/macs2 callpeak -c SRR1042600.sam -t SRR1042599.sam -f SAM -p 0.01 -g hs -n Xu_WT_rep2 2>Xu_WT_rep2.masc2.log &
+
+##我大大减小了P值的标准，结果是输出一大堆的peaks
+
+18919 Xu_MUT_rep1_peaks.xls
+36277 Xu_MUT_rep2_peaks.xls
+32494 Xu_WT_rep1_peaks.xls
+56080 Xu_WT_rep2_peaks.xls
+
+问题是这些peaks根本就都是假阳性！！！
+我手动的check了几个之前严格过滤条件下的peaks，的确可以看到测序深度是两个山峰形状的曲线
+
+## check some peaks 手动的 ## chr1 121484235 121485608
+## masc results :
+samtools depth -r chr10:42385331-42385599 SRR1042593.sorted.bam
+samtools depth -r chr10:42385331-42385599 SRR1042594.sorted.bam
+samtools depth -r chr20:45810382-45810662 SRR1042593.sorted.bam
+samtools depth -r chr20:45810382-45810662 SRR1042594.sorted.bam
+
+##我也check了paper里面得到的peak，但是在我的比对文件里面，肉眼看起来根本不像，所以我很纠结
+
+paper results:
+chr20 45796362 46384917
+chr1 121482722 121485861
+samtools depth -r chr1:121482722-121485861 SRR1042593.sorted.bam
+samtools depth -r chr1:121482722-121485861 SRR1042594.sorted.bam
+samtools depth -r chr20:45796362-46384917 SRR1042593.sorted.bam
+samtools depth -r chr20:45796362-46384917 SRR1042594.sorted.bam 
+```
+很不幸，最后还是没能达到作者的结果，我没搞清楚是为什么，我还用了**BayesPeak/PeakRanger这两个软件，结果也不理想。**
+
+- peak finder软件大全： [http://wodaklab.org/nextgen/data/peakfinders.html](http://wodaklab.org/nextgen/data/peakfinders.html)
+- Peak Calling for ChIP-Seq :　[http://epigenie.com/guide-peak-calling-for-chip-seq/](http://epigenie.com/guide-peak-calling-for-chip-seq/)
+
+
+---
+
+## 第七讲 peaks注释 {-}
+
+经过前面的ChIP-seq测序数据处理的常规分析，我们已经成功的把测序仪下机数据变成了BED格式的peaks记录文件，我选取的这篇文章里面做了4次ChIP-seq实验，分别是两个重复的野生型MCF7细胞系的 BAF155 immun =oprecipitates和两个重复的突变型MCF7细胞系的 BAF155 immunoprecipitates，这样通过比较野生型和突变型MCF7细胞系的 BAF155 immunoprecipitates的不同结果就知道该细胞系的BAF155 突变，对它在全基因组的结合功能的影响。
+
+```
+#我这里直接从GEO里面下载了peaks结果，它们详情如下：wc -l *bed
+6768 GSM1278641_Xu_MUT_rep1_BAF155_MUT.peaks.bed
+3660 GSM1278643_Xu_MUT_rep2_BAF155_MUT.peaks.bed
+11022 GSM1278645_Xu_WT_rep1_BAF155.peaks.bed
+5260 GSM1278647_Xu_WT_rep2_BAF155.peaks.bed
+49458 GSM601398_Ini1HeLa-peaks.bed
+24477 GSM601398_Ini1HeLa-peaks-stringent.bed
+12725 GSM601399_Brg1HeLa-peaks.bed
+12316 GSM601399_Brg1HeLa-peaks-stringent.bed
+46412 GSM601400_BAF155HeLa-peaks.bed
+37920 GSM601400_BAF155HeLa-peaks-stringent.bed
+30136 GSM601401_BAF170HeLa-peaks.bed
+25432 GSM601401_BAF170HeLa-peaks-stringent.bed
+```
+
+每个BED的peaks记录，本质是就3列是需要我们注意的，就是染色体，以及在该染色体上面的起始和终止坐标，如下
+
+```
+#PeakID chr start end strand Normalized Tag Count region size findPeaks Score Clonal Fold Change
+chr20 52221388 52856380 chr20-8088 41141 +
+chr20 45796362 46384917 chr20-5152 31612 +
+chr17 59287502 59741943 chr17-2332 29994 +
+chr17 59755459 59989069 chr17-667 19943 +
+chr20 52993293 53369574 chr20-7059 12642 +
+chr1 121482722 121485861 chr1-995 9070 +
+chr20 55675229 55855175 chr20-6524 7592 +
+chr3 64531319 64762040 chr3-4022 7213 +
+chr20 49286444 49384563 chr20-4482 6165 +
+```
+
+我们所谓的peaks注释，就是想看看该peaks在基因组的哪一个区段，看看它们在**各种基因组区域**(基因上下游，5,3端UTR，启动子，内含子，外显子，基因间区域，microRNA区域)**分布情况**，但是一般的peaks都有近万个，所以需要批量注释，如果脚本学的好，自己下载参考基因组的GFF注释文件，完全可以自己写一个，我这里会介绍一个R的bioconductor包ChIPpeakAnno来做CHIP-seq的peaks注释，下面的包自带的示例
+
+```
+library(ChIPpeakAnno)
+bed <- system.file("extdata", "MACS_output.bed", package="ChIPpeakAnno")
+gr1 <- toGRanges(bed, format="BED", header=FALSE)
+## one can also try import from rtracklayer
+library(rtracklayer)
+gr1.import <- import(bed, format="BED")
+identical(start(gr1), start(gr1.import))
+gr1[1:2]
+gr1.import[1:2] #note the name slot is different from gr1
+gff <- system.file("extdata", "GFF_peaks.gff", package="ChIPpeakAnno")
+gr2 <- toGRanges(gff, format="GFF", header=FALSE, skip=3)
+ol <- findOverlapsOfPeaks(gr1, gr2)
+makeVennDiagram(ol)
+
+##还可以用binOverFeature来根据特定的GRanges对象(通常是TSS)来画分布图
+## Distribution of aggregated peak scores or peak numbers around transcript start sites.
+```
+
+可以看到这个包使用起来非常简单，只需要把我们做好的peaks文件(GSM1278641_Xu_MUT_rep1_BAF155_MUT.peaks.bed等等)用`toGRanges`或者`import`读进去，成一个GRanges对象即可，上面的代码是比较两个peaks文件的overlap。然后还可以根据R很多包都自带的数据来注释基因组特征
+
+```
+data(TSS.human.GRCh37) ## 主要是借助于这个GRanges对象来做注释，也可以用getAnnotation来获取其它GRanges对象来做注释
+## featureType ： TSS, miRNA, Exon, 5'UTR, 3'UTR, transcript or Exon plus UTR
+peaks=MUT_rep1_peaks
+macs.anno <- annotatePeakInBatch(peaks, AnnotationData=TSS.human.GRCh37,
+output="overlapping", maxgap=5000L)
+
+## 得到的macs.anno对象就是已经注释好了的，每个peaks是否在基因上，或者距离基因多远，都是写的清清楚楚
+
+if(require(TxDb.Hsapiens.UCSC.hg19.knownGene)){
+aCR<-assignChromosomeRegion(peaks, nucleotideLevel=FALSE,
+precedence=c("Promoters", "immediateDownstream",
+"fiveUTRs", "threeUTRs",
+"Exons", "Introns"),
+TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene)
+barplot(aCR$percentage)
+}
+```
+
+得到的条形图如下，虽然很丑，但这就是peaks注释的精髓，搞清楚每个peaks在基因组的位置特征：
+
+[![ChIPpeakAnno-genomic-region-distribution](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/ChIPpeakAnno-genomic-region-distribution.png)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/ChIPpeakAnno-genomic-region-distribution.png)
+
+ 
+
+同理，对每个peaks文件，都可以做类似的分析！
+
+但是对多个peaks文件，比如本文中的，想比较野生型和突变型MCF7细胞系的 BAF155 immunoprecipitates的结果的不同，就需要做peaks之间的差异分析，已经后续的差异基因注释啦
+
+当然，值得一提的是peaks注释我更喜欢网页版工具，反正peaks文件非常小，直接上传到别人做好的web tools，就可立即出一大堆可视化图表分析结果啦，大家可以去试试看：
+
+[http://chipseek.cgu.edu.tw/](http://chipseek.cgu.edu.tw/)
+
+[http://bejerano.stanford.edu/great/public/html/](http://bejerano.stanford.edu/great/public/html/)
+
+[http://liulab.dfci.harvard.edu/CEAS/](http://liulab.dfci.harvard.edu/CEAS/)
+
+虽然我花费了大部分篇幅来描述ChIPpeakAnno这个包的用法，**但是真正的重点是你得明白peaks记录了什么，要注释什么，以及把这3个网页工具的可视化图表分析结果全部看懂，这网页版工具才是重点！**
+
+
+
+---
+
+## 第八讲：寻找motif {-}
+
+motif是比较有特征的短序列，会多次出现的，一般认为它的生物学意义重大，做完CHIP-seq分析之后，一般都会寻找motif 。
+
+查找有两种，一种是de novo的，要求的输入文件的fasta序列，一般是根据peak的区域的坐标提取好序列；另一种是依赖于数据库的搜寻匹配，很多课题组会将现有的ChIP-seq数据进行整合，提供更全面，更准确的motif数据库。
+
+**motif的定义如下：**
+
+> motif: recurring pattern. eg, sequence motif, structure motif or network motif
+>
+> DNA sequence motif: short, recurring patterns in DNA that are presumed to have a biological function.
+
+> 从上边的定义可以看出，其实motif这个**单词**就是形容一种反复出现的模式，而**序列motif**往往是DNA上的反复出现的模式，并被假设拥有生物学功能。而且，经常是一些具有序列特异性的蛋白的结合位点（如，转录因子）或者是涉及到重要生物过程的（如，RNA 起始，RNA 终止， RNA 剪切等等）。
+
+摘抄自：[http://blog.163.com/zju_whw/blog/static/225753129201532104815301/](http://blog.163.com/zju_whw/blog/static/225753129201532104815301/)
+
+motif最先是通过实验的方法发现的，换句话说，不是说有了ChIP-seq才有了motif分析，起始很早人们就开始研究motif了！例如，**'TATAAT’ box**在1975年就被pribnow发现了，它与上游的**‘TTGACA’motif**是RNA聚合酶结合位点的特异性序列。而且，当时的人们就知道，不是所有的结合位点都一定完美地与motif匹配，大部分都只匹配了12个碱基中的7-9个。结合位点与motif的匹配程度往往也与蛋白质与DNA的结合强弱有关。
+
+目前被人们识别出来的motif也越来越多，如TRANSFAC和JASPAR数据库都有着大量转录因子的motif。而随着ChIP-seq数据的大量产出，motif的研究会进一步深入，有一些课题组会将现有的ChIP-seq数据进行整合，提供更全面，更准确的motif数据库。
+
+从算法上来讲，这是很复杂的，我就不多说了，我这里主要讲best practice：
+
+一篇文献列出了2014年以前的近乎所有知名的A survey of motif finding Web tools for detecting binding site motifs in ChIP-Seq data 链接见：[https://biologydirect.biomedcentral.com/articles/10.1186/1745-6150-9-4](https://biologydirect.biomedcentral.com/articles/10.1186/1745-6150-9-4)
+
+ **最常用的是 MEME工具套件 ：**
+
+ [http://meme-suite.org/](http://meme-suite.org/)  输入文件是fasta序列，需要对peaks进行转换，根据bed的基因坐标从基因组里面提取对应的序列咯： [http://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html](http://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html)
+
+它里面集成了4个寻找motif 的工具，每个工具都是一篇文章，里面有详细描述具体原理，但是整个网页给人的感觉是too busy，让初学者无从下手。[![meme-suit-motif-finding](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/meme-suit-motif-finding.png)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/meme-suit-motif-finding.png)
+
+
+
+把自己的fasta序列上传上去即可，还是选取我们本次系列教程的数据
+
+```
+$ ls -lh  *fasta
+-rw-r--r-- 1 Jimmy 197121  18M Jul  7 19:40 GSM1278641_Xu_MUT_rep1_BAF155_MUT_sequence.fasta
+-rw-r--r-- 1 Jimmy 197121 9.9M Jul  7 19:38 GSM1278643_Xu_MUT_rep2_BAF155_MUT_sequence.fasta
+-rw-r--r-- 1 Jimmy 197121  26M Jul  7 19:41 GSM1278645_Xu_WT_rep1_BAF155_sequence.fasta
+-rw-r--r-- 1 Jimmy 197121  14M Jul  7 19:41 GSM1278647_Xu_WT_rep2_BAF155_sequence.fasta
+```
+
+然后就可以看到所有结果啦，大家可以试试看。
+
+最后值得一提的是现在流行的R的bioconductor系列包，也可以寻找motif：
+
+一般的R包都可以直接从BED文件里面记录的基因坐标来找motif，有点需要输入fasta序列，就需要自己根据bed的基因坐标从基因组里面提取对应的序列咯：
+
+rGADEM (motif discovery): [http://bioconductor.org/packages/devel/bioc/html/rGADEM.html](http://bioconductor.org/packages/devel/bioc/html/rGADEM.html)
+
+MotIV (motif validation): [http://bioconductor.org/packages/devel/bioc/html/MotIV.html](http://bioconductor.org/packages/devel/bioc/html/MotIV.html)
+
+[http://lgsun.grc.nia.nih.gov/CisFinder/](http://lgsun.grc.nia.nih.gov/CisFinder/)
+
+[http://bioinfo.cs.technion.ac.il/drim/](http://bioinfo.cs.technion.ac.il/drim/)
+
+[http://www.ncbi.nlm.nih.gov/pubmed/20736340](http://www.ncbi.nlm.nih.gov/pubmed/20736340)
+
+还有一个PICS (ChIP-seq): 虽然不是bioconductor的包 [http://www.rglab.org/pics-probabilistic-inference-for-chip-seq/](http://www.rglab.org/pics-probabilistic-inference-for-chip-seq/) 貌似国内被墙了，无法打开。
+
+
+
+---
+
+## 第九讲：ChIP-seq可视化大全 {-}
+
+讲到这里，我们的自学ChIP-seq分析系列教程就告一段落了，当然，我会随时查漏补缺，根据读者的反馈来更新着系列教程。
+
+其实可视化这已经是一个比较复杂的方向了，不仅仅是针对于ChIP-seq数据。可视化本身是发文章的先决条件，而让人一目了然图片也说明了数据分析人员对数据本身的理解。我这里就列出一些目录和一些工具和ppt。这个主要靠大家自学，而且我博客空间有限，就不上传一大堆图片了，大家随便找一些经典的paper里面都会有很多可视化分析。
+
+首先强烈推荐两个网页版工具，针对找到的peaks可视化:
+
+[http://chipseek.cgu.edu.tw/](http://chipseek.cgu.edu.tw/)
+
+[http://bejerano.stanford.edu/great/public/html/](http://bejerano.stanford.edu/great/public/html/)
+
+然后再推荐一个哈佛刘小乐实验室出品的软件，也是专门为了作图 [http://liulab.dfci.harvard.edu/CEAS/usermanual.html](http://liulab.dfci.harvard.edu/CEAS/usermanual.html)
+
+还有一个java工具：也可以可视化CHIP-seq的peaks结果EXPANDER (EXpression Analyzer and DisplayER) is a java-based tool for analysis of gene expression data.[http://acgt.cs.tau.ac.il/expander/help/ver7.0Help/html/Input_Data_.htm](http://acgt.cs.tau.ac.il/expander/help/ver7.0Help/html/Input_Data_.htm)
+
+如图所示
+
+[![nn.3808-F1-multiple-IP-chip-seq-data-visualization](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/nn.3808-F1-multiple-IP-chip-seq-data-visualization.jpg)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/nn.3808-F1-multiple-IP-chip-seq-data-visualization.jpg)
+
+然后我所了解的图片大概有下面这些，都是有专门的软件，甚至自己写脚本也可以做的
+
+- peaks长度分布柱状图
+- 每个peak的测序情况可视化(IGV,sushi)
+- 测序reads在全基因组各个染色体的分布(Chromosome ideograms)
+- reads相对基因位置分布统计
+- peaks相对基因位置分布统计
+- reads在基因组位置分布统计（染色体分开作图）
+- peaks在基因组位置分布统计（染色体分开作图）
+- 统计peaks在各种基因组区域(基因上下游，5,3端UTR，启动子，内含子，外显子，基因间区域，- microRNA区域)分布情况，条形图和饼图均可
+- peak与转录起始位点距离的分析（曲线图和热图）
+
+
+**最后总结一下**
+
+CHIP-seq pipeline :　[http://www.slideshare.net/COST-events/chipseq-data-analysis](http://www.slideshare.net/COST-events/chipseq-data-analysis)
+
+大家一定要看这个ChIP-seq guidelines and practices of the ENCODE and modENCODE consortia.  [http://www.ncbi.nlm.nih.gov/pubmed/22955991](http://www.ncbi.nlm.nih.gov/pubmed/22955991)
 
 ### 微生物组
 

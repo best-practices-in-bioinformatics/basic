@@ -588,9 +588,612 @@ http://www.erudil.com/preqr.pdf
 https://www.cs.tut.fi/~jkorpela/perl/regexp.html 
 https://support.sas.com/rnd/base/datastep/perl_regexp/regexp-tip-sheet.pdf
 
-### python
+### python 
+
+> Python开发的方向太多了，有机器学习，数据挖掘，网络开发，爬虫等等。其实在生信领域，Python还显现不出绝对的优势，生信的大部分软件流程都是用shell或Perl写的，而且已经足够好用了。我选Python是因为我想顺便学点数据挖掘和机器学习的东西，而且Python这些年越来越火，发展势头远超其他脚本语言，所以学它肯定是没错的。
+
+## 一、入门标准  {-} 
+
+入门比较难定义，什么程度才算入门呢？
+
+1. 掌握基本的语法，熟练使用python的内置类型、内置函数和数据结构。 
+2. 了解一些基本的模块的使用，能够实现一些简单的需求。
+
+后面有一个实例，如果你能简单的做完，那我敢肯定你已经入门了。
+
+## 二、基本知识点  {-}
+
+### 1.基本语法  {-}
+
+**缩进**：Python是通过代码缩进来决定代码层次逻辑的，一般约定使用4个空格
+
+**版本问题**：主要包括2.x系列的和3.x系列的，两者语法不同且不兼容，有的模块只能在指定版本下安装。建议使用3.x Python，碰到特殊问题再去使用指定版本
+
+**文件编码声明**：python会去环境变量里寻找python解释器。如果代码里有中文，则要以utf-8编码
+```python
+#!/usr/bin/env python
+#-*- coding: utf-8 –*-
+```
+**变量定义**：使用前要先定义
+
+dir()：列出一个数据类型或对象的所有方法，非常好用，同help()
+
+**文件操作**：f = open()，f.close()；with open() as f: ，os.path.exists()，os.path.isfile()，os.path.abspath()
+
+**目录操作**：os.mkdir()，os.rmdir()，os.listdir()，os.chdir()
+
+**开发环境选择**：
+- Sublime Text 对Python支持挺好，轻量级生化武器（推荐）
+- Eclipse+Pydev比较厚重，大型开发比较适合
+- Vim/Atom
+- PyCharm
+- IPython
+- WingIDE
+
+### 2.处理数据  {-}
+
+#### 2.1 基本数据类型：布尔；整型；浮点型；字符串  {-}
+
+```
+# 字符串的内置函数，都比较有用
+'capitalize', 'casefold', 'center', 'count', 'encode', 'endswith', 'expandtabs', 'find', 'format', 'format_map', 'index', 'isalnum', 'isalpha', 'isdecimal', 'isdigit', 'isidentifier', 'islower', 'isnumeric', 'isprintable', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'maketrans', 'partition', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill'
+```
+
+#### 2.2 基本数据结构：列表、元组、字典、集合。  {-}
+
+数据结构就是一种容器，用于在内存中存放我们的数据。
+
+列表：任意元素组成的顺序序列，以位置为索引。
+```
+# 列表的内置函数
+'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort'
+```
+元组：相当于不可变的列表，防止错误修改，节省内存开销。元组解包
+```
+# 元组的内置函数
+'count', 'index'
+```
+字典：键值对，没有顺序，键必须是常量。
+```
+# 字典内置函数
+'clear', 'copy', 'fromkeys', 'get', 'items', 'keys', 'pop', 'popitem', 'setdefault', 'update', 'values'
+```
+集合：没有顺序，元素之间没有重复，相当于舍弃了值的字典。集合操作（&，|，-，^，<，<=，>，>=）
+```
+# 集合内置函数
+'add', 'clear', 'copy', 'discard', 'pop', 'remove', 'update'
+'isdisjoint','issuperset','issubset','symmetric_difference','difference','union', 'intersection', 'symmetric_difference_update','intersection_update','difference_update',
+```
+####2.3 控制语句   {-}
+
+条件：if…else…
+
+循环：for，while，break，continue
+
+#### 2.4 模块使用  {-}
+
+Python有着非常友好的模块安装方法，一个pip install命令几乎可以安装绝大多数的模块。建议使用模块前多看相关API文档。
+
+最常用的模块有：sys，os，re，csv，gzip，fileinput，random，collections，time；百度上有很多很好的模块使用入门教程。
+- 正则表达式 re
+- 有序字典 collections.OrderedDict()
+- 调用系统命令 subprocess.call()
+
+## 三、入门实例  {-}
+
+题目：从大量FASTA文件中提取指定序列，并对提取到的序列做某些处理（如求反向互补序列）
+
+描述：假设你有很多测序数据，分别存储在不同文件夹的不同文件里，现在给你一些序列名，要求你从众多数据中提取出特定的序列。
+
+image
+
+image
+
+思路：遍历每一个文件夹；遍历每一个文件；读取文件，判断序列，输出序列（处理），关闭文件；处理数据，添加一个函数即可。
+
+## 四、精通标准  {-}
+
+当然这只是个噱头，精通的道路是无止境的，下面只是罗列了一些常见的高级特性。
+
+- 切片，推导式，生成器，异常处理
+
+- 高级模块：threading(多线程)，ctypes(调用C程序优化性能)，logging(日志)
+
+- 专业模块：pysam - 处理基因组数据(fasta/fastq/bam/vcf)的Python模块
+
+- Biopython：Python的计算分子生物学和生物信息学工具包
+
+- 编写自己的package：解决某个特定需求，上传到 PyPI，然后你就成为大神了
+
+- 编程规范：写出规范化的代码 Google Python coding style
+
+- 函数式编程：即使代码量暴增也不会影响代码的可读性，调试和Debug也会变得非常简单。
+
+- 面向对象编程：最高级的编程方法，对函数进行分类和封装，让开发“更快更好更强...”
+
+## 五、最后  {-}
+
+Python只是一门编程语言，一种实现工具，我们可以用很多种语言来替换它，我们之所以选择Python，是因为我们喜欢它给我们带来的便捷。如果你想深入某个领域，其实真正重要的是技术背后的算法。
+
+## 六、推荐资源  {-}
+
+- Python教程 - 廖雪峰的官方网站
+
+- python初级教程：入门详解
+
+- Python 面向对象（初级篇）
+
+- Python | Codecademy
+
+- Google Python编码风格
+
+- Python正则表达式指南
+
+- 《Python学习手册》
+
+- 《Python编程金典》
+
+- 《Bioinformatics Programming Using Python》
+ 
+### R包安装终极解决方案
+
+## 写在前面：  {-}
+
+>我曾多次强调过R语言在生物信息学中的重要性，也激发了很多小伙伴学习的热情。
+学习R语言必然会安装各种各样的包，很多人在这一步就遇到了困难。
+
+刚开始学习R语言的时候我们经常会遇到各种包安装错误，比如`package ‘airway’ is not available (for R version 3.1.0)`等等，
+
+这篇文章，我们就来系统性地整理一些新手可能遇到的问题以及解决方案。
+
+当然，你不一定现在就会遇到，但是如果你遇到了，请记住，可以在这里得到答案！
+
+---
+**文章目录如下**：
+
+- 查看已经安装了和可以安装哪些R包
+- 如何安装旧版本的包
+- 如何切换镜像以及为什么要切换
+- 4种常见的R包安装方式
+
+**说明**：该文首发于我的个人博客以及**生信技能树**论坛，请点击文末的**阅读原文**前往查看详细资料。
+
+---
+## 总体思路 {-}
+
+R语言里面的包其实是很简单的，因为它自带了一个安装函数`install.packages()`基本上可以解决大部分问题。
+
+但是如果出问题你需要从如下角度进行分析思考:
+
+- 你的R语言安装在什么机器什么？（linux(ubuntu?centos?),window,mac）
+- 你的R是什么版本:(3.1 ? 3.2 ? http://www.bio-info-trainee.com/1307.html )
+- 你的安装器是什么版本？（主要针对于bioconductor包的安装）
+- 你的联网方式是什么？https ？http ？
+- 你选择的R包镜像是什么？
+
+##自己的R包安在哪里，可以安装哪些R包？ {-}
+
+**首先**在R里面输入`.libPaths()`即可查看当前的R把包安装到了机器的哪个地方，这样可以直接进入目录去查看有哪些包，每个包都会有一个文件夹。
+
+**其次**你可以用`installed.packages()`查看你已经安装了哪些包。
+
+**最后**你可以用`available.packages()`可以查看自己的机器可以安装哪些包！
+
+```
+>.libPaths()
+[1] "C:/Users/jmzeng/Documents/R/win-library/3.1"
+[2] "C:/Program Files/R/R-3.1.0/library"
+colnames(installed.packages())
+ [1] "Package"               "LibPath"               "Version"              
+ [4] "Priority"              "Depends"               "Imports"              
+ [7] "LinkingTo"             "Suggests"              "Enhances"             
+[10] "License"               "License_is_FOSS"       "License_restricts_use"
+[13] "OS_type"               "MD5sum"                "NeedsCompilation"     
+[16] "Built"    
+ap <- available.packages()
+> dim(ap)
+```
+
+打开ap变量可以看出，我们想安装的 airway 包根本不在，当然，这肯定是不存在的。 因为 airway 是**bioconductor**的包，并非R默认。 
+
+需要调整`contriburl`参数,如下：
+
+```
+> dim(available.packages(contriburl = "https://cran.rstudio.com/bin/windows/contrib/3.2/"))
+[1] 8110   17
+> dim(ap)
+[1] 8155   17
+> dim(available.packages(contriburl = "http://bioconductor.org/packages/3.1/bioc/bin/windows/contrib/3.2/"))
+[1] 1000   17
+> dim(available.packages(contriburl = "http://mirrors.ustc.edu.cn/bioc//packages/3.1/bioc/bin/windows/contrib/3.2/"))
+[1] 1000   17
+```
+用这个参数，可以看不同仓库，甚至不同版本的R包共有哪些资源!
+
+## 如何安装旧版本的包？ {-}
+
+>既然你点进来看，肯定是有需求。
+一般来说，R语言自带的`install.packages`函数来安装一个包时，都是默认安装最新版的。 
+但是有些R包的开发者他会引用其它的一些R包，但是它用的是旧版本的功能，自己来不及更新或者疏忽了。 而我们又不得不用他的包，这时候就不得不卸载最新版包，转而安装旧版本包。
+
+**首先**你要用`remove.packages`这个命令把现在的包卸载掉！
+
+**然后**去包的官网上面找到它的旧版本的下载链接：
+
+我这里拿**ggplot2**举例：
+http://cran.r-project.org/src/contrib/Archive/ggplot2/
+```
+#packageurl <- "http://cran.r-project.org/src/contrib/Archive/ggplot2/ggplot2_1.0.1.tar.gz"
+install.packages(packageurl, repos=NULL, type="source")
+
+#我这里安装它的1.0.1版本，而不是最新版！
+#还有很多其它方法，我就不一一举例了，这个是我认为最方便，最直观的！
+# install yesterday's version of checkpoint, by date
+install.dates('checkpoint', Sys.Date() - 1)
+# install earlier versions of checkpoint and devtools
+install.versions(c('checkpoint', 'devtools'), c('0.3.3', '1.6.1'))
+```
+
+>很明显，我是在*StackOverflow**上面搜索得到的解决方案，O(∩_∩)O哈哈~ 
+你可以参考：http://stackoverflow.com/questions/17082341/installing-older-version-of-r-package
 
 
-![](image/C5/Wechat_biotrainee_python.png)
+## 如何切换镜像 {-}
+
+这个技巧很重要，一般来说，R语言自带的`install.packages`函数来安装一个包时，都是用的默认的镜像！ 
+
+如果你是用的**Rstudio**这个IDE，默认镜像就是：https://cran.rstudio.com/ 
+
+如果你直接用的R语言，那么就是：http://cran.us.r-project.org 
+
+但是一般你安装的时候会提醒你选择,而我们需要更改成自己最方便的
+
+```
+install.packages(pkgs, lib, repos = getOption("repos"),
+    contriburl = contrib.url(repos, type),
+    method, available = NULL, destdir = NULL,
+    dependencies = NA, type = getOption("pkgType"),
+    configure.args = getOption("configure.args"),
+    configure.vars = getOption("configure.vars"),
+    clean = FALSE, Ncpus = getOption("Ncpus", 1L),
+    verbose = getOption("verbose"),
+    libs_only = FALSE, INSTALL_opts, quiet = FALSE,
+    keep_outputs = FALSE, ...)
+``` 
+如果是在国内，`install.packages("ABC",repos="http://mirror.bjtu.edu.cn/ ")`,换成北大的镜像你会体验飞一般的感觉！
+
+如果想永久设置，就用**options**修改即可。
+
+如果你是**Rstudio**的IDE，只需要鼠标点击直接进入全局设置，一劳永逸的选择好镜像！ 
+
+插图
+
+
+你可以check一下每个镜像的包是不是一致的：
+```
+dim(available.packages(contriburl = "http://cran.rstudio.com/bin/windows/contrib/3.2/"))
+```
+更改镜像主页及包的版本即可查看所有镜像各提供哪些包！
+
+当然，我们的**bioconductor**其实也是有镜像的，只是大部分人都不知道，也不会去用而已！
+```
+source("http://bioconductor.org/biocLite.R")
+options(BioC_mirror="http://mirrors.ustc.edu.cn/bioc/")
+biocLite("RGalaxy")
+##这样就用中科大的镜像来下载包啦
+##bioconductor还有很多其它镜像：https://www.bioconductor.org/about/mirrors/
+##https://stat.ethz.ch/R-manual/R-devel/library/utils/html/chooseBioCmirror.html
+```
+
+
+## 4种常见的R包安装方式 {-}
+
+### **R自带函数直接安装**  {-}
+
+这个是最简单的，而且不需要考虑各种包之间的依赖关系。
  
+对普通的R包，直接`install.packages()`即可，一般下载不了都是包的名字打错了，或者是R的版本不够。如果下载了安装不了，一般是依赖包没弄好，或者你的电脑缺少一些库文件，如果实在是找不到或者下载慢，一般就用`repos=`来切换一些镜像。
+
+```
+ > install.packages("ape")  ## 直接输入包名字即可
+Installing package into ‘C:/Users/jmzeng/Documents/R/win-library/3.1’
+(as ‘lib’ is unspecified)  ##一般不指定lib，除非你明确知道你的lib是在哪里
+trying URL 'http://mirror.bjtu.edu.cn/cran/bin/windows/contrib/3.1/ape_3.4.zip'
+Content type 'application/zip' length 1418322 bytes (1.4 Mb)
+opened URL   ##根据你选择的镜像，程序会自动拼接好下载链接url
+downloaded 1.4 Mb
+package ‘ape’ successfully unpacked and MD5 sums checked  
+##表明你已经安装好包啦
+The downloaded binary packages are in  
+##程序自动下载的原始文件一般放在临时目录，会自动删除
+    C:\Users\jmzeng\AppData\Local\Temp\Rtmpy0OivY\downloaded_packages
+```
+
+对于bioconductor的包，我们一般是
+```
+source("http://bioconductor.org/biocLite.R") ##安装BiocInstaller
+#options(BioC_mirror=”http://mirrors.ustc.edu.cn/bioc/“) 如果需要切换镜像
+biocLite("ggbio")
+#或者直接
+BiocInstaller::biocLite('ggbio') 
+## 前提是你已经安装好了BiocInstaller
+#某些时候你还需要卸载
+remove.packages("BiocInstaller") 
+#然后安装新的
+```
+
+### 进入主页找到包下载地址 {-}
+
+可以选择用R自带的下载器来下载，也可以把下面的url拷贝到浏览器用浏览器来下载
+```
+packageurl <- "http://cran.r-project.org/src/contrib/Archive/ggplot2/ggplot2_0.9.1.tar.gz"
+packageurl <- "http://cran.r-project.org/src/contrib/Archive/gridExtra/gridExtra_0.9.1.tar.gz"
+install.packages(packageurl, repos=NULL, type="source")
+#packageurl <- "http://www.bioconductor.org/packages/2.11/bioc/src/contrib/ggbio_1.6.6.tar.gz"
+#packageurl <- "http://cran.r-project.org/src/contrib/Archive/ggplot2/ggplot2_1.0.1.tar.gz"
+install.packages(packageurl, repos=NULL, type="source")
+```
+这样安装的就不需要选择镜像了，也跨越了安装器的版本！
+
+### 下载到本地后再安装 {-}
+
+```
+download.file("http://bioconductor.org/packages/release/bioc/src/contrib/BiocInstaller_1.20.1.tar.gz","BiocInstaller_1.20.1.tar.gz")
+##也可以选择用浏览器下载这个包
+install.packages("BiocInstaller_1.20.1.tar.gz", repos = NULL)
+```
+
+如果你用的**RStudio**这样的IDE，那么直接用鼠标就可以操作了。或者用`choose.files()`来手动选择把下载的源码`BiocInstaller_1.20.1.tar.gz`放到哪里。但这种形式大部分安装都无法成功，因为R包之间的依赖性很强！
+
+### 命令行版本安装 {-}
+
+如果是**linux**版本，命令行从网上自动下载包如下：
+
+```
+sudo su - -c \
+"R -e \"install.packages('shiny', repos='https://cran.rstudio.com/')\""
+```
+如果是linux，命令行安装本地包，在shell的终端
+```
+sudo R CMD INSTALL package.tar.gz
+```
+window或者mac平台一般不推荐命令行格式，可视化那么舒心，何必自讨苦吃呢？
+
+### perl 模块终极解决方案
+
+> 这种细节问题问我，我当然无法直接给出答案咯。毕竟，我的知识积累都不是靠死记硬背的。所以需要取回过头查看一下我的博客，才意识到，
+
+> 我在博客陆陆续续写了7篇教程，关于perl的模块。目录如下：
+
+* [ubuntu服务器解决方案第七讲-perl安装模块](http://www.bio-info-trainee.com/571.html)
+* [Perl用cpan在linux上面安装模块](http://www.bio-info-trainee.com/540.html)
+* [Perl及R及python模块碎碎念](http://www.bio-info-trainee.com/581.html)
+* [perl模块终极解决方案-上](http://www.bio-info-trainee.com/1474.html)
+* [perl模块终极解决方案-下](http://www.bio-info-trainee.com/1476.html)
+* [perl程序技巧-检验系统环境或模块安装](http://www.bio-info-trainee.com/1479.html)
+
+首先需要自己确定已经安装了哪些模块，都安装在哪里？还有新的模块需要安装到哪里？
+然后再学习如何安装新的模块。
+
+## 装Perl模块有两种方法 {-}
+
+* 自动安装 (使用CPAN模块自动完成下载、编译、安装的全过程)
+* 手工安装 (去CPAN网站下载所需要的模块，手工编译、安装)
+
+
+### 使用CPAN模块自动安装  {-}
+
+安装前需要先联上网，有无root权限均可。
+
+初次运行CPAN时需要做一些设置，运行下面的命令即可：
+
+```
+perl -MCPAN -e shell
+```
+> 如果你的机器是直接与因特网相联(拨号上网、专线，etc.)，那么一路回车就行了，只需要在最后一步选一个离您最近的 CPAN 镜像站点。例如我选的是位于国内的http://www.cnblogs.com/itech/admin/ftp://www.perl87.cn/CPAN/ 
+
+> 如果你的机器位于防火墙之后，还需要设置ftp代理或http代理。
+
+其实大部分人的机器都不需要走这一步的，肯定是用过了perl的cpan功能啦，除非你是新买的电脑。
+
+> 下面是常用 cpan 命令。
+
+```
+cpan>help
+cpan>m
+cpan>install Net::Server
+cpan>quit
+```
+
+我简单解释一下吧：
+```
+查询：cpan[1]> d /模块名字或者部分名字/
+查询结果中会给出所有含有模块名字或者部分名字的模块，选择您所需要的模块进行下载
+下载安装：cpan[1]>  install  模块名字
+同时会自动安装很多依赖的模块，非常方便。
+```
+
+### 手工安装的步骤： {-}
+> 一般情况下不推荐这种安装方式，但是总是会有迫不得已的时候，而且尝试这种方式，能加深对perl模块的理解。
+
+比如从 [CPAN](http://search.cpan.org/)下载了Net-Server模块0.97版的压缩文件Net-Server-0.97.tar.gz，假设放在/usr/local/src/下。
+
+
+```perl 
+cd /usr/local/src
+tar xvzf Net-Server-0.97.tar.gz
+cd Net-Server-0.97
+perl Makefile.PL
+make test
+```
+
+如果测试结果报告**all test ok**，你就可以放心地安装编译好的模块了。 
+安装模块前，先要确保你对你下载包的文件夹(例子里面是/usr/local/src/)有可写权限(通常以 su 命令获得).
+当然，只有root用户才会/usr/local/src/有写入的权限，普通用户把模块文件下载到自己的文件夹即可。
+
+测试自己的模块安装成功与否，用下面的命令，如果没有给出任何输出，那就没问题。
+```perl 
+perl -MNet::Server -e1
+```  
+
+上述步骤适合于 Linux/Unix下绝大多数的Perl模块。可能还有少数模块的安装方法略有差别，所以最好先看看安装目录里的 README 或 INSTALL。
+
+有的时候如果是build.pl的需要以下安装步骤：（需要Module::Build模块支持）
+```perl 
+perl Build.PL
+./Build
+./Build test
+./Build install
+```  
+
+## cpan和root权限的关系 {-}
+> 前面我说过，是否有root权限，都可以调用cpan下载器的，但还是有些微区别的。
+
+如果是root用户，模块其实没有问题，直接用cpan下载器，几乎能解决所有的模块下载安装问题！
+
+但是如果是非root用户，那么就麻烦了，很难用自动的cpan下载器，总有一些模块用cpan下载失败。
+
+这样只能下载模块源码，然后编译，但是编译有个问题，很多模块居然是依赖于其它模块的，你的不停地下载其它依赖模块，最后才能解决，特别麻烦！
+但是我仍然不推荐大家用手工下载的方式安装perl模块。
+这里我推荐所有的非root用户运行下面的代码获取自己的私人cpan下载器。
+```perl 
+wget -O- http://cpanmin.us | perl - -l ~/perl5 App::cpanminus local::lib
+eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`
+echo 'eval `perl -I ~/perl5/lib/perl5 -Mlocal::lib`' >> ~/.profile
+echo 'export MANPATH=$HOME/perl5/man:$MANPATH' >> ~/.profile
+```
  
+就能拥有一个私人的cpan下载器，~/.profile可能需要更改为.bash_profile, .bashrc, etc等等，取决于你的linux系统！
+然后你直接运行cpanm Module::Name，就跟root用户一样的可以下载模块啦！
+或者用下面的方式在shell里面安装模块，其中ext是模块的安装目录，可以修改！
+
+```perl 
+perl -MTime::HiRes -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Time::HiRes;
+perl -MFile::Path -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext File::Path;
+perl -MFile::Basename -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext File::Basename;
+perl -MFile::Copy -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext File::Copy;
+perl -MIO::Handle -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext IO::Handle;
+perl -MYAML::XS -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext YAML::XS;
+perl -MYAML -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext YAML;
+perl -MXML::Simple -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext XML::Simple;
+perl -MStorable -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Storable;
+perl -MStatistics::Descriptive -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Statistics::Descriptive;
+perl -MTie::IxHash -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Tie::IxHash;
+perl -MAlgorithm::Combinatorics -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Algorithm::Combinatorics;
+perl -MDevel::Size -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Devel::Size;
+perl -MSort::Key::Radix -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Sort::Key::Radix;
+perl -MSort::Key -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Sort::Key;
+perl -MBit::Vector -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Bit::Vector;
+perl -M"feature 'switch'" -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext feature;
+```  
+
+### 非root用户的另一个解决方案 {-}
+
+手动下载local::lib, 这个perl模块，然后自己安装在指定目录，也是能解决模块的问题！
+
+下载之后解压，进入：
+```  
+perl Makefile.PL --bootstrap=~/.perl  ##这里设置你想把模块放置的目录
+make test && make install
+echo 'eval $(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)' >> ~/.bashrc
+```  
+
+等待几个小时即可！！！
+
+
+添加好环境变量之后，就可以用
+```  
+perl -MCPAN -Mlocal::lib -e 'CPAN::install(LWP)'
+```  
+这样的模式下载模块了，所有的模块都会存储在$HOME/.perl/lib/perl5 里面！！！
+如果是新写的perl程序，需要在开头加入 use local::lib;   
+这样才能sets up a local lib at ~/perl5，才能使用该模块！ 
+ 
+当然每次写程序添加这个也实在是太麻烦了，其实你也可以直接打开 ~/.bashrc，然后写入下面的内容
+```  
+PERL5LIB=$PERL5LIB:/PATH_WHERE_YOU_PUT_THE_PACKAGE/source/bin/perl_module; 
+#(笨蛋，这个里面的内容-路径-是需要你修改的，别直接拷贝粘贴哈)
+export PERL5LIB
+``` 
+ 
+可以把perl模块安装在任何地方，然后通过这种方式去把模块加载到你的perl程序！
+ 
+
+```
+PATH="/home/jmzeng/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/jmzeng/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/jmzeng/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/jmzeng/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/jmzeng/perl5"; export PERL_MM_OPT;
+
+```
+
+## 查看perl模块的安装目录 {-}
+
+> 这里指的是查看那些被添加到了环境变量的perl模块安装目录，理论上你可以在如何文件夹里面安装一个perl模块，但是如果不添加到环境变量，意义不大，因为大多数perl程序只会在环境变量里面搜索安装的perl模块，其它地方的模块它们无法调用。
+
+主要就是\@INC这个默认变量 ，可以用下面的代码查看:
+```
+perl -e '{print "$_\n" foreach @INC}'
+```
+比如我其中一个服务器显示如下：
+```
+/home/jmzeng/perl5/lib/perl5/5.18.2/x86_64-linux-gnu-thread-multi
+/home/jmzeng/perl5/lib/perl5/5.18.2
+/home/jmzeng/perl5/lib/perl5/x86_64-linux-gnu-thread-multi
+/home/jmzeng/perl5/lib/perl5
+/etc/perl
+/usr/local/lib/perl/5.18.2
+/usr/local/share/perl/5.18.2
+/usr/lib/perl5
+/usr/share/perl5
+/usr/lib/perl/5.18
+/usr/share/perl/5.18
+/home/jmzeng/perl5/lib/perl5/5.18.1
+/usr/local/lib/site_perl
+```
+
+## 查看已经安装哪些perl模块 {-}
+
+不管你有没有root权限，进入 cpan 然后install ExtUtils::Installed模块
+这样就可以执行 instmodsh 这个命令了，可以查看当前环境下所有的模块！
+为什么可以直接使用呢，因为模块安装的时候就顺便把**instmodsh**给你添加到了环境变量，你可以用 **which instmodsh** 查看它被安装到哪里了。
+```
+/usr/bin/instmodsh
+/home/jmzeng/perl5/bin/instmodsh
+```
+
+当然也可以写出脚本来利用这个模块查询其它模块安装信息，主要是写脚本校验用户电脑模块的时候用得着。
+```perl
+#!/usr/bin/perl
+use strict;
+use ExtUtils::Installed;
+my $inst= ExtUtils::Installed->new();
+my @modules = $inst->modules();
+foreach(@modules)
+{
+	my $ver = $inst->version($_) || "???";
+	printf("%-12s -- %s\n", $_, $ver);
+}
+exit 0; 
+```
+
+
+## 模块理论上可以安装到如何地方 {-}
+比如非root用户，使用 cpan ，那么一般会创建/home/yourname/.cpan这个隐藏目录下面存储个人的perl模块。
+因为不是root用户，所以cpan并不是万能的，有些包是安装不成功的，比如GD模块
+而且也可以直接下载模块文件，自己编译到任何目录，只需要在运行自己的脚本的时候加上下面一句话。
+```perl
+use lib '/home/your-home/perl_lib';
+```
+但是，大部分情况下，我们安装模块不是因为我们自己写脚本需要，而且一些生物信息学软件对模块有依赖，但是我们很少有能力修改那些生物信息学软件。
+所以这条路一般是不走的。
+如果有很多自己下载的包，统一安装到了一个目录，就可以把该目录添加目录到@INC。
+
+
+
+
+
+
+
+

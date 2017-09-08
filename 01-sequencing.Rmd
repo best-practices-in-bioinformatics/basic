@@ -335,7 +335,7 @@ illumina技术核心在于桥式PCR和边合成边测序（SBS）。illumina测�
 Fastq是一种文件文件，如果Fastq文件大小在M级，一般可以直接用文本编辑器（如Notepad++）打开。打开之后，就可以看到类似下面表格中第二列的内容，每四行记录一段序列，这个序列也是有名字的，叫reads。如果采用的是illumina MiSeq PE250，则第二行碱基和第四行碱基质量值均为250个，即reads长度为250 bp。
 
 
-|Illumina Seqence identifier|@HWUSI-EAS100R:6:73:941:1973#0/1|  
+|Illumina Seqence identifier|\@HWUSI-EAS100R:6:73:941:1973#0/1|  
 |---------------------------|:------------------------------:| 
 |Read bases	|GATTTGGGGTTCAAAGCAGTATCGATCAAATAG...|
 |+	|+|

@@ -191,7 +191,97 @@ http://www.biotrainee.com/thread-862-1-1.html
 
 ## 参考基因组版本
 
-数据库资源是
+### 不同版本对应关系 {-}
+
+hg19，GRCH37和ensembl75是三种国际生物信息学数据库资源收集存储单位，即NCBI，UCSC和ENSEMBL各自发布的基因组信息。
+
+hg系列，hg18/19/38来自UCSC也是目前使用频率最高的基因组。从出道至今我就只看过hg19了，但是建议大家都转为hg38，因为它是目前的最新版本。
+
+基因组各种版本对应关系综合来看如下所示：
+
+- GRCh36 (hg18): ENSEMBL release_52.
+- GRCh37 (hg19): ENSEMBL release_59/61/64/68/69/75.
+- GRCh38 (hg38): ENSEMBL  release_76/77/78/80/81/82.
+
+ENSEMBL的版本特别复杂也很容易搞混，UCSC的版本就简单很多，常用的是hg19，最新版本为hg38。
+
+看起来NCBI也是很简单，就GRCh36,37,38，但是里面水也很深！
+
+```
+Feb 13 2014 00:00    Directory April_14_2003
+Apr 06 2006 00:00    Directory BUILD.33
+Apr 06 2006 00:00    Directory BUILD.34.1
+Apr 06 2006 00:00    Directory BUILD.34.2
+Apr 06 2006 00:00    Directory BUILD.34.3
+Apr 06 2006 00:00    Directory BUILD.35.1
+Aug 03 2009 00:00    Directory BUILD.36.1
+Aug 03 2009 00:00    Directory BUILD.36.2
+Sep 04 2012 00:00    Directory BUILD.36.3
+Jun 30 2011 00:00    Directory BUILD.37.1
+Sep 07 2011 00:00    Directory BUILD.37.2
+Dec 12 2012 00:00    Directory BUILD.37.3
+```
+
+从上面可以看到，有37.1， 37.2和 37.3 等等，不过这种版本一般指的是注释在更新而基因组序列一般不变。
+
+**总之你需要记住，** **hg19基因组大小是3G，压缩后八九百兆**。
+
+如果要下载GTF注释文件，基因组版本尤为重要。
+
+### **NCBI**：最新版（hg38） {-}
+
+- ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/GFF/ 
+
+### **NCBI**：其它版本 {-}
+
+- ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/ARCHIVE/    
+
+### **Ensembl** {-}
+
+- ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz
+
+> 变化上面链接中的**release**就可以拿到所有版本信息
+
+- ftp://ftp.ensembl.org/pub/
+
+### **UCSC**  {-}
+
+它本身需要一系列参数：
+
+```
+1. Navigate to http://genome.ucsc.edu/cgi-bin/hgTables
+2. Select the following options:
+clade: Mammal
+genome: Human
+assembly: Feb. 2009 (GRCh37/hg19)
+group: Genes and Gene Predictions
+track: UCSC Genes
+table: knownGene
+region: Select "genome" for the entire genome.
+output format: GTF - gene transfer format
+output file: enter a file name to save your results to a file, or leave blank to display results in the browser
+3. Click 'get output'.
+```
+搞清楚版本关系了，接下来就是进行下载。UCSC里面下载非常方便，只需要根据基因组简称来拼接url：
+
+```
+http://hgdownload.cse.ucsc.edu/goldenPath/mm10/bigZips/chromFa.tar.gz
+http://hgdownload.cse.ucsc.edu/goldenPath/mm9/bigZips/chromFa.tar.gz
+http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz
+http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/chromFa.tar.gz
+```
+或者用shell脚本指定下载的染色体号
+
+```
+for i in $(seq 1 22) X Y M;
+do echo $i;
+wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes/chr${i}.fa.gz;done
+gunzip *.gz
+for i in $(seq 1 22) X Y M;
+do cat chr${i}.fa >> hg19.fasta;
+done
+rm -fr chr*.fasta
+```
 
 ##NCBI
 NCBI (National Center for Biotechnology Information，美国国立生物技术信息中心）于1988年11月4日建立，是NIH（美国国立卫生研究院）的NLM（国立医学图书馆）的一个分支。目的是通过提供在线生物学数据和生物信息学分析工具来帮助人类更好的认知生物学问题。
