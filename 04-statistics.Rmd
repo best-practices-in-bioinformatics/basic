@@ -45,7 +45,9 @@ T分布
 
 ## 可视化举例
 
-### [表达矩阵可视化大全](http://bio-info-trainee.com/tmp/basic_visualization_for_expression_matrix.html)
+### 表达矩阵可视化大全
+
+把rmd文件发在这里即可，[表达矩阵可视化](http://bio-info-trainee.com/tmp/basic_visualization_for_expression_matrix.html)
 
 ### 热图
 
@@ -55,7 +57,7 @@ T分布
 
 ### reads覆盖图
 
-###
+### 其它
 
 
 

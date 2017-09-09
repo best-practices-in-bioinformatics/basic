@@ -196,7 +196,7 @@ bwa软件就没有添加到环境变量，所以需要用全路径，指明使�
 
 而把安装好的软件添加到环境变量的方法有：
    
-### 第一种方法：
+#### 第一种方法{-}
 
 ```
 export PATH=/usr/local/webserver/mysql/bin:$PATH  ## 先添加
@@ -204,7 +204,7 @@ echo $PATH        ### 再查看
 ```
 上述方法的PATH 在终端关闭后就会消失。所以还是建议通过编辑/etc/profile来改PATH，也可以修改家目录下的.bashrc(即：~/.bashrc)。
 
-### 第二种方法：
+#### 第二种方法 {-} 
 
 ```
 vim /etc/profile
@@ -241,7 +241,7 @@ Linux系统在生物信息学数据处理中的重要性就不用我多说了，
 
 现可以把Linux的学习过程分成三个阶段，总结如下：
 
-#### 第一阶段：把linux系统玩得跟windows系统一样顺畅
+#### 第一阶段：把linux系统玩得跟windows系统一样顺畅{-} 
 
 这一阶段的主要目的就是去可视化，熟悉黑白命令行界面。
 
@@ -281,7 +281,7 @@ blast软件如何安装以及使用？
 
 建议自己安装bio-linux系统，里面会自带很多生物信息学测试数据(fastq,fasta,sam,bam,vcf,gff,gtf,bed,MAF……)，安装系统的过程也是熟悉linux的过程，熟悉这些数据格式既能加强生物信息学技巧，也能练习linux操作。
 
-#### 第二阶段：shell脚本，类似于windows的bat批处理文件
+#### 第二阶段：shell脚本，类似于windows的bat批处理文件{-} 
 
 ```
 懂很多预定义变量：.bashrc/env/HOME/ 
@@ -299,7 +299,7 @@ blast软件如何安装以及使用？
 
 基本上要了解到这里才能勉强算是一个合格的生物信息学工程师。
 
-#### 第三阶段：高级运维技巧
+#### 第三阶段：高级运维技巧{-} 
 
 ```
 w/last/top/qsub/condor/apache/socket/IO/ps/who/uid/ 
@@ -322,7 +322,7 @@ R最新版的安装
 
 > R语言不仅在生物信息数据处理中发挥着重要作用，也是其它主流数据处理人士的首选工具。现在非常多自学生物信息学的小伙伴必须学的就是R，所以写一个R的系统性入门指导是非常有必要的。我作为老一辈的生信工程师，所以喜欢perl一点，排斥python。我也稍微看过一些python的语法，个人认为R和python几乎是一模一样的。R的特点就是内置了大量的函数，基本上你认识的英文单词都可以是一个函数，即使不是，你也可以自定义为函数。搞清楚了函数和变量，就可以看懂大部分的R代码了。
 
-#### perl/python/R 的比较
+#### perl/python/R 的比较{-} 
 
 python跟perl都是高级语言， 两个开发的目的不同， perl更面向过程一些，优势是严谨，快。 
 python主流面向对象编程， 这个跟R类似， 数据结构等方面有些不同，但可以互相调用。 
@@ -331,9 +331,9 @@ R本身起源于S语言，是主要针对统计的，也是面向对象的。本
 excel高级应用也是要编程的，所以R的初级应用可以当成是没有用户交互界面的excel，细心一点， 把示例代码都打对，当功能强大但不好使版的excel吧， 这样至少心理上不会畏难跟抵触。
 内部集成的越多，用户需要做的越少，你用C画个图累死你，用python得写几行，R一行就行了！
 
-#### 六步系统入门R语言 
+#### 六步系统入门R语言 {-} 
 
-##### 第一步：掌握必须要会的基础
+##### 第一步：掌握必须要会的基础{-} 
 
 下载R语言的软件：https://cran.r-project.org/bin/windows/base/
 下载Rstudio这个R编辑器：https://www.rstudio.com/products/rstudio/download/（在Rstudio里面写代码会比较方便） 
@@ -358,7 +358,7 @@ R的包（package）(http://www.bio-info-trainee.com/579.html)
 这些书籍都会提供一些简单的测试代码，你跟着傻瓜式的敲代码就好.
 但是实践的过程中，请务必注意一些英文单词（file文件路径/Description简述/Usage用法/Arguments参数/Details详细/value 数值/Examples例子/header 表标题/logical_value 逻辑值/delimiter 分隔符/object 对象/col列/row 行/vector向量/dimensions维度/data数据）。
 
-##### 第二步：明白R中的变量
+##### 第二步：明白R中的变量{-} 
 
 向量和因子：向量特简单,没什么好说的，因子太复杂了，我说不清楚，你们慢慢理解。
 数据框：就像我们的表格,第一行就是每一列的名字,我们称之为字段,或者变量名。那么对应每列下面的数据就叫做记录或者观测。用data.frame( 字段1,字段2,…. )创建 )
@@ -366,7 +366,7 @@ R的包（package）(http://www.bio-info-trainee.com/579.html)
 数组：其形式就像我们玩的模方,每一个面都是一个矩阵数据,用array(数据,各维度的最大值,各维度的名称)
 
 
-##### 第三步：了解变量的基础操作函数
+##### 第三步：了解变量的基础操作函数{-} 
 
 变量怎么来，对它们处理什么？ 
 
@@ -375,7 +375,7 @@ R的包（package）(http://www.bio-info-trainee.com/579.html)
 数据的特性函数也必须要知道，无非就是一些英文单词而已，你经常的玩一下，就慢慢的熟练了。
 主要需要熟练的函数有：str,class,names,row.names,col.names,length,unique,view,min,max,summay,table
 
-##### 第四步：可视化你的变量
+##### 第四步：可视化你的变量{-} 
 
 了解了R里面的基础变量和对象，也学会了对它们进行简单的转换，接下来就可以尝一尝R的甜头了，对任何数据都可以可视化，简简单单的就可以画一大堆的图。 
 plot,boxplot,barplot,pie,hist,pair,它们每个绘图函数都有自己要求的输入数据，特定的可视化结果，请务必在还没熟练使用之前help一下它们，自己主动查看它们好玩的地方，好好自学。
@@ -411,13 +411,13 @@ legend()　添加图例
 如何通过Google来使用ggplot2可视化
 用谷歌搜索来使用ggplot2做可视化（下）
 
-##### 第五步：数据对象的高级操作
+##### 第五步：数据对象的高级操作{-} 
 
 前面我们对向量，数据框，数组，列表都了解了，也知道如何查看数据的特性，但是要进行高级转换，就需要一些时间来学习apply系列函数，aggregate，split等函数的用法。这是一个分水岭，用好了你就算是R入门了。也可以用一些包，比如reshape2，dplyr。
 
 当然，R里面的字符串对象是另外完全不一样的操作模式，建议大家自行搜索学习。
 
-##### 第六步：遨游R的bioconductor世界
+##### 第六步：遨游R的bioconductor世界{-} 
 
 这个是生物信息学特有的，也是为什么我要求搞生物信息学数据处理的人必须学习R，就是为了应用大量的bioconductor包。在这里面所有的对象都不在是基础的向量，数据框，数组，列表了，而是S3，S4对象，这个高级知识点我就不推荐了，你学会了前面的东西，就有了自己的学习经验了，后面的分分钟就搞定了。(其实你永远也搞不定的)
 每学一个bioconductor的包，都是自己R水平的提升。
@@ -451,18 +451,23 @@ R语言的应用方向。
 补充：R语言学习的网络资源
 
 R语言官方站 http://www.r-project.org/
+
 R-blogger http://www.r-bloggers.com/
+
 R语言资源汇总 https://github.com/qinwf/awesome-R
+
 R语言搜索引擎 http://www.rseek.org/
+
 R函数在线帮助 http://www.rdocumentation.org/
-关于R的问答网站 http://stackoverflow.com/questions/tagged/r
+
 一个入门级的R在线教程 http://tryr.codeschool.com/
-交互式的R在线教程 https://www.datacamp.com
-统计之都 http://cos.name/
-我的博客 http://xccds1977.blogspot.com
-美国计算机世界杂志提供的Ｒ语言初学者入门资料http://www.computerworld.com/s/article/9239625/Beginner_s_guide_to_R_Introduction
-各种cheatsheet 
+
+交互式的R在线教程 https://www.datacamp.com 
+
+各种cheatsheet适合打印出来随时查阅
+
 http://cran.r-project.org/doc/contrib/Short-refcard.pdf 
+
 http://www.rstudio.com/resources/cheatsheets/
 
 
@@ -470,7 +475,7 @@ http://www.rstudio.com/resources/cheatsheets/
 
 > Perl是典型的脚本语言，短小精悍，非常容易上手，尤其适合处理文本，数据，以及系统管理。它在老一辈的生物信息学分析人员中非常流行，出于历史遗留原因大家肯定会或多或少地接触 Perl，即使你再怎么推崇Python或者GO等新兴编程语言。
 
-#### 1 入门资料
+#### 1 入门资料{-} 
 
 两个半小时入门指导：https://qntm.org/files/perl/perl.html
 21天学完 perl，自己搜索下载PDF书籍吧！
@@ -479,7 +484,7 @@ http://www.rstudio.com/resources/cheatsheets/
 函数如何用：都可以在http://perldoc.perl.org/perl.html 查到
 论坛：http://www.perlmonks.org/
 
-#### 2 知识要点
+#### 2 知识要点{-} 
 
 在看书的同时，你必须记住和熟练使用的知识点是下面这些：
 
@@ -531,7 +536,7 @@ while(<>){
 
 > perl 单行命令 
 
-我个人特别喜欢这个知识点，我也专门下载过一本书来学习，把这个教程看完就基本上能全明白：http://www.catonmat.net/blog/perl-one-liners-explained-part-one/。学习单行命令的前提是掌握非常多的奇奇怪怪的perl自定义变量和perl的基础语法，用熟练了之后就非常方便，很多生物信息学数据处理过程我现在基本不写脚本，都是直接写一行命令，完全代替了shell脚本里面的awk、sed/grep系列命令。(perl -p -a -n -a -l -i -F -M)
+我个人特别喜欢这个知识点，我也专门下载过一本书来学习，把这个[perl单行命令教程](http://www.catonmat.net/blog/perl-one-liners-explained-part-one/)看完就基本上能全明白。学习单行命令的前提是掌握非常多的奇奇怪怪的perl自定义变量和perl的基础语法，用熟练了之后就非常方便，很多生物信息学数据处理过程我现在基本不写脚本，都是直接写一行命令，完全代替了shell脚本里面的awk、sed/grep系列命令，就是熟悉`` -p -a -n -a -l -i -F -M`` 这些参数。
 
 >预定义函数 
 
@@ -577,22 +582,27 @@ XML/pdf/excel/Json 相关的模块可以用来读取非文本格式数据，或�
 socket通信相关，高手甚至可以写出一个QQ的模仿版本； 
 最后不得不提的就是Bioperl了，虽然我从来没有用过，但是它的确对初学者非常有用，大多数人不提倡重复造轮子，但我个人觉得，对初学者来说，重复造轮子是一个非常好的学习方式。大家可以仿造bioperl里面的各个功能，用自己的脚本来实现！
 
-#### 3 复习资料
+#### 3 复习资料{-} 
 
 如果你感觉学的差不多了，就可以下载一些复习资料，查漏补缺: 
 http://michaelgoerz.net/refcards/perl_refcard.pdf 
-https://rc.hms.harvard.edu/training/perl/Perl%20Cheat%20Sheet.pdf 
+
 https://www.cheatography.com/mishin/cheat-sheets/perl-reference-card/ 
+
 http://www.catonmat.net/download/perl.predefined.variables.pdf 
+
 http://www.erudil.com/preqr.pdf 
+
 https://www.cs.tut.fi/~jkorpela/perl/regexp.html 
+
 https://support.sas.com/rnd/base/datastep/perl_regexp/regexp-tip-sheet.pdf
+
 
 ### python 
 
 > Python开发的方向太多了，有机器学习，数据挖掘，网络开发，爬虫等等。其实在生信领域，Python还显现不出绝对的优势，生信的大部分软件流程都是用shell或Perl写的，而且已经足够好用了。我选Python是因为我想顺便学点数据挖掘和机器学习的东西，而且Python这些年越来越火，发展势头远超其他脚本语言，所以学它肯定是没错的。
 
-## 一、入门标准  {-} 
+##### 一、入门标准  {-} 
 
 入门比较难定义，什么程度才算入门呢？
 
@@ -601,9 +611,9 @@ https://support.sas.com/rnd/base/datastep/perl_regexp/regexp-tip-sheet.pdf
 
 后面有一个实例，如果你能简单的做完，那我敢肯定你已经入门了。
 
-## 二、基本知识点  {-}
+##### 二、基本知识点  {-}
 
-### 1.基本语法  {-}
+###### 1.基本语法  {-}
 
 **缩进**：Python是通过代码缩进来决定代码层次逻辑的，一般约定使用4个空格
 
@@ -630,9 +640,9 @@ dir()：列出一个数据类型或对象的所有方法，非常好用，同hel
 - IPython
 - WingIDE
 
-### 2.处理数据  {-}
+###### 2.处理数据  {-}
 
-#### 2.1 基本数据类型：布尔；整型；浮点型；字符串  {-}
+####### 2.1 基本数据类型：布尔；整型；浮点型；字符串  {-}
 
 ```
 # 字符串的内置函数，都比较有用
@@ -664,13 +674,13 @@ dir()：列出一个数据类型或对象的所有方法，非常好用，同hel
 'add', 'clear', 'copy', 'discard', 'pop', 'remove', 'update'
 'isdisjoint','issuperset','issubset','symmetric_difference','difference','union', 'intersection', 'symmetric_difference_update','intersection_update','difference_update',
 ```
-####2.3 控制语句   {-}
+#######2.3 控制语句   {-}
 
 条件：if…else…
 
 循环：for，while，break，continue
 
-#### 2.4 模块使用  {-}
+####### 2.4 模块使用  {-}
 
 Python有着非常友好的模块安装方法，一个pip install命令几乎可以安装绝大多数的模块。建议使用模块前多看相关API文档。
 
@@ -679,7 +689,7 @@ Python有着非常友好的模块安装方法，一个pip install命令几乎可
 - 有序字典 collections.OrderedDict()
 - 调用系统命令 subprocess.call()
 
-## 三、入门实例  {-}
+##### 三、入门实例  {-}
 
 题目：从大量FASTA文件中提取指定序列，并对提取到的序列做某些处理（如求反向互补序列）
 
@@ -691,7 +701,7 @@ image
 
 思路：遍历每一个文件夹；遍历每一个文件；读取文件，判断序列，输出序列（处理），关闭文件；处理数据，添加一个函数即可。
 
-## 四、精通标准  {-}
+##### 四、精通标准  {-}
 
 当然这只是个噱头，精通的道路是无止境的，下面只是罗列了一些常见的高级特性。
 
@@ -711,11 +721,11 @@ image
 
 - 面向对象编程：最高级的编程方法，对函数进行分类和封装，让开发“更快更好更强...”
 
-## 五、最后  {-}
+##### 五、最后  {-}
 
 Python只是一门编程语言，一种实现工具，我们可以用很多种语言来替换它，我们之所以选择Python，是因为我们喜欢它给我们带来的便捷。如果你想深入某个领域，其实真正重要的是技术背后的算法。
 
-## 六、推荐资源  {-}
+##### 六、推荐资源  {-}
 
 - Python教程 - 廖雪峰的官方网站
 
@@ -733,11 +743,12 @@ Python只是一门编程语言，一种实现工具，我们可以用很多种�
 
 - 《Python编程金典》
 
-- 《Bioinformatics Programming Using Python》
+- 《Bioinformatics Programming Using Python》 
  
 ### R包安装终极解决方案
 
-## 写在前面：  {-}
+
+##### 写在前面：  {-}
 
 >我曾多次强调过R语言在生物信息学中的重要性，也激发了很多小伙伴学习的热情。
 学习R语言必然会安装各种各样的包，很多人在这一步就遇到了困难。
@@ -759,7 +770,7 @@ Python只是一门编程语言，一种实现工具，我们可以用很多种�
 **说明**：该文首发于我的个人博客以及**生信技能树**论坛，请点击文末的**阅读原文**前往查看详细资料。
 
 ---
-## 总体思路 {-}
+##### 总体思路 {-}
 
 R语言里面的包其实是很简单的，因为它自带了一个安装函数`install.packages()`基本上可以解决大部分问题。
 
@@ -771,7 +782,7 @@ R语言里面的包其实是很简单的，因为它自带了一个安装函数`
 - 你的联网方式是什么？https ？http ？
 - 你选择的R包镜像是什么？
 
-##自己的R包安在哪里，可以安装哪些R包？ {-}
+#####自己的R包安在哪里，可以安装哪些R包？ {-}
 
 **首先**在R里面输入`.libPaths()`即可查看当前的R把包安装到了机器的哪个地方，这样可以直接进入目录去查看有哪些包，每个包都会有一个文件夹。
 
@@ -810,7 +821,7 @@ ap <- available.packages()
 ```
 用这个参数，可以看不同仓库，甚至不同版本的R包共有哪些资源!
 
-## 如何安装旧版本的包？ {-}
+##### 如何安装旧版本的包？ {-}
 
 >既然你点进来看，肯定是有需求。
 一般来说，R语言自带的`install.packages`函数来安装一个包时，都是默认安装最新版的。 
@@ -838,7 +849,7 @@ install.versions(c('checkpoint', 'devtools'), c('0.3.3', '1.6.1'))
 你可以参考：http://stackoverflow.com/questions/17082341/installing-older-version-of-r-package
 
 
-## 如何切换镜像 {-}
+##### 如何切换镜像 {-}
 
 这个技巧很重要，一般来说，R语言自带的`install.packages`函数来安装一个包时，都是用的默认的镜像！ 
 
@@ -886,9 +897,9 @@ biocLite("RGalaxy")
 ```
 
 
-## 4种常见的R包安装方式 {-}
+##### 4种常见的R包安装方式 {-}
 
-### **R自带函数直接安装**  {-}
+###### **R自带函数直接安装**  {-}
 
 这个是最简单的，而且不需要考虑各种包之间的依赖关系。
  
@@ -922,7 +933,7 @@ remove.packages("BiocInstaller")
 #然后安装新的
 ```
 
-### 进入主页找到包下载地址 {-}
+###### 进入主页找到包下载地址 {-}
 
 可以选择用R自带的下载器来下载，也可以把下面的url拷贝到浏览器用浏览器来下载
 ```
@@ -935,7 +946,7 @@ install.packages(packageurl, repos=NULL, type="source")
 ```
 这样安装的就不需要选择镜像了，也跨越了安装器的版本！
 
-### 下载到本地后再安装 {-}
+###### 下载到本地后再安装 {-}
 
 ```
 download.file("http://bioconductor.org/packages/release/bioc/src/contrib/BiocInstaller_1.20.1.tar.gz","BiocInstaller_1.20.1.tar.gz")
@@ -945,7 +956,7 @@ install.packages("BiocInstaller_1.20.1.tar.gz", repos = NULL)
 
 如果你用的**RStudio**这样的IDE，那么直接用鼠标就可以操作了。或者用`choose.files()`来手动选择把下载的源码`BiocInstaller_1.20.1.tar.gz`放到哪里。但这种形式大部分安装都无法成功，因为R包之间的依赖性很强！
 
-### 命令行版本安装 {-}
+###### 命令行版本安装 {-}
 
 如果是**linux**版本，命令行从网上自动下载包如下：
 
@@ -959,7 +970,9 @@ sudo R CMD INSTALL package.tar.gz
 ```
 window或者mac平台一般不推荐命令行格式，可视化那么舒心，何必自讨苦吃呢？
 
+
 ### perl 模块终极解决方案
+
 
 > 这种细节问题问我，我当然无法直接给出答案咯。毕竟，我的知识积累都不是靠死记硬背的。所以需要取回过头查看一下我的博客，才意识到，
 
@@ -975,13 +988,13 @@ window或者mac平台一般不推荐命令行格式，可视化那么舒心，�
 首先需要自己确定已经安装了哪些模块，都安装在哪里？还有新的模块需要安装到哪里？
 然后再学习如何安装新的模块。
 
-## 装Perl模块有两种方法 {-}
+一、装Perl模块有两种方法 
 
 * 自动安装 (使用CPAN模块自动完成下载、编译、安装的全过程)
 * 手工安装 (去CPAN网站下载所需要的模块，手工编译、安装)
 
 
-### 使用CPAN模块自动安装  {-}
+二、使用CPAN模块自动安装 
 
 安装前需要先联上网，有无root权限均可。
 
@@ -1013,7 +1026,8 @@ cpan>quit
 同时会自动安装很多依赖的模块，非常方便。
 ```
 
-### 手工安装的步骤： {-}
+三、手工安装的步骤
+
 > 一般情况下不推荐这种安装方式，但是总是会有迫不得已的时候，而且尝试这种方式，能加深对perl模块的理解。
 
 比如从 [CPAN](http://search.cpan.org/)下载了Net-Server模块0.97版的压缩文件Net-Server-0.97.tar.gz，假设放在/usr/local/src/下。
@@ -1046,7 +1060,8 @@ perl Build.PL
 ./Build install
 ```  
 
-## cpan和root权限的关系 {-}
+四、cpan和root权限的关系 
+
 > 前面我说过，是否有root权限，都可以调用cpan下载器的，但还是有些微区别的。
 
 如果是root用户，模块其实没有问题，直接用cpan下载器，几乎能解决所有的模块下载安装问题！
@@ -1087,7 +1102,7 @@ perl -MBit::Vector -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext Bit::Vector
 perl -M"feature 'switch'" -e 1 > /dev/null 2>&1 || cpanm -v --notest -l ext feature;
 ```  
 
-### 非root用户的另一个解决方案 {-}
+五、非root用户的另一个解决方案 
 
 手动下载local::lib, 这个perl模块，然后自己安装在指定目录，也是能解决模块的问题！
 
@@ -1128,7 +1143,7 @@ PERL_MM_OPT="INSTALL_BASE=/home/jmzeng/perl5"; export PERL_MM_OPT;
 
 ```
 
-## 查看perl模块的安装目录 {-}
+六、查看perl模块的安装目录 
 
 > 这里指的是查看那些被添加到了环境变量的perl模块安装目录，理论上你可以在如何文件夹里面安装一个perl模块，但是如果不添加到环境变量，意义不大，因为大多数perl程序只会在环境变量里面搜索安装的perl模块，其它地方的模块它们无法调用。
 
@@ -1153,7 +1168,7 @@ perl -e '{print "$_\n" foreach @INC}'
 /usr/local/lib/site_perl
 ```
 
-## 查看已经安装哪些perl模块 {-}
+七、查看已经安装哪些perl模块 
 
 不管你有没有root权限，进入 cpan 然后install ExtUtils::Installed模块
 这样就可以执行 instmodsh 这个命令了，可以查看当前环境下所有的模块！
@@ -1179,7 +1194,8 @@ exit 0;
 ```
 
 
-## 模块理论上可以安装到如何地方 {-}
+八、模块理论上可以安装到如何地方 
+
 比如非root用户，使用 cpan ，那么一般会创建/home/yourname/.cpan这个隐藏目录下面存储个人的perl模块。
 因为不是root用户，所以cpan并不是万能的，有些包是安装不成功的，比如GD模块
 而且也可以直接下载模块文件，自己编译到任何目录，只需要在运行自己的脚本的时候加上下面一句话。
@@ -1191,6 +1207,127 @@ use lib '/home/your-home/perl_lib';
 如果有很多自己下载的包，统一安装到了一个目录，就可以把该目录添加目录到@INC。
 
 
+
+### Python包安装的小结  
+
+> 想当初刚学习Python的时候，就会用书本里面自带的一些package，用**sys**，**os**也用得很开心。
+后来接触到biopython项目，发现原来Python有这么不同功能的包，简直琳琅满目。
+不过这也是我痛苦的开始，在服务器上装个包怎么那么费劲呢，缺这少那的。
+为了一个包的安装，我得花多少时间啊，还能不能让人好好做科研了。  
+
+一、黑暗时代 
+
+最开始的时候是从源码开始安装，一般`python setup.py install`就执行安装过程了，不过可怕的这些包之间的依赖关系。而且安装的时候，要选择安装目录。对于刚开始学习的我，都要搞晕了。后来还看到一个叫`easy_install`,可以自动解析package之间的依赖关系，生产效率感觉提上去了。不过经常出错，虽然比手动安装好多了，使用起来还是挺费劲的。
+
+二、迎来曙光  
+
+不知道当时从哪里看到说用`pip`会更好，看来没事上上网还是挺有好处的。
+而且比`easy_install`什么的不知道高到哪里去了，具体差异可以看[pip vs easy_install](https://packaging.python.org/pip_easy_install/)和[why use pip over easy_install](https://stackoverflow.com/questions/3220404/why-use-pip-over-easy-install)，上面的链接都说得很详细了。对于一般的需求，`pip install --user <package>`就已经很受用了。如果再使用上豆瓣上的PyPi源，那使用体验简直不能太好。
+
+```bash
+# Linux/Mac用户修改
+# $HOME/.config/pip/pip.conf
+[global]
+timeout = 60
+index-url = https://pypi.doubanio.com/simple
+
+## 注意： 如果使用http链接，需要指定trusted-host参数
+
+[global]
+timeout = 60
+index-url = http://pypi.douban.com/simple
+trusted-host = pypi.douban.com
+```
+
+常用的pip用法一般有：
+
+```bash
+# 在用户目录安装软件，不需要root 权限
+pip install --user <package>
+# 搜索package
+pip search biopython
+# 安装特定版本的package，版本号可以从search的结果中找到
+pip install biopython=1.69
+# 卸载package
+pip uninstall biopython
+# 导出已安装的包信息
+pip freeze > requirements.txt
+# 其他使用方法可以参考pip的帮助说明
+pip -h
+```
+
+三、发现virtualenv  
+
+如果你只是测试，或者电脑上同一个package安装了好几个版本，那么你一定会喜欢`virtualenv`。
+有了它，现在可以在电脑上安装不同版本的package了。
+使用方法也很简单，因为`virtualenv`也是Python包，可以直接用`pip`来进行安装。
+现在可以用它在电脑上创建不同的虚拟环境了，各个虚拟环境互不干扰，而且对原有的环境不会造成影响，哪天不想玩了，直接把对应的目录删掉就可以了，非常方便 。
+
+```bash
+# 安装virtualenv
+pip install --user virtualenv
+# 创建一个新的环境
+mkdir my_envs 
+cd my_envs
+# 创建一个env_test目录，把相关的package安装到该目录下
+virtualenv env_test
+# 如果系统上有多个python版本，可以通过参数来指定对应的python版本
+virtualenv -p /usr/bin/python2.7 env2.7
+# 激活虚拟环境，需要提供具体的虚拟环境安装目录
+source env2.7/bin/activate
+# 激活后就可以在终端中看到有对应提示，如果想关闭也很简单
+deactivate
+```
+
+上面的都一些基本的用法，如果创建的虚拟环境比较多，可以借助`virtualenvwrapper`来进行管理，更多的信息可以参考[Python虚拟环境](http://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html)。
+
+四、大杀器anaconda
+
+当时在学习**virtualenv**的时候，也发现**anaconda**这个东西，不过当时觉得软件太多，而且比较臃肿。
+对我这种没装几个软件的来说，**virtualenv**已经够用了。直到有一天我需要安装**tensorflow**的时候，才发现这东西有多方便。
+不仅帮你解决依赖关系，而且还会帮你把相关的系统依赖也解决了。相信大家在安装软件的时候，没少遇到missing 什么 libxxxx.so什么的信息。
+有的时候为了安装这些系统依赖，真的能把人搞疯。**anaconda**不仅能解决这些问题，还可以安装R里面package啊， 虽然我没用过这个功能。
+现在除了**anaconda**，还有精简的**miniconda**和专门为生物信息准备的**bioconda**，虽然名字不一样，只是默认安装时带的package不一样而已，使用方法没什么区别。
+下面简单说明下**bioconda**的使用：
+
+```bash
+# 首先需要安装conda，我们下载minicoda，文件比较小，下载过程比较快
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+
+这样在你的`$HOME`目录里面有一个miniconda，保存安装的软件使用，而且自动在环境变量配置文件`.bashrc`添加新的变量设置。
+安装之后可以自己检查一下，是不是有新的不一样的东西。你需要要重新登录一下或者重新加载环境变量`source ~/.bashrc`。
+因为网络环境问题，最好修改一下安装软件源，可以使用[清华anaconda开源镜像源](https://mirror.tuna.tsinghua.edu.cn/help/anaconda/)
+
+```bash
+# 请注意一上顺序哈
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+conda config --add channels defaults
+conda config --add channels r
+conda config --add channels bioconda
+```
+
+
+```bash
+# 搜索特定软件包
+conda search package-name  
+# 新建一个叫py3的环境，这个环境里面我们需要指定使用python3 
+conda create -n py3 python=3.5.3
+# 激活虚拟环境 
+source activate py3   
+# 关闭虚拟环境
+source deactivate  
+# 列出已经创建的虚拟环境  
+conda info --evns
+```
+
+
+五、参考  
+
+1. [pip使用豆瓣源](http://www.cnblogs.com/ZhangRuoXu/p/6370107.html)  
+
+2. [Python虚拟环境](http://pythonguidecn.readthedocs.io/zh/latest/dev/virtualenvs.html)
 
 
 

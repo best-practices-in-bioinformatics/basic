@@ -2,16 +2,28 @@
 
 ## 中心法则
 
-> 这里应该放中心法则，以及它涉及到的各种生命大分子物质，包括DNA,RNA,protein等等
-
+中心法则是指遗传信息经过DNA转录成信使RNA(mRNA),再由转运RNA（tRNA）和核糖体将mRNA翻译成蛋白质（Protein）,完成遗传信息经DNA—RNA—蛋白质的传递。
+也可以由DNA自我复制成DNA,即完成遗传信息由DNA—DNA的传递。
+这是所有具有细胞结构的生物所遵循的法则。另外在某些病毒中的RNA自我复制和在某些病毒中以RNA为模版逆转录成DNA的过程，是对中心法则的补充。
+![](image/C6/genetic-central-dogma.png)
 
 ### DNA
 
-测序本身得到的就是ATCG这样的碱基表示的序列， 
+脱氧核糖核酸又称去氧核糖核酸，是一种生物大分子，可组成遗传指令，引导生物发育与生命机能运作。主要功能是信息储存，可比喻为“蓝图”或“食谱”。其中包含的指令，是建构细胞内其他的化合物，如蛋白质与核糖核酸所需。带有蛋白质编码的DNA片段称为基因。脱氧核糖核酸又称去氧核糖核酸，是一种生物大分子，可组成遗传指令，引导生物发育与生命机能运作。主要功能是信息储存，可比喻为“蓝图”或“食谱”。其中包含的指令，是建构细胞内其他的化合物，如蛋白质与核糖核酸所需。带有蛋白质编码的DNA片段称为基因。
+
+DNA是一种长链聚合物，组成单位为四种脱氧核苷酸，即：
+腺嘌呤脱氧核苷酸（dAMP ）、胸腺嘧啶脱氧核苷酸（dTMP ）、胞嘧啶脱氧核苷酸（dCMP ）、鸟嘌呤脱氧核苷酸（dGMP ）。
+
+而脱氧核糖（五碳糖）与磷酸分子借由酯键相连，组成其长链骨架，排列在外侧，四种碱基排列在内侧。每个糖分子都与四种碱基里的其中一种相连，这些碱基沿着DNA长链所排列而成的序列，可组成遗传密码，指导蛋白质的合成。读取密码的过程称为转录，是以DNA双链中的一条单链为模板转录出一段称为mRNA（信使RNA）的核酸分子。多数RNA带有合成蛋白质的讯息，另有一些本身就拥有特殊功能，例如rRNA、snRNA与siRNA。
+
+在细胞内，DNA能与蛋白质结合形成染色体，整组染色体则统称为染色体组。对于人类而言，正常的人体细胞中含有46条染色体。染色体在细胞分裂之前会先在分裂间期完成复制，细胞分裂间期又可划分为：G1期-DNA合成前期、S期-DNA合成期、G2-DNA合成后期。对于真核生物，如动物、植物及真菌而言，染色体主要存在于细胞核内；而对于原核生物，如细菌而言，则主要存在于细胞质中的拟核内。染色体上的染色质蛋白，如组织蛋白，能够将DNA进行组织并压缩，以帮助DNA与其他蛋白质进行交互作用，进而调节基因的转录。
+
+DNA是高分子聚合物，DNA溶液为高分子溶液，具有很高的粘度，可被甲基绿染成绿色。DNA对紫外线（260nm）有吸收作用，利用这一特性，可以对DNA进行含量测定。当核酸变性时，吸光度升高，称为增色效应；当变性核酸重新复性时，吸光度又会恢复到原来的水平。较高温度、有机溶剂、酸碱试剂、尿素、酰胺等都可以引起DNA分子变性，即DNA双链碱基间的氢键断裂，双螺旋结构解开—也称为DNA的解螺旋。
+
 
 ### RNA
 
-各种分析要点
+ 
 
 ### protein
 
@@ -20,27 +32,1381 @@
 ## 组学
 
 
+
 ### 基因组
+
+基因组学是一个非常广的概念，研究的可以是全基因组的重测序，比如对人类来说，基因组大小是3G(30亿个碱基)，我的全基因组测序共8.9亿条150bp的reads，那么全基因组范围的平均测序深度就是8.9亿*150/30亿~45X。
+
+当然并不是每个实验对象都需要测多达10亿条reads，可以只选择基因组上面的编码基因的外显子设计好特异性的探针后捕获它们进行集中测序，这个就是外显子测序。外显子测序一般测几千万条reads就可以了，虽然测序总量只有全基因组测序的1%，但是外显子区域(30M)也只有全基因组(3G)的1%，所以测序深度仍然可以达到50X以上，足以做大部分的数据分析。
+
+即使是只测全外显子，单个样本的数据量的确不大，但是要推广到千千万万的实验样本，这个累积数据量就可观了，同时分析速度也是一个限制，而且所有的外显子包含的信息量也太多，并不是每一个人都需要。这个时候有针对性的靶向捕获测序就显示出它的优点了。可以是针对十几个基因，或者几百个有明确意义(一般是疾病等性状相关)的基因panel。当然，捕获测序的最终目标也是找到跟参考基因组不一致的位点，来解释为什么这个样本有这样的变异。
+
+如果是癌症研究，那么测序策略也会稍有不同，上面提到的全基因组，全外显子组，靶向测序都可以应用到癌症研究。但是癌症研究有个特色，就是对每个个体不只是要测癌症部位的DNA信息，还需要提取该个体的正常组织进行对照。去除那些个体特异性的变异位点，或者那些没有太大的临床表型意义的germline mutation位点。
+
+最后，值得一提的是，上面的分析都是建立在测序个体的物种参考基因组是已知的前提，所以只需要跟参考基因组进行比较，来找差异。但即使是在测序数据已经海量的今天，也不是每个物种都有了参考基因组，这个时候基因组的de novo测序就可以大展身手了。它的分析流程也完全不一样。
+
+#### 全基因组重测序分析流程分享
+
+> 这里选取的是[ GATK best practice](https://www.broadinstitute.org/partnerships/education/broade/best-practices-variant-calling-gatk-1) 是目前认可度最高的全基因组重测序分析流程，尤其适用于``人类``研究。
+
+
+##### 流程介绍 {-}
+
+ - [x] bwa(MEM alignment)
+ - [x] picard(SortSam)
+ - [x] picard(MarkDuplicates)
+ - [x] picard(FixMateInfo)
+ - [ ] GATK(RealignerTargetCreator) 
+ - [ ] GATK(IndelRealigner)
+ - [ ] GATK(BaseRecalibrator)
+ - [ ] GATK(PrintReads)
+ - [x] GATK(HaplotypeCaller)
+ - [ ] GATK(GenotypeGVCFs)
+
+在本文，我将会把我的``全基因组重测序``数据走完上面所有的流程，并给出代码和时间消耗情况。
+
+##### 准备工作 {-}
+###### 首先是软件安装 {-}
+```shell
+## Download and install BWA
+cd ~/biosoft
+mkdir bwa &&  cd bwa
+#http://sourceforge.net/projects/bio-bwa/files/
+wget https://sourceforge.net/projects/bio-bwa/files/bwa-0.7.15.tar.bz2 
+tar xvfj bwa-0.7.15.tar.bz2 # x extracts, v is verbose (details of what it is doing), f skips prompting for each individual file, and j tells it to unzip .bz2 files
+cd bwa-0.7.15
+make
+
+## Download and install samtools
+## http://samtools.sourceforge.net/
+## http://www.htslib.org/doc/samtools.html
+cd ~/biosoft
+mkdir samtools &&  cd samtools
+wget https://github.com/samtools/samtools/releases/download/1.3.1/samtools-1.3.1.tar.bz2 
+tar xvfj samtools-1.3.1.tar.bz2 
+cd samtools-1.3.1 
+./configure --prefix=/home/jianmingzeng/biosoft/myBin
+make 
+make install 
+~/biosoft/myBin/bin/samtools --help
+~/biosoft/myBin/bin/plot-bamstats --help
+cd htslib-1.3.1
+./configure --prefix=/home/jianmingzeng/biosoft/myBin
+make 
+make install
+~/biosoft/myBin/bin/tabix 
+
+
+## Download and install picardtools
+## https://sourceforge.net/projects/picard/
+## https://github.com/broadinstitute/picard
+cd ~/biosoft
+mkdir picardtools &&  cd picardtools
+wget http://ncu.dl.sourceforge.net/project/picard/picard-tools/1.119/picard-tools-1.119.zip
+unzip picard-tools-1.119.zip
+mkdir 2.9.2 && cd 2.9.2 
+wget https://github.com/broadinstitute/picard/releases/download/2.9.2/picard.jar
+
+## GATK 需要自行申请下载，不能公开
+```
+###### 其次是必备数据的下载  {-}
+
+```shell
+cd ~/reference
+mkdir -p  genome/human_g1k_v37  && cd genome/human_g1k_v37 
+# http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/ 
+nohup wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/human_g1k_v37.fasta.gz  &
+gunzip human_g1k_v37.fasta.gz
+wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/human_g1k_v37.fasta.fai
+wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/README.human_g1k_v37.fasta.txt
+java -jar ~/biosoft/picardtools/picard-tools-1.119/CreateSequenceDictionary.jar R=human_g1k_v37.fasta O=human_g1k_v37.dict
+
+cd ~/reference
+mkdir -p index/bwa && cd index/bwa   ~/reference/index/bwa/human_g1k_v37  ~/reference/genome/human_g1k_v37/human_g1k_v37.fasta 1>human_g1k_v37.bwa_index.log 2>&1   &
+ 
+mkdir -p ~/biosoft/GATK/resources/bundle/b37
+cd ~/biosoft/GATK/resources/bundle/b37
+wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/b37/1000G_phase1.indels.b37.vcf.gz
+wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/b37/1000G_phase1.indels.b37.vcf.idx.gz
+wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/b37/Mills_and_1000G_gold_standard.indels.b37.vcf.gz
+wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/b37/Mills_and_1000G_gold_standard.indels.b37.vcf.idx.gz
+gunzip 1000G_phase1.indels.b37.vcf.idx.gz
+gunzip 1000G_phase1.indels.b37.vcf.gz
+gunzip Mills_and_1000G_gold_standard.indels.b37.vcf.gz
+gunzip Mills_and_1000G_gold_standard.indels.b37.vcf.idx.gz
+
+mkdir -p ~/annotation/variation/human/dbSNP 
+cd ~/annotation/variation/human/dbSNP 
+## https://www.ncbi.nlm.nih.gov/projects/SNP/
+## ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b147_GRCh38p2/
+## ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b147_GRCh37p13/
+nohup wget ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b147_GRCh37p13/VCF/All_20160601.vcf.gz &
+wget ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b147_GRCh37p13/VCF/All_20160601.vcf.gz.tbi
+
+```
+
+> 上述代码都是可以直接在linux/MAC里面运行的，只有当软件安装完毕，还有参考基因组等必备文件准备齐全了，才能正式进入全基因组重测序分析流程！
+ 
+
+> 上面是我的全基因组数据fastq文件的截图，测序分成了5条lane，每条lane的数据量不一致。
+
+##### 数据分析 {-}
+
+数据分析的主线就是 fastq-->bam-->vcf  这样的数据转换，中间选择不同的工具已经使用不同的参数，所以流程得到的结果会略微不同。这里仅介绍我多年实践的最佳流程，希望对读者有所启发。
+
+###### 首先是fastq2bam步骤 {-}
+####### 代码 {-}
+
+```shell
+module load java/1.8.0_91
+GENOME=/home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta
+INDEX=/home/jianmingzeng/reference/index/bwa/human_g1k_v37
+GATK=/home/jianmingzeng/biosoft/GATK/GenomeAnalysisTK.jar
+PICARD=/home/jianmingzeng/biosoft/picardtools/2.9.2/picard.jar
+DBSNP=/home/jianmingzeng/annotation/variation/human/dbSNP/All_20160601.vcf.gz
+SNP=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/1000G_phase1.snps.high_confidence.b37.vcf.gz
+INDEL=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/Mills_and_1000G_gold_standard.indels.b37.vcf.gz
+TMPDIR=/home/jianmingzeng/tmp/software
+## samtools and bwa are in the environment 
+## samtools Version: 1.3.1 (using htslib 1.3.1)
+## bwa Version: 0.7.15-r1140
+ 
+: '
+'
+## please keep the confige in three columns format, which are fq1 fq2 sampe
+cat $1 |while read id
+do
+	arr=($id)
+	fq1=${arr[0]}
+	fq2=${arr[1]}
+	sample=${arr[2]}
+	#####################################################
+	################ Step 1 : Alignment #################
+	#####################################################
+	echo bwa `date`
+	bwa mem -t 5 -R "@RG\tID:$sample\tSM:$sample\tLB:WGS\tPL:Illumina" $INDEX $fq1 $fq2 > $sample.sam
+	echo bwa `date`
+	#####################################################
+	################ Step 2: Sort and Index #############
+	#####################################################
+	echo SortSam `date`
+	java -Djava.io.tmpdir=$TMPDIR    -Xmx40g -jar $PICARD SortSam SORT_ORDER=coordinate INPUT=$sample.sam OUTPUT=$sample.bam 
+	samtools index $sample.bam
+	echo SortSam `date`
+
+	#####################################################
+	################ Step 3: Basic Statistics ###########
+	#####################################################
+	echo stats `date`
+	samtools flagstat $sample.bam > ${sample}.alignment.flagstat
+	samtools stats  $sample.bam > ${sample}.alignment.stat
+	echo plot-bamstats -p ${sample}_QC  ${sample}.alignment.stat
+	echo stats `date`
+
+	#####################################################
+	####### Step 4: multiple filtering for bam files ####
+	#####################################################
+
+	###MarkDuplicates###
+	echo MarkDuplicates `date`
+	java -Djava.io.tmpdir=$TMPDIR    -Xmx40g -jar $PICARD MarkDuplicates \
+	INPUT=$sample.bam OUTPUT=${sample}_marked.bam METRICS_FILE=$sample.metrics  
+	echo MarkDuplicates `date`
+
+
+	###FixMateInfo###
+	echo FixMateInfo `date`
+	java -Djava.io.tmpdir=$TMPDIR    -Xmx40g -jar $PICARD FixMateInformation \
+	INPUT=${sample}_marked.bam OUTPUT=${sample}_marked_fixed.bam SO=coordinate  
+	samtools index ${sample}_marked_fixed.bam
+	echo FixMateInfo `date`
+	
+	echo ${sample}_marked_fixed.bam >>files.bamlist
+	
+	rm $sample.sam $sample.bam ${sample}_marked.bam
+done 
+samtools merge -@ 5  -b files.bamlist  merged.bam
+samtools index merged.bam
+```
+> 上面的代码有一点长，希望大家能用心的来理解，其实就是一个批量处理，对5条lane的测序数据循环处理。
+其实正式流程里面我一般是并行的，而不是循环，这里是为了给大家秀一下时间消耗情况，让大家对全基因组重测序分析有一个感性的认知。
+最后把所有lane的数据用 ``samtools merge `` 合并成一个非常大(60G)的bam文件 .
+
+####### 时间消耗情况探索 {-}
+
+对L1来说，时间消耗如下：
+```
+[main] Real time: 15870.794 sec; CPU: 77463.156 sec
+picard.sam.SortSam done. Elapsed time: 45.60 minutes.
+picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 64.20 minutes.
+picard.sam.FixMateInformation done. Elapsed time: 58.05 minutes.
+```
+> 总共耗时约7.2小时，仅仅是对10G的fastq完成比对压缩排序去PCR重复。
+
+如果是其它文件大小的fastq输入数据，那么这个流程耗时如下：
+```
+[main] Real time: 9527.240 sec; CPU: 47758.233 sec
+[main] Real time: 16000.325 sec; CPU: 80595.629 sec
+[main] Real time: 29286.523 sec; CPU: 147524.841 sec
+[main] Real time: 28104.568 sec; CPU: 141519.377 sec
+
+picard.sam.SortSam done. Elapsed time: 29.02 minutes.
+picard.sam.SortSam done. Elapsed time: 61.26 minutes.
+picard.sam.SortSam done. Elapsed time: 98.39 minutes.
+picard.sam.SortSam done. Elapsed time: 117.16 minutes.
+
+picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 35.52 minutes.
+picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 54.41 minutes.
+picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 90.40 minutes.
+picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 93.03 minutes.
+
+picard.sam.FixMateInformation done. Elapsed time: 35.92 minutes.
+picard.sam.FixMateInformation done. Elapsed time: 66.31 minutes.
+picard.sam.FixMateInformation done. Elapsed time: 131.65 minutes.
+picard.sam.FixMateInformation done. Elapsed time: 122.31 minutes.
+```
+
+前面我们说过，这5条lane的数据其实是可以并行完成这几个步骤的，最长耗时约12小时。
+每个数据处理我都分配了``5个线程``，``40G的内存``。
+
+###### GATK重新处理bam文件 {-}
+
+> 主要是针对上一个步骤合并了5个lane之后的``merge.bam``文件
+```
+-rw-rw-r-- 1 jianmingzeng jianmingzeng  57G Jun  7 11:32 merged.bam
+-rw-rw-r-- 1 jianmingzeng jianmingzeng 8.4M Jun  7 12:05 merged.bam.bai
+```
+###### merge后需要AddOrReplaceReadGroups处理 {-}
+
+> 因为不同的lane出来的数据都是我本人的全基因组重测续数据，后续处理应该是当做一个样本的，所有需要AddOrReplaceReadGroups处理，代码是：
+
+```
+### AddOrReplaceReadGroups ###
+java -Djava.io.tmpdir=$TMPDIR    -Xmx40g -jar $PICARD AddOrReplaceReadGroups \
+INPUT=${sample}.bam OUTPUT=${sample}_tmp.bam   RGID=jmzeng  RGLB=lib_all  RGPL=illumina RGPU=x10  RGSM=jmzeng
+mv ${sample}_tmp.bam ${sample}.bam
+samtools index ${sample}.bam 
+```
+这里是直接跟着GATK官方的最佳实践写的代码，完成对bam文件的预处理。包括``RealignerTargetCreator --> IndelRealigner --> BaseRecalibrator --> PrintReads ``
+```shell
+module load java/1.8.0_91
+GENOME=/home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta
+INDEX=/home/jianmingzeng/reference/index/bwa/human_g1k_v37
+GATK=/home/jianmingzeng/biosoft/GATK/GenomeAnalysisTK.jar
+PICARD=/home/jianmingzeng/biosoft/picardtools/2.9.2/picard.jar
+DBSNP=/home/jianmingzeng/annotation/variation/human/dbSNP/All_20160601.vcf.gz
+
+KG_SNP=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/1000G_phase1.snps.high_confidence.b37.vcf.gz
+Mills_indels=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/Mills_and_1000G_gold_standard.indels.b37.vcf
+KG_indels=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/1000G_phase1.indels.b37.vcf
+
+TMPDIR=/home/jianmingzeng/tmp/software
+## samtools and bwa are in the environment 
+## samtools Version: 1.3.1 (using htslib 1.3.1)
+## bwa Version: 0.7.15-r1140
+
+sample='merge'
+
+###RealignerTargetCreator###
+echo RealignerTargetCreator `date`
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T RealignerTargetCreator \
+-I ${sample}.bam -R $GENOME -o ${sample}_target.intervals \
+-known $Mills_indels -known $KG_indels -nt 5
+echo RealignerTargetCreator `date`
+
+
+###IndelRealigner###
+echo IndelRealigner `date`
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T IndelRealigner \
+-I ${sample}_marked_fixed_split.bam -R $GENOME -targetIntervals ${sample}_target.intervals \
+-o ${sample}_realigned.bam -known $Mills_indels -known $KG_indels 
+echo IndelRealigner `date`
+
+
+###BaseRecalibrator###
+echo BaseRecalibrator `date`
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T BaseRecalibrator \
+-I ${sample}_realigned.bam -R $GENOME -o ${sample}_temp.table -knownSites $DBSNP
+echo BaseRecalibrator `date`
+
+
+###PrintReads###
+echo PrintReads `date`
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T PrintReads \
+-R $GENOME -I ${sample}_realigned.bam -o ${sample}_recal.bam -BQSR ${sample}_temp.table
+samtools index ${sample}_recal.bam
+echo PrintReads `date`
+
+###delete_intermediate_files###
+全基因组重测序分析
+``` 
+时间消耗如下：
+```
+INFO  15:50:24,097 ProgressMeter - Total runtime 1165.34 secs, 19.42 min, 0.32 hours 
+INFO  17:21:00,917 ProgressMeter - Total runtime 4265.44 secs, 71.09 min, 1.18 hours
+INFO  19:58:23,969 ProgressMeter - Total runtime 9436.69 secs, 157.28 min, 2.62 hours 
+INFO  23:41:00,540 ProgressMeter - Total runtime 13349.77 secs, 222.50 min, 3.71 hours 
+```
+可以看到最耗费时间的步骤是最后一个``PrintReads``
+
+###### variant calling by gatk hc  {-}
+这个才是GATK工具的本职工作，就是找出测序数据跟参考基因组的不同之处，代码如下：
+
+```shell
+module load java/1.8.0_91
+GENOME=/home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta
+INDEX=/home/jianmingzeng/reference/index/bwa/human_g1k_v37
+GATK=/home/jianmingzeng/biosoft/GATK/GenomeAnalysisTK.jar
+PICARD=/home/jianmingzeng/biosoft/picardtools/2.9.2/picard.jar
+DBSNP=/home/jianmingzeng/annotation/variation/human/dbSNP/All_20160601.vcf.gz
+
+KG_SNP=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/1000G_phase1.snps.high_confidence.b37.vcf.gz
+Mills_indels=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/Mills_and_1000G_gold_standard.indels.b37.vcf
+KG_indels=/home/jianmingzeng/biosoft/GATK/resources/bundle/b37/1000G_phase1.indels.b37.vcf
+
+TMPDIR=/home/jianmingzeng/tmp/software
+## samtools and bwa are in the environment 
+## samtools Version: 1.3.1 (using htslib 1.3.1)
+## bwa Version: 0.7.15-r1140
+
+fq1=P_jmzeng_DHG09057_AH33KVALXX_L1_1.clean.fq.gz
+fq2=P_jmzeng_DHG09057_AH33KVALXX_L1_2.clean.fq.gz
+sample='merge'
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T HaplotypeCaller  \
+-R $GENOME -I ${sample}_recal.bam --dbsnp $DBSNP  \
+-stand_emit_conf 10 -o  ${sample}_recal_raw.snps.indels.vcf
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T HaplotypeCaller  \
+-R $GENOME -I ${sample}_realigned.bam --dbsnp $DBSNP  \
+-stand_emit_conf 10 -o  ${sample}_realigned_raw.snps.indels.vcf
+```
+
+时间消耗如下：
+```
+INFO  20:40:49,063 ProgressMeter - Total runtime 39243.88 secs, 654.06 min, 10.90 hours 
+INFO  08:53:17,633 ProgressMeter - Total runtime 43939.69 secs, 732.33 min, 12.21 hours 
+```
+可以看到对``recal.bam``的处理比 ``recal.bam``时间上要少2个小时，但是时间均消耗很长。
+
+##### 流程探究 {-}
+
+> 如果只给代码，那么这个教程意义不大，如果给出了input和output，还给出了时间消耗情况，那么这个教程可以说是中上水平了，读者只需要拿到数据就可以自己重复出来，既能估算硬件配置又能对大致的时间消耗有所了解。
+
+> 但，这仍然不够，对我来说，我还可以介绍为什么要走每一个流程，以及每一个流程到底做了什么。可以这么说，你看完下面的流程探究，基本上就相当于你自己做过了一个全基因组重测序分析实战
+
+> 我这里就对``L1``样本进行解析
+
+###### 首先的BWA  {-}
+
+这个没什么好说的，基因组数据的比对首选，耗时取决于fastq文件的reads数目。
+```
+CMD: bwa mem -t 5 -R @RG\tID:L1\tSM:L1\tLB:WGS\tPL:Illumina /home/jianmingzeng/reference/index/bwa/human_g1k_v37 P_jmzeng_DHG09057_AH33KVALXX_L1_1.clean.fq.gz P_jmzeng_DHG09057_AH33KVALXX_L1_2.clean.fq.gz
+[main] Real time: 15870.794 sec; CPU: 77463.156 sec
+```
+###### 接下来是PICARD  {-}
+
+共3个步骤用到了这个软件，消耗时间及内存分别如下：
+
+```
+picard.sam.SortSam done. Elapsed time: 44.15 minutes. Runtime.totalMemory()=13184794624
+picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 53.71 minutes. Runtime.totalMemory()=39832256512
+picard.sam.FixMateInformation done. Elapsed time: 53.79 minutes. Runtime.totalMemory()=9425649664 
+
+```
+比对得到的都是sam格式数据，文件占硬盘空间太大，一般需要压缩成二进制的bam格式文件，用的是``SortSam``
+至于``FixMateInformation``步骤仅仅是对bam文件增加了MC和MQ这两个tags
+```
+add MC (CIGAR string for mate) and MQ (mapping quality of the mate/next segment) tags 
+```
+而 ``markduplicates`` 步骤就比较复杂了，因为没有选择 REMOVE_DUPLICATES=True  所以并不会去除reads，只是标记一下而已，就是把sam文件的第二列改一下。
+```
+Read 119776742 records. 
+INFO    2017-06-05 10:57:22     MarkDuplicates  Marking 14482525 records as duplicates.
+INFO    2017-06-05 10:57:22     MarkDuplicates  Found 943146 optical duplicate clusters.
+```
+下面列出了部分被改变的flag值，可以去下面的[PICARD网页](https://broadinstitute.github.io/picard/explain-flags.html)去查看每个flag的含义。
+```
+# https://broadinstitute.github.io/picard/explain-flags.html
+# diff  -y -W 50   |grep '|' 
+163		      |	1187
+83		      |	1107
+99		      |	1123
+163		      |	1187
+147		      |	1171
+83		      |	1107
+99		      |	1123
+99		      |	1123
+147		      |	1171
+147		      |	1171
+99		      |	1123
+147		      |	1171
+163		      |	1187
+83		      |	1107
+```
+
+###### 最后是GATK {-}
+
+``SplitNCigarReads`` 这个步骤对基因组数据来说可以略去，主要是针对于转录组数据的
+
+> 命令是：
+
+```
+Program Args: -T SplitNCigarReads -R /home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta \
+-I L1_marked_fixed.bam -o L1_marked_fixed_split.bam \
+-rf ReassignOneMappingQuality -RMQF 255 -RMQT 60 -U ALLOW_N_CIGAR_READS 
+```
+
+> 程序运行的log日志是：
+
+```
+INFO  13:04:52,813 ProgressMeter - Total runtime 2398.74 secs, 39.98 min, 0.67 hours 
+INFO  13:04:52,854 MicroScheduler - 0 reads were filtered out during the traversal out of approximately 120614036 total reads (0.00%) 
+INFO  13:04:52,854 MicroScheduler -   -> 0 reads (0.00% of total) failing BadCigarFilter 
+INFO  13:04:52,854 MicroScheduler -   -> 0 reads (0.00% of total) failing MalformedReadFilter 
+INFO  13:04:52,855 MicroScheduler -   -> 0 reads (0.00% of total) failing ReassignOneMappingQualityFilter 
+```
+
+可以看到，对全基因组测序数据来说，这个步骤毫无效果，而且还耗时40分钟，应该略去。
+ 
+然后是indel区域的重排，需要结合 ``RealignerTargetCreator`` 和 ``IndelRealigner`` 
+
+> 命令是：
+
+```
+Program Args: -T RealignerTargetCreator -I L1_marked_fixed_split.bam \
+-R /home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta -o L1_target.intervals \
+-known /home/jianmingzeng/biosoft/GATK/resources/bundle/b37/Mills_and_1000G_gold_standard.indels.b37.vcf \
+-known /home/jianmingzeng/biosoft/GATK/resources/bundle/b37/1000G_phase1.indels.b37.vcf -nt 5 
+```
+
+> 程序运行的log日志是：
+
+```
+INFO  15:50:24,097 ProgressMeter - Total runtime 1165.34 secs, 19.42 min, 0.32 hours 
+INFO  15:50:24,097 MicroScheduler - 22094746 reads were filtered out during the traversal out of approximately 120826819 total reads (18.29%) 
+INFO  15:50:24,104 MicroScheduler -   -> 0 reads (0.00% of total) failing BadCigarFilter 
+INFO  15:50:24,104 MicroScheduler -   -> 1774279 reads (1.47% of total) failing BadMateFilter 
+INFO  15:50:24,104 MicroScheduler -   -> 14006627 reads (11.59% of total) failing DuplicateReadFilter 
+INFO  15:50:24,104 MicroScheduler -   -> 0 reads (0.00% of total) failing FailsVendorQualityCheckFilter 
+INFO  15:50:24,104 MicroScheduler -   -> 0 reads (0.00% of total) failing MalformedReadFilter 
+INFO  15:50:24,104 MicroScheduler -   -> 0 reads (0.00% of total) failing MappingQualityUnavailableFilter 
+INFO  15:50:24,105 MicroScheduler -   -> 6313840 reads (5.23% of total) failing MappingQualityZeroFilter 
+INFO  15:50:24,105 MicroScheduler -   -> 0 reads (0.00% of total) failing NotPrimaryAlignmentFilter 
+INFO  15:50:24,105 MicroScheduler -   -> 0 reads (0.00% of total) failing Platform454Filter 
+INFO  15:50:24,105 MicroScheduler -   -> 0 reads (0.00% of total) failing UnmappedReadFilter 
+```
+
+> 命令是：
+
+```
+Program Args: -T IndelRealigner -I L1_marked_fixed_split.bam \
+-R /home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta \
+-targetIntervals L1_target.intervals -o L1_realigned.bam \
+-known /home/jianmingzeng/biosoft/GATK/resources/bundle/b37/Mills_and_1000G_gold_standard.indels.b37.vcf \
+-known /home/jianmingzeng/biosoft/GATK/resources/bundle/b37/1000G_phase1.indels.b37.vcf
+```
+
+> 程序运行的log日志是：
+
+```
+INFO  17:21:00,917 ProgressMeter - Total runtime 4265.44 secs, 71.09 min, 1.18 hours 
+INFO  17:21:00,920 MicroScheduler - 0 reads were filtered out during the traversal out of approximately 120614036 total reads (0.00%) 
+INFO  17:21:00,920 MicroScheduler -   -> 0 reads (0.00% of total) failing BadCigarFilter 
+INFO  17:21:00,920 MicroScheduler -   -> 0 reads (0.00% of total) failing MalformedReadFilter 
+```
+
+最后是碱基质量的矫正，需要结合 ``BaseRecalibrator`` 和 ``PrintReads`` 
+> 命令是：
+
+```
+Program Args: -T BaseRecalibrator -I L1_realigned.bam \
+-R /home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta -o L1_temp.table \
+-knownSites /home/jianmingzeng/annotation/variation/human/dbSNP/All_20160601.vcf.gz
+```
+
+> 程序运行的log日志是：
+
+```
+INFO  19:58:23,969 ProgressMeter - Total runtime 9436.69 secs, 157.28 min, 2.62 hours 
+INFO  19:58:23,970 MicroScheduler - 21179430 reads were filtered out during the traversal out of approximately 120614036 total reads (17.56%) 
+INFO  19:58:23,970 MicroScheduler -   -> 0 reads (0.00% of total) failing BadCigarFilter 
+INFO  19:58:23,970 MicroScheduler -   -> 14073643 reads (11.67% of total) failing DuplicateReadFilter 
+INFO  19:58:23,970 MicroScheduler -   -> 0 reads (0.00% of total) failing FailsVendorQualityCheckFilter 
+INFO  19:58:23,970 MicroScheduler -   -> 0 reads (0.00% of total) failing MalformedReadFilter 
+INFO  19:58:23,971 MicroScheduler -   -> 0 reads (0.00% of total) failing MappingQualityUnavailableFilter 
+INFO  19:58:23,971 MicroScheduler -   -> 7105787 reads (5.89% of total) failing MappingQualityZeroFilter 
+INFO  19:58:23,971 MicroScheduler -   -> 0 reads (0.00% of total) failing NotPrimaryAlignmentFilter 
+INFO  19:58:23,971 MicroScheduler -   -> 0 reads (0.00% of total) failing UnmappedReadFilter 
+```
+
+> 命令是：
+
+```
+Program Args: -T PrintReads -R /home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta -I L1_realigned.bam -o L1_recal.bam -BQSR L1_temp.table 
+```
+
+> 程序运行的log日志是：
+
+```
+INFO  23:41:00,540 ProgressMeter - Total runtime 13349.77 secs, 222.50 min, 3.71 hours 
+INFO  23:41:00,542 MicroScheduler - 0 reads were filtered out during the traversal out of approximately 120614036 total reads (0.00%) 
+INFO  23:41:00,542 MicroScheduler -   -> 0 reads (0.00% of total) failing BadCigarFilter 
+INFO  23:41:00,542 MicroScheduler -   -> 0 reads (0.00% of total) failing MalformedReadFilter 
+```
+
+可以看到这个步骤非常的耗时，而且bam文件的大小近乎翻倍了。
+
+最后是GATK真正的功能，variant-calling 
+
+我这里不仅仅是对最后recal的bam进行variant-calling 步骤，同时也对realign的bam做了，所以下面显示两个时间消耗的记录.
+因为GATK的 ``BaseRecalibrator`` 步骤太耗费时间，而且极大的增加了bam文件的存储，所以有必要确认这个步骤是否有必要。
+
+> 命令是：
+
+```
+Program Args: -T HaplotypeCaller -R /home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta -I L1_recal.bam --dbsnp /home/jianmingzeng/annotation/variation/human/dbSNP/All_20160601.vcf.gz -stand_emit_conf 10 -o L1_recal_raw.snps.indels.vcf 
+```
+
+> 程序运行的log日志是：
+
+```
+INFO  20:40:49,062 ProgressMeter -            done    3.101804739E9    10.9 h           12.0 s      100.0%    10.9 h       0.0 s 
+INFO  20:40:49,063 ProgressMeter - Total runtime 39243.88 secs, 654.06 min, 10.90 hours 
+INFO  20:40:49,064 MicroScheduler - 22384946 reads were filtered out during the traversal out of approximately 119776742 total reads (18.69%) 
+INFO  20:40:49,064 MicroScheduler -   -> 0 reads (0.00% of total) failing BadCigarFilter 
+INFO  20:40:49,064 MicroScheduler -   -> 13732328 reads (11.46% of total) failing DuplicateReadFilter 
+INFO  20:40:49,065 MicroScheduler -   -> 0 reads (0.00% of total) failing FailsVendorQualityCheckFilter 
+INFO  20:40:49,065 MicroScheduler -   -> 8652618 reads (7.22% of total) failing HCMappingQualityFilter 
+INFO  20:40:49,066 MicroScheduler -   -> 0 reads (0.00% of total) failing MalformedReadFilter 
+INFO  20:40:49,066 MicroScheduler -   -> 0 reads (0.00% of total) failing MappingQualityUnavailableFilter 
+INFO  20:40:49,066 MicroScheduler -   -> 0 reads (0.00% of total) failing NotPrimaryAlignmentFilter 
+INFO  20:40:49,067 MicroScheduler -   -> 0 reads (0.00% of total) failing UnmappedReadFilter 
+```
+
+> 命令是：
+
+```
+Program Args: -T HaplotypeCaller -R /home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta -I L1_realigned.bam --dbsnp /home/jianmingzeng/annotation/variation/human/dbSNP/All_20160601.vcf.gz -stand_emit_conf 10 -o L1_realigned_raw.snps.indels.vcf 
+```
+
+> 程序运行的log日志是：
+
+```
+INFO  08:53:17,633 ProgressMeter -            done    3.101804739E9    12.2 h           14.0 s      100.0%    12.2 h       0.0 s 
+INFO  08:53:17,633 ProgressMeter - Total runtime 43939.69 secs, 732.33 min, 12.21 hours 
+INFO  08:53:17,634 MicroScheduler - 22384946 reads were filtered out during the traversal out of approximately 119776742 total reads (18.69%) 
+INFO  08:53:17,634 MicroScheduler -   -> 0 reads (0.00% of total) failing BadCigarFilter 
+INFO  08:53:17,635 MicroScheduler -   -> 13732328 reads (11.46% of total) failing DuplicateReadFilter 
+INFO  08:53:17,635 MicroScheduler -   -> 0 reads (0.00% of total) failing FailsVendorQualityCheckFilter 
+INFO  08:53:17,635 MicroScheduler -   -> 8652618 reads (7.22% of total) failing HCMappingQualityFilter 
+INFO  08:53:17,636 MicroScheduler -   -> 0 reads (0.00% of total) failing MalformedReadFilter 
+INFO  08:53:17,636 MicroScheduler -   -> 0 reads (0.00% of total) failing MappingQualityUnavailableFilter 
+INFO  08:53:17,636 MicroScheduler -   -> 0 reads (0.00% of total) failing NotPrimaryAlignmentFilter 
+INFO  08:53:17,637 MicroScheduler -   -> 0 reads (0.00% of total) failing UnmappedReadFilter 
+```
+
+这个不同的bam文件首先大小就不一致，其次找变异所消耗的时间也不一样，找出的变异数目也不同的，至于具体差别在哪里，就不是本文探索范围了，我在我在直播基因组里面有提到过这一点。
+ 
+我对realign和recal以及原始的bam都用了HaplotypeCaller找变异，得到的vcf文件如下：
+```
+1.1G Jun 21 02:29 jmzeng_merge_raw.snps.indels.vcf
+1.1G Jun 21 02:15 jmzeng_realigned_raw.snps.indels.vcf
+1.1G Jun 20 21:20 jmzeng_recal_raw.snps.indels.vcf
+```
+这是最原始的变异文件，我们需要进行过滤，拆分SNP和INDEL，这样才能更好的对它们两两比较。
+
+###### 拆分SNP和INDEL并过滤低质量位点  {-}
+
+> 代码如下：
+```shell
+module load java/1.8.0_91
+GENOME=/home/jianmingzeng/reference/genome/human_g1k_v37/human_g1k_v37.fasta 
+GATK=/home/jianmingzeng/biosoft/GATK/GenomeAnalysisTK.jar 
+TMPDIR=/home/jianmingzeng/tmp/software 
+
+sample=$1
+
+## for SNP 
+: '
+'
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T SelectVariants  -R $GENOME  \
+-selectType SNP \
+-V ${sample}_raw.snps.indels.vcf -o ${sample}_raw_snps.vcf
+
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T VariantFiltration -R $GENOME  \
+--filterExpression "QD < 2.0 || FS > 60.0 || MQ < 40.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0"  \
+--filterName "my_snp_filter" \
+-V ${sample}_raw_snps.vcf  -o ${sample}_filtered_snps.vcf   
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T SelectVariants -R $GENOME  \
+--excludeFiltered \
+-V ${sample}_filtered_snps.vcf  -o  ${sample}_filtered_PASS.snps.vcf
+
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T VariantEval -R $GENOME  \
+-eval ${sample}_filtered_PASS.snps.vcf -o  ${sample}_filtered_PASS.snps.vcf.eval
+
+## for  INDEL 
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T SelectVariants  -R $GENOME \
+-selectType INDEL  \
+-V ${sample}_raw.snps.indels.vcf   -o ${sample}_raw_indels.vcf
+
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T VariantFiltration -R $GENOME  \
+--filterExpression "QD < 2.0 || FS > 200.0 || ReadPosRankSum < -20.0"  \
+--filterName "my_indel_filter" \
+-V ${sample}_raw_indels.vcf  -o ${sample}_filtered_indels.vcf   
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T SelectVariants -R $GENOME  \
+--excludeFiltered \
+-V ${sample}_filtered_indels.vcf  -o  ${sample}_filtered_PASS.indels.vcf
+
+java -Djava.io.tmpdir=$TMPDIR   -Xmx40g -jar $GATK -T VariantEval -R $GENOME  \
+-eval ${sample}_filtered_PASS.indels.vcf -o  ${sample}_filtered_PASS.indels.vcf.eval
+```
+要深度理解这个代码请点击自行[阅读文档](http://gatkforums.broadinstitute.org/gatk/discussion/2806/howto-apply-hard-filters-to-a-call-set)。
+其实我本人不大喜欢用这个工具的各种参数，我比较喜欢自行写脚本来过滤vcf文件。
+
+这样得到的文件如下：
+
+```
+     801242 jmzeng_merge_filtered_indels.vcf
+     760890 jmzeng_merge_filtered_PASS.indels.vcf
+    3812094 jmzeng_merge_filtered_PASS.snps.vcf
+    4034168 jmzeng_merge_filtered_snps.vcf
+     801240 jmzeng_merge_raw_indels.vcf
+    4837892 jmzeng_merge_raw.snps.indels.vcf
+    4034166 jmzeng_merge_raw_snps.vcf
+     801963 jmzeng_realigned_filtered_indels.vcf
+     761510 jmzeng_realigned_filtered_PASS.indels.vcf
+    3812442 jmzeng_realigned_filtered_PASS.snps.vcf
+    4034797 jmzeng_realigned_filtered_snps.vcf
+     801961 jmzeng_realigned_raw_indels.vcf
+    4839256 jmzeng_realigned_raw.snps.indels.vcf
+    4034795 jmzeng_realigned_raw_snps.vcf
+     793611 jmzeng_recal_filtered_indels.vcf
+     754755 jmzeng_recal_filtered_PASS.indels.vcf
+    3784343 jmzeng_recal_filtered_PASS.snps.vcf
+    4010670 jmzeng_recal_filtered_snps.vcf
+     793609 jmzeng_recal_raw_indels.vcf
+    4806696 jmzeng_recal_raw.snps.indels.vcf
+    4010668 jmzeng_recal_raw_snps.vcf
+```
+
+很容易理解：
+* 对recal的bam得到的变异vcf文件来说，总共是480万位点，拆分成401万的SNP和79万的INDEL，然后经过过滤后剩下378万的SNP和75万的INDEL。
+* 对原始的bam得到的变异vcf文件来说，  总共是483万位点，拆分成403万的SNP和80万的INDEL，然后经过过滤后剩下381万的SNP和76万的INDEL。
+* 对重排的bam得到的变异vcf文件来说，  总共是483万位点，拆分成403万的SNP和80万的INDEL，然后经过过滤后剩下381万的SNP和76万的INDEL。
+
+从位点数量级来说，原始的bam和重排的bam得到的变异vcf文件没区别，所以需要用专业的工具来具体比较它们里面的每一个位点。
+我这里还是选择SnpEff套件里面的SnpSift工具。
+
+###### 首先比较SNP位点 {-}
+
+> 代码如下：
+```shell
+java -jar  ~/biosoft/SnpEff/snpEff/SnpSift.jar  concordance -v ../jmzeng_merge_filtered_PASS.snps.vcf ../jmzeng_realigned_filtered_PASS.snps.vcf 1>concordance.txt 2>SnpSift_Concordance.log
+java -jar  ~/biosoft/SnpEff/snpEff/SnpSift.jar  concordance -v ../jmzeng_recal_filtered_PASS.snps.vcf  ../jmzeng_realigned_filtered_PASS.snps.vcf 1>concordance.txt 2>SnpSift_Concordance.log
+java -jar  ~/biosoft/SnpEff/snpEff/SnpSift.jar  concordance -v ../jmzeng_recal_filtered_PASS.snps.vcf  ../jmzeng_merge_filtered_PASS.snps.vcf 1>concordance.txt 2>SnpSift_Concordance.log
+```
+
+比较的结果如下：
+```
+Number of samples:
+	1	File ../jmzeng_merge_filtered_PASS.snps.vcf
+	1	File ../jmzeng_realigned_filtered_PASS.snps.vcf
+	1	Both files
+
+# Errors:
+	ALT field does not match	31
+	
+Number of samples:
+	1	File ../jmzeng_recal_filtered_PASS.snps.vcf
+	1	File ../jmzeng_realigned_filtered_PASS.snps.vcf
+	1	Both files
+
+# Errors:
+	ALT field does not match	204
+	
+Number of samples:
+	1	File ../jmzeng_recal_filtered_PASS.snps.vcf
+	1	File ../jmzeng_merge_filtered_PASS.snps.vcf
+	1	Both files
+
+# Errors:
+	ALT field does not match	208
+```
+可以看到对高质量的SNP位点来说，3种bam文件得到SNP信息差别很微弱，在可接受范围内。但是我们不能忽视原始的bam和重排的bam得到的变异vcf文件要比recal后的少了近两万这个事实！！！
+
+
+###### 接着比较INDEL位点 {-}
+
+> 代码如下：
+```	shell
+java -jar  ~/biosoft/SnpEff/snpEff/SnpSift.jar  concordance -v ../jmzeng_merge_filtered_PASS.indels.vcf ../jmzeng_realigned_filtered_PASS.indels.vcf 1>concordance.txt 2>SnpSift_Concordance.log
+java -jar  ~/biosoft/SnpEff/snpEff/SnpSift.jar  concordance -v ../jmzeng_recal_filtered_PASS.indels.vcf  ../jmzeng_realigned_filtered_PASS.indels.vcf 1>concordance.txt 2>SnpSift_Concordance.log
+java -jar  ~/biosoft/SnpEff/snpEff/SnpSift.jar  concordance -v ../jmzeng_recal_filtered_PASS.indels.vcf  ../jmzeng_merge_filtered_PASS.indels.vcf 1>concordance.txt 2>SnpSift_Concordance.log
+```
+
+比较的结果如下：
+```
+Number of samples:
+	1	File ../jmzeng_merge_filtered_PASS.indels.vcf
+	1	File ../jmzeng_realigned_filtered_PASS.indels.vcf
+	1	Both files
+
+# Errors:
+	REF fields does not match	28
+	ALT field does not match	45
+	
+	
+Number of samples:
+	1	File ../jmzeng_recal_filtered_PASS.indels.vcf
+	1	File ../jmzeng_merge_filtered_PASS.indels.vcf
+	1	Both files
+
+# Errors:
+	REF fields does not match	1295
+	ALT field does not match	964
+	
+	
+Number of samples:
+	1	File ../jmzeng_recal_filtered_PASS.indels.vcf
+	1	File ../jmzeng_realigned_filtered_PASS.indels.vcf
+	1	Both files
+
+# Errors:
+	REF fields does not match	1276
+	ALT field does not match	947
+```
+INDEL本身对参数非常敏感，这时候不仅仅是数量的差异，而且本身找到的位点突变情况的差异也不少。
+
+所以我的结论是，GATK的BEST PRACTISE的每个步骤都是必须的！虽然他们非常耗时，但是对结果准确性的改进的确非常显著。
+如果要想把测序数据在临床上面应用，那么每一个步骤都是非常有意义的。	
+
+
+比如，如果我们来分析realign之后的高质量SNP为什么会有31个的ALT改变了呢？
+```		
+21	10716592
+21	10701512
+21	10700605
+20	26317761
+19	15787221
+18	18515822
+17	25266293
+16	35230302
+16	33975649
+16	33972478
+10	42400348
+10	42393437
+9	66455306
+4	49111623
+1	142537167
+Y	58977742
+Y	13478115
+X	61909282
+X	61730552
+X	61721098
+```
+简单看了几眼， 发现都是在染色体的中心粒的地方
+
+再次介绍一下我的这次基因组重测续数据共5条lane，都是单独的PE150的fastq文件。
+
+###### 如果仅对L1这条lane数据进行处理  {-}
+
+> 首先是BWA的比对耗时如下： 
+
+```
+[main] Real time: 15870.794 sec; CPU: 77463.156 sec
+picard.sam.SortSam done. Elapsed time: 45.60 minutes.
+picard.sam.markduplicates.MarkDuplicates done. Elapsed time: 64.20 minutes.
+picard.sam.FixMateInformation done. Elapsed time: 58.05 minutes.
+```
+> 然后是GATK对bam文件的一些预处理，步骤是：
+```
+RealignerTargetCreator --> IndelRealigner --> BaseRecalibrator --> PrintReads 
+```
+后面我会讲到这些步骤是否是必须的。
+
+> 耗时如下：
+```
+INFO  15:50:24,097 ProgressMeter - Total runtime 1165.34 secs, 19.42 min, 0.32 hours 
+INFO  17:21:00,917 ProgressMeter - Total runtime 4265.44 secs, 71.09 min, 1.18 hours 
+INFO  19:58:23,969 ProgressMeter - Total runtime 9436.69 secs, 157.28 min, 2.62 hours 
+INFO  23:41:00,540 ProgressMeter - Total runtime 13349.77 secs, 222.50 min, 3.71 hours 
+```
+可以看到对L1这条lane数据来说，整个流程耗时才不到10个小时，还算是可接受范围内的。
+
+
+###### 接下来用HaplotypeCaller找变异  {-}
+
+> 这个步骤我对realign的bam和recal的bam分别处理了，耗时如下：
+```
+INFO  20:40:49,063 ProgressMeter - Total runtime 39243.88 secs, 654.06 min, 10.90 hours 
+INFO  08:53:17,633 ProgressMeter - Total runtime 43939.69 secs, 732.33 min, 12.21 hours 
+```
+对bam文件找变异的时间取决于reads数量的多少以及这些reads覆盖的基因组区域大小，虽然一条lane的数据量很小，但它仍然是全基因组测序，如果是全外显子测序这个耗时是不一样的。
+
+> 整个L1这条lane数据(120M的reads)处理后的文件大小如下所示：
+```
+3.0M Jun  7 01:14 L1.bam.bai 
+8.8G Jun  7 02:33 L1_marked.bam
+9.0G Jun  7 03:31 L1_marked_fixed.bam
+3.3M Jun  7 03:36 L1_marked_fixed.bam.bai
+2.6K Jun  7 02:33 L1.metrics
+8.2M Jun  5 17:21 L1_realigned.bai
+9.0G Jun  5 17:21 L1_realigned.bam
+8.2M Jun  5 23:41 L1_recal.bai
+ 27G Jun  5 23:41 L1_recal.bam
+8.1M Jun  5 23:53 L1_recal.bam.bai
+ 39M Jun  5 15:50 L1_target.intervals
+320K Jun  5 19:58 L1_temp.table
+```
+因为我的这次基因组重测续数据共5条lane，这5条lane的数据其实是可以并行完成这几个步骤的，最长耗时约12小时。 
+每个数据处理我都分配了 5个线程， 40G的内存。
+
+如果merge后不进行AddOrReplaceReadGroups处理,意味着要把5条lane的数据当做是不同的样本，这样后续处理这5个lane的bam矫正以及找变异都是独立进行的，虽然最后生成的vcf文件只有一个，但是每条lane都有独立的基因型。
+realign和recal耗时如下：
+```
+INFO  17:54:59,396 ProgressMeter - Total runtime 5194.10 secs, 86.57 min, 1.44 hours 
+INFO  02:04:10,907 ProgressMeter - Total runtime 22558.84 secs, 375.98 min, 6.27 hours 
+INFO  18:48:45,762 ProgressMeter - Total runtime 60267.18 secs, 1004.45 min, 16.74 hours 
+INFO  21:30:54,519 ProgressMeter - Total runtime 96119.87 secs, 1602.00 min, 26.70 hours 
+```
+> 同样还是对realign的bam和recal的bam分别用HaplotypeCaller找变异
+```
+INFO  19:36:31,960 ProgressMeter - Total runtime 201031.47 secs, 3350.52 min, 55.84 hours 
+INFO  22:59:21,693 ProgressMeter - Total runtime 184944.78 secs, 3082.41 min, 51.37 hours 
+```
+可以看到这个时候的耗时相比仅针对一条lane已经是非常恐怖了，不仅仅是因为这个时候reads数量增多，而且是因为5条lane独立样本处理。
+
+
+如果merge后进行AddOrReplaceReadGroups处理，也就是正确的做法下，realign和recal耗时如下：
+```
+INFO  15:52:21,739 ProgressMeter - Total runtime 3573.62 secs, 59.56 min, 0.99 hours 
+INFO  22:46:39,615 ProgressMeter - Total runtime 24853.46 secs, 414.22 min, 6.90 hours 
+INFO  16:06:14,340 ProgressMeter - Total runtime 62366.41 secs, 1039.44 min, 17.32 hours 
+INFO  18:18:08,004 ProgressMeter - Total runtime 94304.46 secs, 1571.74 min, 26.20 hours 
+```
+这个耗时跟上面把lane当做是独立样本的没有什么区别，因为耗时取决于reads数据量。
+
+接下来找变异，我不仅仅是对realign和recal，还加入了最原始的bam，全部耗时如下：
+```
+INFO  02:29:32,680 ProgressMeter - Total runtime 149229.64 secs, 2487.16 min, 41.45 hours 
+INFO  02:15:39,234 ProgressMeter - Total runtime 148379.91 secs, 2473.00 min, 41.22 hours 
+INFO  21:20:51,032 ProgressMeter - Total runtime 130663.06 secs, 2177.72 min, 36.30 hours
+```
+可以看到这些耗时都显著的小于把lane当做独立样本。
+
+全部流程输出的文件大小如下:
+
+```
+ 59G Jun 14 14:17 jmzeng.bam
+8.4M Jun 14 14:52 jmzeng.bam.bai
+1.1G Jun 21 02:29 jmzeng_merge_raw.snps.indels.vcf
+ 12M Jun 21 02:29 jmzeng_merge_raw.snps.indels.vcf.idx
+8.4M Jun 14 22:46 jmzeng_realigned.bai
+ 59G Jun 14 22:46 jmzeng_realigned.bam
+1.1G Jun 21 02:15 jmzeng_realigned_raw.snps.indels.vcf
+ 12M Jun 21 02:15 jmzeng_realigned_raw.snps.indels.vcf.idx
+8.5M Jun 16 18:18 jmzeng_recal.bai
+161G Jun 16 18:18 jmzeng_recal.bam
+8.5M Jun 16 19:39 jmzeng_recal.bam.bai
+1.1G Jun 20 21:20 jmzeng_recal_raw.snps.indels.vcf
+ 12M Jun 20 21:20 jmzeng_recal_raw.snps.indels.vcf.idx
+ 47M Jun 14 15:52 jmzeng_target.intervals
+323K Jun 15 16:06 jmzeng_temp.table
+```
+值得注意的是，recal之后的bam文件是原始bam的3倍大小，特别耗费存储空间。
+
+接下来我会讲解realign和recal步骤的必要性，毕竟这两个步骤也的确太耗时了，尤其是recal，不仅仅耗时还特别占硬盘存储。
+
+
+#### tro家系外显子数据分析
+
+外显子组测序（whole exome sequencing, WES）是指利用序列捕获技术将全基因组外显子区域DNA捕捉并富集后进行高通量测序的基因组分析方法。在人类基因中大约有18万个外显子,占人类基因组的1%，约30 Mb。相比于全基因组测序，外显子组测序更加经济、高效，目前已广泛应用于遗传病和癌症研究中。
+
+在各种环境因素的作用下，机体某些体细胞染色体上发生的变异破坏或改变了某些重要的生物学过程，体细胞可能会因此异常增生而转变为肿瘤细胞。对于癌症研究，一般选取患病个体配对的癌组织和癌旁组织或患病个体组织样本及配对的外周血样本进行外显子组学研究。由于不同患病个体之间没有血缘关系，遗传背景相差较大。而在遗传病领域一般是对患病个体的父母一同测序，叫做 基于trio的全外显子组测序。
+
+> 基于trio的全外显子组测序已经被证实是一种对于智力障碍(intellectual disability, ID)和先天性畸形(congenital malformation, CM)患者的致病基因检测非常有效的策略。
+
+
+目录如下：
+- 测序质量控制
+- snp-calling
+- snp-filter
+- 不同个体的比较
+- 不同软件比较
+- annovar注释
+- de novo变异情况
+
+
+##### 第一步：测序质量控制 {-}
+
+这一步主要看看这些外显子测序数据的测序质量如何：
+
+![](image/C6/WES/image0011.png) 
+
+首先用fastqc处理，会出一些图表，通常是不会有问题的，毕竟公司不想砸自己的牌子。
+
+然后粗略统计下**平均测序深度**及**目标区域覆盖度**，这个是重点，不过一般没问题的，因为现在芯片捕获技术非常成熟了，而且实验水平大幅提升，没有以前那么多的问题了。
+
+这个外显子项目的测序文件中mpileup文件是1371416525行，意味着总的测序长度是1.3G，以前我接触的一般是600M左右的。因为外显子目标区域并不大，就34729283bp，也就是约35M，即使加上侧翼长度。
+```
+54692160：外显子加上前后50bp
+73066288：外显子加上前后100bp
+90362533：外显子加上前后150bp
+```
+然后我要根据外显子记录文件对mpileup文件进行计数，统计外显子的coverage还有测序深度，这个脚本其实蛮有难度的。
+
+我前面提到过外显子组的序列仅占全基因组序列的1%左右，而我在NCBI里面拿到 consensus coding sequence (CCDS)记录`CCDS.20150512.txt`文件，是基于hg38版本的，需要首先转换成hg19才可以来计算这次测序项目的覆盖度和平均测序深度。
+
+参考：http://www.bio-info-trainee.com/?p=990 （ liftover基因组版本之间的coordinate转换）
+
+```
+ awk '{print "chr"$3,$4,$5,$1,0,$2,$4,$5,"255,0,0"}' CCDS.20150512.exon.txt >CCDS.20150512.exon.hg38.bed
+~/bio-soft/liftover/liftOver CCDS.20150512.exon.hg38.bed ~/bio-soft/liftover/hg38ToHg19.over.chain CCDS.20150512.exon.hg19.bed unmap
+```
+
+下面这个程序就是读取转换好的外显子记录的数据，对一家三口一起统计，然后再读取每个样本的20G左右的mpileup文件进行统计，所以很耗费时间。
+
+![](image/C6/WES/image0021.png)
+
+外显子目标区域平均测序深度接近100X，所以很明显是非常好的捕获效率啦！而全基因组背景深度才3.3，这符合实验原理，即与探针杂交碱基多的片段比少的片段更易被捕获。对非特异杂交的基因组覆盖度非特异的背景 DNA 也进行了测序。
+
+![](image/C6/WES/image0031.png)
+
+接下来对测序深度进行简单统计，脚本如下，但是这个图没多大意思因为我们的外显子的35M区域平均都接近100X的测序量。
+
+![](image/C6/WES/image0041.png)
+
+---
+
+##### 第二步：找变异位点 {-}
+
+准备文件：下载必备的软件和参考基因组数据
+
+**软件**
+
+![](image/C6/WES/image0012.png)
+
+ps：还有samtools，freebayes和varscan软件，我以前下载过，这次就没有再弄了，但是下面会用到
+
+**参考基因组**
+
+![](image/C6/WES/image0022.png)
+
+**参考突变数据**
+
+![](image/C6/WES/image0032.png)
+
+1. 下载数据
+
+![](image/C6/WES/image0042.png)
+
+2. bwa比对
+
+![](image/C6/WES/image0051.png)
+
+![](image/C6/WES/image006.png)
+
+3. sam转为bam，并sort好
+
+![](image/C6/WES/image007.png)
+
+![](image/C6/WES/image008.png)
+
+4. 标记PCR重复，并去除
+
+![](image/C6/WES/image009.png)
+
+![](image/C6/WES/image010.png)
+
+5. 产生需要重排的坐标记录
+
+![](image/C6/WES/image011.png)
+
+![](image/C6/WES/image012.png)
+
+6. 根据重排记录文件把比对结果重新比对
+
+![](image/C6/WES/image013.png)
+
+![](image/C6/WES/image014.png)
+
+7. 把最终的bam文件转为mpileup文件
+
+![](image/C6/WES/image015.png)
+
+![](image/C6/WES/image016.png)
+
+8. 用bcftools 来call snp
+
+![](image/C6/WES/image017.png)
+
+9 用freebayes来call snp
+
+![](image/C6/WES/image018.png)
+
+10. 用gatk来call snp
+
+![](image/C6/WES/image019.png)
+
+11. 用varscan来call snp
+
+![](image/C6/WES/image020.png)
+
+![](image/C6/WES/image021.png)
+
+
+##### 第三步：过滤变异位点 {-}
+
+其中freebayes,bcftools,gatk都是把所有的snp细节都call出来了，可以看到下面这些软件的结果有的高达一百多万个snp，而一般文献都说外显子组测序可鉴定约8万个变异。
+
+![](image/C6/WES/image0013.png)
+
+这样得到突变太多了，所以需要过滤。这里过滤的统一标准都是**qual大于20，测序深度大于10**。过滤之后的snp数量如下
+
+![](image/C6/WES/image0023.png)
+
+```
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next if /INDEL/;/(DP4=.*?);/;print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$1"}' Sample3.bcftools.vcf >Sample3.bcftools.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next if /INDEL/;/(DP4=.*?);/;print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$1"}' Sample4.bcftools.vcf >Sample4.bcftools.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next if /INDEL/;/(DP4=.*?);/;print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$1"}' Sample5.bcftools.vcf >Sample5.bcftools.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next unless /TYPE=snp/;@tmp=split/:/,$F[9];print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[1]"}'  Sample3.freebayes.vcf > Sample3.freebayes.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next unless /TYPE=snp/;@tmp=split/:/,$F[9];print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[1]"}'  Sample4.freebayes.vcf > Sample4.freebayes.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next unless /TYPE=snp/;@tmp=split/:/,$F[9];print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[1]"}'  Sample5.freebayes.vcf > Sample5.freebayes.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next if length($F[3]) >1;next if length($F[4]) >1;@tmp=split/:/,$F[9];print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[1]:$tmp[2]"}'  Sample3.gatk.UG.vcf  >Sample3.gatk.UG.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next if length($F[3]) >1;next if length($F[4]) >1;@tmp=split/:/,$F[9];print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[1]:$tmp[2]"}'  Sample4.gatk.UG.vcf  >Sample4.gatk.UG.vcf.filter
+
+perl -alne '{next if $F[5]<20;/DP=(\d+)/;next if $1<10;next if length($F[3]) >1;next if length($F[4]) >1;@tmp=split/:/,$F[9];print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[1]:$tmp[2]"}'  Sample5.gatk.UG.vcf  >Sample5.gatk.UG.vcf.filter
+
+perl -alne '{@tmp=split/:/,$F[9];next if $tmp[3]<10;print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[3]"}' Sample3.varscan.snp.vcf >Sample3.varscan.snp.vcf.filter
+
+perl -alne '{@tmp=split/:/,$F[9];next if $tmp[3]<10;print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[3]"}' Sample4.varscan.snp.vcf >Sample4.varscan.snp.vcf.filter
+
+perl -alne '{@tmp=split/:/,$F[9];next if $tmp[3]<10;print "$F[0]\t$F[1]\t$F[3]\t$F[4]:$tmp[0]:$tmp[3]"}' Sample5.varscan.snp.vcf >Sample5.varscan.snp.vcf.filter
+
+```
+这样不同工具产生的snp记录数就比较整齐了，我们先比较四种不同工具的call snp的情况，然后再比较三个人的区别。
+
+然后写了一个程序把所有的snp合并起来比较
+
+![](image/C6/WES/image0033.png)
+
+得到了一个很有趣的表格，我放在excel里面看了看 ，主要是要看生物学意义，但是我的生物学知识好多都忘了，得重新学习了 
+
+![](image/C6/WES/image0043.png)
+
+
+##### 第四步：不同个体的比较 {-}
+
+3-4-5分别就是孩子、父亲、母亲
+
+我对每个个体取他们的**四种软件的公共snp**来进行分析，并且只分析基因型，看看是否符合孟德尔遗传定律。
+
+![](image/C6/WES/image0014.png)
+
+结果如下：
+
+![](image/C6/WES/image0024.png)
+
+粗略看起来好像很少不符合孟德尔遗传定律，然后我写了程序计算。
+
+![](image/C6/WES/image0034.png)
+
+总共127138个可以计算的位点，共有18063个位点不符合孟德尔遗传定律。
+
+我检查了一下不符合的原因，发现我把
+
+`chr1 100617887 C T:DP4=0,0,36,3 T:1/1:40 T:1/1:0,40:40 miss T:DP4=0,0,49,9 T:1/1:59 T:1/1:0,58:59 miss T:DP4=0,0,43,8 T:1/1:53 T:1/1:0,53:53 T:1/1:50`
+
+计算成了`chr1 100617887 C 0/0 0/0 1/1` 所以认为不符合，因为我认为只有四个软件都认为是snp的我才当作是snp的基因型，否则都是0/0。那么我就改写了程序，全部用gatk结果来计算。这次可以计算的snp有个176036，不符合的有20309，而且我看了不符合的snp的染色体分布，Y染色体有点异常。
+
+![](image/C6/WES/image0044.png)
+
+![](image/C6/WES/image0052.png)
+
+但是很失败，没什么发现。
+
+##### 第五步：不同软件比较 {-}
+
+主要是画韦恩图看看，参考：http://www.bio-info-trainee.com/?p=893
+
+对合并而且过滤的高质量snp信息来看看四种不同的snp calling软件的差异
+
+我们用R语言来画韦恩图
+
+![](image/C6/WES/image0015.png)
+
+可以看出不同软件的差异还是蛮大的，所以我只选四个软件的公共snp来进行分析
+
+首先是sample3
+
+![](image/C6/WES/image0025.png)
+
+然后是sample4
+
+![](image/C6/WES/image0035.png)
+
+然后是sample5
+
+![](image/C6/WES/image0045.png)
+
+可以看出，不同的软件差异还是蛮大的，所以我重新比较了一下，这次只比较，它们不同的软件在exon位点上面的snp的差异，毕竟，我们这次是外显子测序，重点应该是外显子snp
+
+![](image/C6/WES/image0053.png)
+
+然后我们用同样的程序，画韦恩图，这次能明显看出来了，大部分的snp位点都至少有两到三个软件支持
+
+**所以，只有测序深度达到一定级别，用什么软件来做snp-calling其实影响并不大。**
+
+![](image/C6/WES/image0061.png)
+
+##### 第六步：用annovar注释 {-}
+
+使用annovar软件参考自：http://www.bio-info-trainee.com/?p=641
+
+```
+/home/jmzeng/bio-soft/annovar/convert2annovar.pl -format vcf4  Sample3.varscan.snp.vcf > Sample3.annovar
+
+/home/jmzeng/bio-soft/annovar/convert2annovar.pl -format vcf4  Sample4.varscan.snp.vcf > Sample4.annovar
+
+/home/jmzeng/bio-soft/annovar/convert2annovar.pl -format vcf4  Sample5.varscan.snp.vcf > Sample5.annovar
+```
+然后用下面这个脚本批量注释
+
+![](image/C6/WES/image0016.png)
+
+Reading gene annotation from /home/jmzeng/bio-soft/annovar/humandb/hg19_refGene.txt ... Done with 50914 transcripts (including 11516 without coding sequence annotation) for 26271 unique genes
+
+最后查看结果可知，真正在外显子上面的突变并不多
+
+```
+23515 Sample3.anno.exonic_variant_function
+23913 Sample4.anno.exonic_variant_function
+24009 Sample5.anno.exonic_variant_function
+```
+annovar软件就是把我们得到的十万多个snp分类了，看看这些snp分别是基因的哪些位置，是否引起蛋白突变，位置信息如下：
+
+```
+downstream
+exonic
+exonic;splicing
+intergenic
+intronic
+ncRNA_exonic
+ncRNA_intronic
+ncRNA_splicing
+ncRNA_UTR3
+ncRNA_UTR5
+splicing
+upstream
+upstream;downstream
+UTR3
+UTR5
+UTR5;UTR3
+```
+
+##### 第七步：de novo变异情况 {-}
+
+de novo变异寻找也属于snp-calling的一部分，但是有点不同的就是该软件考虑了一家三口的测序文件，找de novo突变。
+
+功能介绍：http://varscan.sourceforge.net/trio-calling-de-novo-mutations.html
+
+而且还专门有一篇文章讲ASD和autism与de novo变异的关系，但个人感觉文章不清不楚，没什么意思
+
+**Trio Calling for de novo Mutations**
+
+![](image/C6/WES/image0017.png)
+
+```
+Min coverage:   10
+Min reads2:     4
+Min var freq:   0.2
+Min avg qual:   15
+P-value thresh: 0.05
+Adj. min reads2:        2
+Adj. var freq:  0.05
+Adj. p-value:   0.15
+```
+**Reading input from trio.filter.mpileup**
+
+```
+1371416525 bases in pileup file （137M的序列）
+83123183 met the coverage requirement of 10 （其中有83M的测序深度大于10X）
+145104 variant positions (132268 SNP, 12836 indel) （共发现15.5万的变异位点）
+4403 were failed by the strand-filter
+139153 variant positions reported (126762 SNP, 12391 indel)
+502 de novo mutations reported (376 SNP, 126 indel) （真正属于 de novo mutations只有502个）
+1734 initially DeNovo were re-called Germline
+12 initially DeNovo were re-called MIE
+3 initially DeNovo were re-called MultAlleles
+522 initially MIE were re-called Germline
+1 initially MIE were re-called MultAlleles
+3851 initially Untransmitted were re-called Germline
+```
+然后我看了看输出的文件**trio.mpileup.output.snp.vcf**
+
+软件是这样解释的
+> The output of the trio subcommand is a single VCF in which all variants are classified as germline (transmitted or untransmitted), de novo, or MIE.
+
+- FILTER - mendelError if MIE, otherwise PASS
+
+- **STATUS - 1=untransmitted, 2=transmitted, 3=denovo, 4=MIE**
+
+- DENOVO - if present, indicates a high-confidence de novo mutation call
+
+里面的信息量还是不清楚。
+
+我首先对拿到的trio.de_novo.mutaion.snp.vcf文件进行简化，只看基因型！
+
+```
+head status.txt   （顺序是dad,mom,child）
+STATUS=2 0/0 0/1 0/1
+STATUS=2 1/1 1/1 1/1
+STATUS=2 0/1 0/0 0/1
+STATUS=2 1/1 1/1 1/1
+STATUS=1 0/1 0/0 0/0
+STATUS=1 0/1 0/0 0/0
+STATUS=2 1/1 1/1 1/1
+STATUS=2 1/1 1/1 1/1
+STATUS=2 1/1 1/1 1/1
+STATUS=2 0/1 0/1 0/1
+#那么总结如下：
+26564 STATUS=1 无所以无 （0/0 0/1 0/0或者 0/1 0/0 0/0等等）
+97764 STATUS=2 有所以有 （1/1 1/1 1/1 或者0/1 0/1 1/1等等）
+385 STATUS=3 无中生有 （0/0 0/0 0/1 或者0/0 0/0 1/1）
+1485 STATUS=4 有中生无 （1/1 0/1 0/0 等等）
+```
+我用annovar注释了一下
+
+```
+/home/jmzeng/bio-soft/annovar/convert2annovar.pl -format vcf4  trio.mpileup.output.snp.vcf > trio.snp.annovar
+/home/jmzeng/bio-soft/annovar/annotate_variation.pl -buildver hg19  --geneanno --outfile  trio.snp.anno trio.snp.annovar /home/jmzeng/bio-soft/annovar/humandb
+```
+结果是：
+```
+A total of 132268 locus in VCF file passed QC threshold, representing 132809 SNPs (86633 transitions and 46176 transversions) and 3 indels/substitutions
+```
+可以看到最后被**注释到外显子上面的突变有两万多个**。
+```
+23794  284345 3123333 trio.snp.anno.exonic_variant_function
+```
+这个应该是非常有意义的，但是我还没学会后面的分析。只能先做到这里了……
 
 ### 转录组
 
-#### 全转录组是什么？
+转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的**所有 RNA 的总和**，包括 mRNA 和非编码 RNA 。通过转录组测序，能够全面获得物种特定组织或器官的转录本信息，从而进行转录本结构研究、变异研究、**基因表达水平研究**以及全新转录本发现等研究。
 
-全转录组即包含mRNA，small RNA，lncRNA，circRNA的测序。
+其中，基因表达水平的探究是转录组领域**最热门**的方向，利用转录组数据来识别转录本和表达定量，是转录组数据的核心作用。由于这个作用，他可以不依赖其他组学信息，单独成为一个产品项目RNA-seq测序。所以很多时候**转录组测序**会与**RNA-seq**混为一谈。
 
-全转录组之所以这么火的原因就在于大家逐渐意识到单一的mRNA或ncRNA研究已无法满足科研需求，需要结合多种RNA信息进行整合分析，探索潜在的调控网络机制。而全转录组测序无疑成为阐释生物学问题的利器
-
-#### 转录组入门笔记
-
-# 计算机及软件安装 {-}
+现在RNA-seq数据**使用广泛**，但是没有一套流程可以解决所有的问题。比较值得关注的RNA-seq分析中的重要的步骤包括：实验设计，质控，read比对，表达定量，可视化，差异表达，识别可变剪切，功能注释，融合基因检测，eQTL定位等。
 
 
-#### RNA-seq 检测变异之 GATK 最佳实践流程
+#### RNA-seq表达量分析指引
+
+##### (1)：[计算机资源的准备](http://www.biotrainee.com/thread-1742-1-1.html) {-}
+
+最好是有mac或者linux系统，8G+的内存，500G的存储即可。
+如果你是Windows，那么安装必须安装 git,notepad++,everything，还有虚拟机，在虚拟机里面安装linux，最好是ubuntu。
+需要安装的软件包括 sratoolkit,fastqc,hisats,samtools,htseq-count,R,Rstudio 
+软件安装的代码，在生信技能树公众号后台回复**老司机**即可拿到。
+进阶作业，每个软件都收集一个中文教程链接，并自己阅读，发在论坛里面。 
+
+##### (2)：[读文章拿到测序数据](http://www.biotrainee.com/thread-1743-1-1.html) {-}
+
+本系列课程学习的文章是：AKAP95 regulates splicing through scaffolding RNAs and RNA processing factors. Nat Commun 2016 Nov 8;7:13347. PMID: 27824034 很容易在文章里面找到数据地址GSE81916 这样就可以下载sra文件
+作业，看文章里的methods部分，把它用到的软件和参数摘抄下来！
+
+然后理解GEO/SRA数据库的数据存放形式，把规律和笔记发在论坛上面！ 
+
+##### (3)：了解fastq测序数据 {-}
+
+需要用安装好的sratoolkit把sra文件转换为fastq格式的测序文件，并且用fastqc等软件测试测序文件的质量！
+
+作业，理解测序reads，GC含量，质量值，接头，index，fastqc的全部报告，搜索中文教程，并发在论坛上面。 
+
+##### (4)：了解参考基因组及基因注释 {-}
+
+在UCSC下载hg19参考基因组，我博客有详细说明，从gencode数据库下载基因注释文件，并且用IGV去查看你感兴趣的基因的结构，比如TP53,KRAS,EGFR等等。
 
 
-## RNA-seq 序列比对  {-}
+作业，截图几个基因的IGV可视化结构！还可以下载ENSEMBL，NCBI的gtf，也导入IGV看看，截图基因结构。了解IGV常识。
 
-对 RNA-seq 产出的数据进行变异检测分析，与常规重测序的主要区别就在序列比对这一步，因为 RNA-seq 的数据是来自转录本的，比对到参考基因组需要跨越转录剪切位点，所以 RNA-seq 进行变异检测的重点就在于跨剪切位点的精确序列比对。
+
+##### (5)： 序列比对 {-}
+
+比对软件很多，首先大家去收集一下，因为我们是带大家入门，请统一用hisat2，并且搞懂它的用法。
+
+直接去hisat2的主页下载index文件即可，然后把fastq格式的reads比对上去得到sam文件。
+
+接着用samtools把它转为bam文件，并且排序(注意N和P两种排序区别)索引好，载入IGV，再截图几个基因看看！
+
+顺便对bam文件进行简单QC，参考直播我的基因组系列。 
+
+##### (6)： reads计数 {-}
+
+实现这个功能的软件也很多，还是烦请大家先自己搜索几个教程，入门请统一用htseq-count，对每个样本都会输出一个表达量文件。
+
+需要用脚本合并所有的样本为表达矩阵。参考：生信编程直播第四题：多个同样的行列式文件合并起来
+
+对这个表达矩阵可以自己简单在excel或者R里面摸索，求平均值，方差。
+看看一些生物学意义特殊的基因表现如何，比如GAPDH,β-ACTIN等等。
+这是一个分水岭，后面的分析主要靠R了，前面的分析都最好是在linux系统下面完成，主要是安装软件，下载数据，运行。
+
+有几个笔记不错的整合作业：
+
+* [转录组入门（1-6）从测序数据到生成count矩阵](http://www.biotrainee.com/thread-1931-1-1.html)
+* [JD加栋 的个人博客](http://www.zd200572.com/2017/07/15/2017-RNAseq-executing/)
+* [PANDA姐的转录组入门（0-6）合辑](http://www.biotrainee.com/thread-1966-1-1.html)
+
+
+##### (7)： 差异基因分析 {-}
+
+这个步骤推荐在R里面做，载入表达矩阵，然后设置好分组信息，统一用DEseq2进行差异分析，当然也可以走走edgeR或者limma的voom流程。
+
+基本任务是得到差异分析结果，进阶任务是比较多个差异分析结果的异同点。
+
+##### (8)： 差异基因结果注释 {-}
+
+我们统一选择p<0.05而且abs(logFC)大于一个与众的基因为显著差异表达基因集，对这个基因集用R包做KEGG/GO超几何分布检验分析。
+
+然后把表达矩阵和分组信息分别作出cls和gct文件，导入到GSEA软件分析。
+基本任务是完成这个分析。
+
+
+最后，把同样的代码实践与其它几篇转录组文章，并且把代码和分析结果发在论坛上面；
+
+* http://biotrainee.com/jmzeng/RNA-seq/RNA-seq-example-GSE81916-two-group.sh
+* http://biotrainee.com/jmzeng/RNA-seq/DEG.zip 
+
+我以前在博客写过的
+
+* http://www.bio-info-trainee.com/2218.html
+
+> 比如可以来一些实战：
+
+* 生信技能树»生信技能树›互动作业›项目实战›[mRNA-seq数据分析实战](http://www.biotrainee.com/thread-115-1-1.html)
+* [MeDIP-seq,ChIP-seq,RNA-seq结合起来分析](http://www.biotrainee.com/thread-883-1-1.html)
+
+#### RNA-seq检测变异分析实战
+
+前面我们说到RNA-seq最重要的就是对所测样品进行基因表达量的测定，但也有部分课题需要检测RNA-seq试剂里面的变异位点。
+这里也进行简单的介绍，如下：
+
+##### RNA-seq 序列比对  {-}
+
+对 RNA-seq 产出的数据进行变异检测分析，与常规重测序的主要区别就在序列比对这一步，因为 RNA-seq 的数据是来自转录本的，比对到参考基因组需要跨越转录剪切位点，所以 RNA-seq 进行变异检测的重点就在于**跨剪切位点的精确序列比对**
 
 文献 [systematic evaluation of spliced alignment programs for RNA-seq data](http://www.nature.com/nmeth/journal/v10/n12/full/nmeth.2722.html) 中对 RNA-seq 数据常用的 11 款比对软件进行了详细测试，包括 STAR 2-pass，而 GATK 对 RNA-seq 数据变异检测的最佳实践流程中选用了 STAR 2-pass 这一方法进行比对，STAR 发表的文章至今已被引用 1900 余次，这款软件的比对速度很快，也是 [ENCODE](https://www.encodeproject.org/) 项目的御用比对软件。
 
@@ -105,11 +1471,13 @@ java -jar picard.jar MarkDuplicates \
 到此序列比对就完成了。
 
 ---
-## 使用 GATK 进行变异检测  {-}
+
+##### 使用 GATK 进行变异检测  {-}
 
 感觉 GATK 里面的工具都很慢（相对于其他的软件特别慢！），都是单线程在跑，有的虽然可以设置为多线程但是感觉没啥速度上的提升，所以要有点耐心……
 
 由于 STAR 软件使用的 MAPQ 标准与 GATK 不同，而且比对时会有 reads 的片段落到内含子区间，需要进行一步 MAPQ 同步和 reads 剪切，使用 GATK 专为 RNA-seq 应用开发的工具 `SplitNCigarReads` 进行操作，它会将落在内含子区间的 reads 片段直接切除，并对 MAPQ 进行调整。DNA 测序的重测序应用中也有序列比对软件的 MAPQ 与 GATK 无法直接对接的情况，需要进行调整。
+
 ```shell
 # samtools faidx chrX.fa
 # samtools dict chrX.fa
@@ -123,7 +1491,8 @@ java -jar GenomeAnalysisTK.jar -T SplitNCigarReads \
         -U ALLOW_N_CIGAR_READS
 ```
 
-之后就是可选的 Indel Realignment，对已知的 indel 区域附近的 reads 重新比对，可以稍微提高 indel 检测的真阳性率，如果时间紧张也可以不做，这一步影响很轻微 :)
+之后就是可选的 Indel Realignment，对已知的 indel 区域附近的 reads 重新比对，可以稍微提高 indel 检测的真阳性率，如果时间紧张也可以不做，这一步影响很轻微
+
 ```shell
 # 可选步骤 IndelRealign
 java -jar GenomeAnalysisTK.jar -T RealignerTargetCreator \
@@ -142,7 +1511,8 @@ java -jar GenomeAnalysisTK.jar -T IndelRealigner \
         
 ```
 
-然后还是可选的 BQSR，这一步操作主要是针对测序质量不太好的数据，进行碱基质量再校准，如果对自己的测序数据质量足够自信可以省略，2500 之后 Hiseq 仪器的数据质量都挺不错的，可以根据 FastQC 结果来决定。这一步省了又能节省时间 :)
+然后还是可选的 BQSR，这一步操作主要是针对测序质量不太好的数据，进行碱基质量再校准，如果对自己的测序数据质量足够自信可以省略，2500 之后 Hiseq 仪器的数据质量都挺不错的，可以根据 FastQC 结果来决定。这一步省了又能节省时间
+
 ```shell
 # 可选步骤 BQSR
 java -jar GenomeAnalysisTK.jar \
@@ -164,9 +1534,9 @@ java -jar GenomeAnalysisTK.jar  \
 
 比如下面的数据就可以放心的省略这两步了：
 
-![R1 数据质量够好][1]
+![R1 数据质量够好](image/C6/R1_QC.png)
 
-![R2 数据质量也够好][2]
+![R2 数据质量也够好](image/C6/R2_QC.png)
 
 现在终于可以进行变异检测了，GATK 官网说 HC 表现比 UC 好，所以这里用 HC 进行变异检测：
 ```shell
@@ -196,11 +1566,80 @@ java -jar GenomeAnalysisTK.jar \
   [1]: http://static.zybuluo.com/wangpeng905/tiitfgpjnuvyvfdnvvnud319/R1_QC.png
   [2]: http://static.zybuluo.com/wangpeng905/iqx3yy6wf72dmodirjnjvs6j/R2_QC.png
   
-  
-  
+#### 全转录组
+
+> 全转录组即包含mRNA，small RNA，lncRNA，circRNA的测序。
+
+搞研究的小伙伴目前大多默认转录组指的是mRNA。而我们知道转录组中也包含着非编码RNA（ncRNA），包括具有调控功能的ncRNAs和管家RNAs（如tRNA，rRNA等）。对转录组中的非编码RNA，目前大家的研究多集中在具有调控功能的small RNA（以miRNA为代表），长链非编码RNA（lncRNA）和环状RNA（circRNA）上，而这几类ncRNA的调控对象都和mRNA有关。因此，全转录组即包含了ncRNAs和mRNA。
+大家目前主要关心调控ncRNAs与mRNA的相互作用关系。全转录组的提出，是为了与大家默认的转录组（mRNA）有所区分，并不是一个新概念。但是在实验和数据分析上，两者还是有一些不同的。
+
+##### 全转录组文库构建 {-}
+
+全转录组测序是通过构建2个文库，1个小RNA文库（包含miRNA）和一个去除核糖体的链特异性文库（包含mRNA，lncRNA，和circRNA），然后分别上机测序，最后主要获得4类RNA——miRNA，lncRNA，mRNA，circRNA的序列信息。
+
+由于miRNA序列较短（18~26 nt），而其他三类RNA序列较长（通常在1 kb以上），因此它们构建文库的方式会不一样，长序列需要先片段化再建库。这也造成了两者的测序读长是不一样的，小RNA文库的测序读长是SE50，长序列文库的测序读长是PE150，因而需要分别上机测序。
+我们熟悉的转录组测序只需要构建一个文库，针对mRNA进行序列鉴定和分析。
+
+##### 全转录组测序的数据分析  {-}
+
+不同于只能获取mRNA信息的转录组测序，在全转录组测序完成后，我们可以获取4类主要RNA（miRNA，mRNA，lncRNA，circRNA）的序列信息。接着我们对这4类RNA进行标准分析和整合分析。
+标准分析是针对每类RNA主要讨论，序列鉴定，序列特征分析，差异表达分析，和功能富集分析；
+整合分析是全转录组测序的重点内容，基于标准分析的结果，整合分析重点讨论非编码RNA与编码RNA间的调控关系，主要包括两者间互作关系miRNA vs mRNA，miRNA vs lncRNA，miRNA vs circRNA，再进一步讨论三者间互作关系mRNA vs miRNA vs lncRNA，mRNA vs miRNA vs circRNA。而三者间的互作关系正是目前讨论得如火如荼的ceRNA（competing endogenous RNA）调控网络。
+
+ 
+#### 可变剪切
+
+##### 什么是可变剪接，研究可变剪接的意义？  {-}
+
+某些基因的一个mRNA前体可以通过选择不同的剪接位点产生不同的可变剪接（Alternative Splicing, AS）形式，这种可变剪接通过以下两种方式参与基因表达调控：
+
+* 1）导致一个基因形成多个剪接异构体（isoform），从而编码不同的蛋白质
+* 2）通过无义介导的mRNA降解（NMD）和miRNA调节来调整mRNA的稳定性及翻译。
+
+可变剪接是转录本和蛋白质多样性的主要来源，已有研究表明可变剪接与某些数量性状基因、性别决定通路（如果蝇）、遗传疾病（如脆性X综合征）等密切相关。对可变剪接进行精准的鉴定分析，能够更深入地研究基因表达模型和调控机制。
+
+##### 如何对标准的mRNA-seq数据进行可变剪切分析？   {-}
+
+这个数据分析点比较小众，理论上不属于本书的讲解范畴，我们就简单描述部分。可以用ASprofile 软件对 Cufflinks 预测的转录本的可变剪切事件进行分类统计，常见可变剪切事件如下所示:
+
+- AE: Alternative exon ends (5' , 3' , or both) ----- 可变 5' 或3' 端剪切
+- XAE: Approximate AE (5' , 3' , or both) ----- 近似可变 5' 或3' 端剪切
+- IR: Intron retention ----- 单内含子保留
+- XIR: Approximate IR ----- 近似单内含子保留
+- MIR: Multi-IR ----- 多内含子保留
+- XMIR: Approximate MIR ----- 近似多内含子保留
+- TSS: Alternative 5' first exon ----- 第一个外显子可变剪切
+- TTS: Alternative 3' last exon ----- 最后一个外显子可变剪切
+- SKIP: Skipped exon ----- 单外显子跨跃
+- XSKIP: Approximate SKIP ----- 近似单外显子跨跃
+- MSKIP: Multi-exon SKIP ----- 多外显子跨跃
+- XMSKIP: Approximate MSKIP ----- 近似多外显子跨跃
+
+可以将**Length >= 200bp** 且 **exon number >=2** 作为可靠的新基因的转录本筛选条件，新基因的转录本需要做Nr, KEGG的数据库注释。
+
+至于基因结构优化，对于人、小鼠、拟南芥等模式生物来说，基因注释相对完整，但对于研究没那么透彻的其他物种，我们可以用reads来优化基因结构，从而完善它们的基因注释信息。
+
+Reads比对参考基因组后，我们用**Cufflink**软件对reads进行转录本重构，将重构结果与参考转录本序列进行比较，重构出来的转录本可能会延长基因注释的5’或3’端，由此实现优化基因结构的目的。
+
+##### 可变剪切事件的可视化 {-}
+
+Python软件SpliceGrapher可以将可变剪切模型绘制成图片
+
+SpliceGrapher可以根据测序序列预测可变剪切模型，也可以用已知的基因注释文件生成可变剪切模型。它需要两种输入文件，注释gtf/gff3文件和测序reads与参考基因组比对的sam文件。SpliceGrapher可以预测出多种多样的可变剪切事件，已知的基因模型中存在Alt 3’（可变3’端）、Skipped Exon（跳过外显子）、Intron Retention（内含子保留）、Alt 5’（可变5’端）、既是Alt 3’又是Skipped Exon、既是Alt 5’又是Intron Retention等多种可变剪切事件。不同的事件用不同的颜色标注出来。
+
+发表这个工具的文章是Xiaoxian Liu, et al. Detecting Alternatively Spliced Transcript Isoforms from Single-Molecule Long-Read Sequences without a Reference Genome. Mol Ecol Resour. (2017)
+
+#### 融合基因分析
+
+基因融合现象发生在很多致命疾病中，如果是癌症等疾病的融合基因分析可以使用defuse软件， 利用reads的基因跨越以及一对reads的相对距离进行基因融合查找，当然，也可以使用BGI的SOAP系列，生信菜鸟团博客里面有详细描述软件的安装以及示例数据的测试使用。
+
+结题报告能给用户的就是软件找到的可能的融合基因表格,表格里面可能有下面的内容：
+
+
+
 #### 自学miRNA-seq八讲
 
-## 第一讲：文献选择与解读  {-}
+##### 第一讲：文献选择与解读  {-}
 
 前阵子逛BioStar论坛的时候看到了一个关于miRNA分析的问题，提问者从NCBI的SRA中下载文献提供的原始数据，然后处理的时候出现了问题。我看到他列出的数据来自iron torrent测序仪，而且我以前也没有做过miRNA-seq的数据分析， 就自学了一下。因为我有RNA-seq的基础，所以理解学习起来比较简单。
 
@@ -210,7 +1649,7 @@ java -jar GenomeAnalysisTK.jar \
 
 但是miRNA分析起来就有点麻烦了，作者用的是iron torrent测序仪。不过从SRA数据中心下载的是已经去掉接头的fastq格式测序数据，所以这里其实并不需要考虑测序仪的特异性。
 
-### 关于该文章的几个资料 {-}
+###### 关于该文章的几个资料 {-}
 
 - paper : http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0108051
 - Aggarwal P, Turner A, Matter A, Kattman SJ et al. RNA expression profiling of human iPSC-derived cardiomyocytes in a cardiac hypertrophy model. PLoS One 2014;9(9):e108051. PMID: 25255322
@@ -222,7 +1661,7 @@ java -jar GenomeAnalysisTK.jar \
 
 接下来我们要知道文章做了哪些分析，然后才能自己模仿看是否可以得到同样的分析结果。
 
-### 文章数据处理流程 {-}
+###### 文章数据处理流程 {-}
 
 - Ion Torrent's Torrent Suite version 3.6 was used for basecalling
 - Raw sequencing reads were aligned using the SHRiMP2 aligner and were aligned against the human reference genome (hg19) for novel miRNA prediction and then against a custom reference sequence file containing miRBase v.20 known human miRNA hairpins, tRNA, rRNA, adapter sequences and predicted novel miRNA sequences.(Genome_build: hg19, miRBase v.20 human miRNA hairpins)
@@ -257,19 +1696,19 @@ java -jar GenomeAnalysisTK.jar \
 
 ---
 
-## 第二讲：搜集学习资料 {-}
+##### 第二讲：搜集学习资料 {-}
 
 因为我是完全从零开始入门miRNA-seq分析，所以收集的资料比较齐全。
 
 首先看了部分中文资料，**了解miRNA测序是怎么回事，该分析什么，然后主要围绕着第一讲文献里的分析步骤来搜索资料。**
 
-### miRNA定义 {-}
+###### miRNA定义 {-}
 
 我首先找到了miRNA定义：[http://nar.oxfordjournals.org/content/34/suppl_1/D135.full ](http://nar.oxfordjournals.org/content/34/suppl_1/D135.full)
 
 >  MicroRNAs (miRNAs) are **small RNA molecules**, which are **∼22 nt sequences**  that have an important role in the translational regulation and degradation of mRNA by the base's pairing to the 3′-untranslated regions (3′-UTR) of the mRNAs. The miRNAs are derived from the **precursor transcripts of ∼70–120 nt sequences**, which fold to **form as stem–loop structures**, which are thought to be highly conserved in the evolution of genomes. Previous analyses have suggested that **∼1% of all human genes are miRNA genes,** which regulate the production of protein for 10% or more of all human coding genes。
 
-### 选择参考序列 {-}
+###### 选择参考序列 {-}
 
 然后我比较纠结的问题是参考序列如何选择，因为miRNA序列很少，把它map到3G大小的人类基因组有点浪费计算资源，正好我的服务器又坏了，不想太麻烦，想用自己的个人电脑搞定这个学习过程。
 
@@ -366,7 +1805,7 @@ perl -alne '{if(/^>/){if(/Homo/){$tmp=1}else{$tmp=0}};next if $tmp!=1;s/U/T/g if
 
 ---
 
-## 第三讲：下载公共数据 {-}
+##### 第三讲：下载公共数据 {-}
 
 前面已经讲到了该文章的数据已经上传到NCBI的SRA数据中心，所以直接根据索引号下载，然后用**SRAtoolkit**转出我们想要的fastq测序数据即可。
 
@@ -458,7 +1897,7 @@ mv *zip *html QC_results
 
 ---
 
-## 第四讲：测序数据比对 {-}
+##### 第四讲：测序数据比对 {-}
 
 序列比对是大多数类型数据分析的核心，如果要利用好测序数据，比对细节非常重要，我这里只是研读一篇文章也就没有对比对细节过多考虑，只是列出自己的代码和自己的几点思考，力求重现文章作者的分析结果。
 
@@ -530,7 +1969,7 @@ $SHRIMP_FOLDER/bin/gmapper-ls -L  hairpin.human-ls SRR1542716.fastq  --qv-offset
 
 ---
 
-## 第五讲：获取miRNA表达量 {-}
+##### 第五讲：获取miRNA表达量 {-}
 
 得到比对后的sam/bam文件只能算是level2的数据，一般我们给他人share的结果也是直接给表达矩阵的， miRNA分析跟mRNA分析类似，但是它的表达矩阵更好获取一点。
 
@@ -584,7 +2023,7 @@ cor(tmp[,2],tmp[,3])
 
 ---
 
-## 第六讲：miRNA表达量差异分析 {-}
+##### 第六讲：miRNA表达量差异分析 {-}
 
 这一讲是miRNA-seq数据分析的分水岭，前面的5讲说的是读文献下载数据比对，然后计算表达量，属于常规的流程分析，一般在公司测序之后都可以拿到分析结果，或者文献也会给出下载结果。
 
@@ -698,7 +2137,7 @@ plotMDS( assays(dds)[["mu"]] ) ##- fitted values.
 
 ---
 
-## 第七讲：miRNA样本配对mRNA表达量获取 {-}
+##### 第七讲：miRNA样本配对mRNA表达量获取 {-}
 
 这一讲其实算不上自学miRNA-seq分析，本质是affymetrix的mRNA表达芯片数据分析，而且还是最常用的那种GPL570   HG-U133_Plus_2，但因为是跟miRNA样本配对检测而且后面会利用到这两个数据分析结果来做共表达网络分析等等，所以就贴出对该芯片数据的分析结果。
 
@@ -764,7 +2203,7 @@ write.csv(DEG,"ET1-normal.DEG.csv")
 
 ---
 
-## 第八讲：miRNA-mRNA表达相关下游分析 {-}
+##### 第八讲：miRNA-mRNA表达相关下游分析 {-}
 
 通过前面的分析，我们已经量化了ET1刺激前后的细胞的miRNA和mRNA表达水平，也通过成熟的统计学分析分别得到了差异miRNA和mRNA，这时候我们就需要换一个参考文献了，因为前面提到的那篇文章分析的不够细致，我这里选择了浙江大学的一篇TCGA数据挖掘分析文章：
 
@@ -798,7 +2237,7 @@ library(pheatmap)
 
 因为我前面保存的表达量就基于counts的，所以画热图还需要进行normalization，我这里懒得弄了，就用了一个网页版工具可以自动生成热图：http://biit.cs.ut.ee/clustvis/
 
-![miRNA-heatmap](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/miRNA-heatmap.png)
+![miRNA-heatmap](image/C6/miRNA-heatmap.png)
 
 
 
@@ -832,9 +2271,11 @@ library(pheatmap)
 
 ### 表观组
 
-##### 自学ChIP-seq分析九讲
+几十年来，DNA一直被认为是决定生命遗传信息的核心物质，但是近些年新的研究表明，生命遗传信息从来就不是基因所能完全决定的，比如科学家们发现，可以在不影响DNA序列的情况下改变基因组的修饰，这种改变不仅可以影响个体的发育，而且还可以遗传下去。这种在基因组的水平上研究表观遗传修饰的领域被称为“表观基因组学(epigenomics）”。表观基因组学使人们对基因组的认识又增加了一个新视点：对基因组而言，不仅仅是序列包含遗传信息，而且其修饰也可以记载遗传信息。
 
-## 第一讲：文献选择与解读 {-}
+#### 自学ChIP-seq分析九讲
+
+##### 第一讲：文献选择与解读 {-}
 
 
 **文献；CARM1 Methylates Chromatin Remodeling Factor BAF155 to Enhance Tumor Progression and Metastasis** 
@@ -891,9 +2332,7 @@ To identify genes differentially expressed between MDA-MB-231-BAF155WT and MDA-M
 
 这里有一个文章发表了关于CHIP-seq的流程的：[http://biow.sb-roscoff.fr/ecole_bioinfo/protected/jacques.van-helden/ThomasChollier_NatProtoc_2012_peak-motifs.pdf](http://biow.sb-roscoff.fr/ecole_bioinfo/protected/jacques.van-helden/ThomasChollier_NatProtoc_2012_peak-motifs.pdf)
 
-[![Chip-seq-workflow](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/Chip-seq-workflow.png)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/Chip-seq-workflow.png)
-
-
+ 
 
 **同时我还推荐大家看几篇相关文献**
 
@@ -903,7 +2342,7 @@ To identify genes differentially expressed between MDA-MB-231-BAF155WT and MDA-M
 
 ---
 
-## 第二讲：资料收集 {-}
+##### 第二讲：资料收集 {-}
 
 
 
@@ -913,7 +2352,7 @@ CHIP-seq的确是非常完善的NGS流程，各种资料层出不穷。
 
 
 
-![chip-seq-workflow-all-5-steps](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/chip-seq-workflow-all-5-steps.jpg)
+![chip-seq-workflow-all-5-steps](image/C6/chip-seq-workflow-all-5-steps.jpg)
 
 
 
@@ -1025,7 +2464,7 @@ bioconductor系列工具和教程 :
 
 ---
 
-## 第三讲：公共数据下载 {-}
+##### 第三讲：公共数据下载 {-}
 
 这一步跟自学其它高通量测序数据处理一样，就是仔细研读paper，在里面找到作者把原始测序数据放在了哪个公共数据库里面，一般是NCBI的GEO，SRA，本文也不例外，然后解析样本数，找到下载链接规律。
 
@@ -1071,7 +2510,7 @@ bioconductor系列工具和教程 :
 ```
 ---
 
-## 第四讲：必要软件安装及结果下载 {-}
+##### 第四讲：必要软件安装及结果下载 {-}
 
 博文的顺序有点乱，因为怕读到前面的公共测序数据下载这篇文章的朋友搞不清楚，我如何调用各种软件的，所以我这里强势插入一篇博客来描述这件事，当然也只是略过，我所有的软件理论上都是安装在我的home目录下的biosoft文件夹，所以你看到我一般安装程序都是:
 
@@ -1213,7 +2652,7 @@ mv *zip *html QC_results/
 
 ---
 
-## 第五讲：测序数据比对 {-}
+##### 第五讲：测序数据比对 {-}
 
 比对本质是是很简单的了，各种mapping工具层出不穷，我们一般常用的就是BWA和bowtie了，我这里就挑选bowtie2吧，反正别人已经做好了各种工具效果差异的比较，我们直接用就好了，代码如下：
 
@@ -1285,13 +2724,13 @@ SRR1042600.fastq
 
 
 
-## 第六讲 寻找peaks {-}
+##### 第六讲 寻找peaks {-}
 
 
 
 ChIP-seq测序的本质还是目标片段捕获测序，但跟WES不同的是，你选择的IP不同，细胞或者机体状态不同，捕获到的序列差异很大。而我们研究的重点就是捕获到的差异。我们对ChIP-seq测序数据寻找peaks的本质就是得到所有测序数据比对在全基因组之后在基因组上测序深度里面寻找比较突出的部分。比如对WES数据来说，各个外显子，或者外显子的5端到3端，理论上测序深度应该是一致的，都是50X~200X，画一个测序深度曲线，应该是近似于一条直线。但对我们的ChIP-seq测序数据来说，在所捕获的区域上面，理论上测序深度是绝对不一样的，应该是近似于一个山峰。而那些覆盖度高的地方，山顶，就是我们的IP所结合的热点，也就是我们想要找的peaks，在IGV里面看到大致是下面这样：
 
-![chipseq-0-peakdetection-large-IGV](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/chipseq-0-peakdetection-large-IGV.png)
+![chipseq-0-peakdetection-large-IGV](image/C6/chipseq-0-peakdetection-large-IGV.png)
 
 可以看到测序的reads是分布不均匀的，我们通常说的ChIP-seq测序的IP，可以是各个组蛋白上各修饰位点对应的抗体，或者是各种转录因子的抗体等等。
 
@@ -1421,7 +2860,7 @@ samtools depth -r chr20:45796362-46384917 SRR1042594.sorted.bam
 
 ---
 
-## 第七讲 peaks注释 {-}
+##### 第七讲 peaks注释 {-}
 
 经过前面的ChIP-seq测序数据处理的常规分析，我们已经成功的把测序仪下机数据变成了BED格式的peaks记录文件，我选取的这篇文章里面做了4次ChIP-seq实验，分别是两个重复的野生型MCF7细胞系的 BAF155 immun =oprecipitates和两个重复的突变型MCF7细胞系的 BAF155 immunoprecipitates，这样通过比较野生型和突变型MCF7细胞系的 BAF155 immunoprecipitates的不同结果就知道该细胞系的BAF155 突变，对它在全基因组的结合功能的影响。
 
@@ -1500,7 +2939,7 @@ barplot(aCR$percentage)
 
 得到的条形图如下，虽然很丑，但这就是peaks注释的精髓，搞清楚每个peaks在基因组的位置特征：
 
-[![ChIPpeakAnno-genomic-region-distribution](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/ChIPpeakAnno-genomic-region-distribution.png)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/ChIPpeakAnno-genomic-region-distribution.png)
+![ChIPpeakAnno-genomic-region-distribution](image/C6/ChIPpeakAnno-genomic-region-distribution.png)
 
  
 
@@ -1522,7 +2961,7 @@ barplot(aCR$percentage)
 
 ---
 
-## 第八讲：寻找motif {-}
+##### 第八讲：寻找motif {-}
 
 motif是比较有特征的短序列，会多次出现的，一般认为它的生物学意义重大，做完CHIP-seq分析之后，一般都会寻找motif 。
 
@@ -1550,7 +2989,9 @@ motif最先是通过实验的方法发现的，换句话说，不是说有了ChI
 
  [http://meme-suite.org/](http://meme-suite.org/)  输入文件是fasta序列，需要对peaks进行转换，根据bed的基因坐标从基因组里面提取对应的序列咯： [http://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html](http://bedtools.readthedocs.io/en/latest/content/tools/getfasta.html)
 
-它里面集成了4个寻找motif 的工具，每个工具都是一篇文章，里面有详细描述具体原理，但是整个网页给人的感觉是too busy，让初学者无从下手。[![meme-suit-motif-finding](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/meme-suit-motif-finding.png)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/meme-suit-motif-finding.png)
+它里面集成了4个寻找motif 的工具，每个工具都是一篇文章，里面有详细描述具体原理，但是整个网页给人的感觉是too busy，让初学者无从下手。
+
+![meme-suit-motif-finding](image/C6/meme-suit-motif-finding.png)
 
 
 
@@ -1586,7 +3027,7 @@ MotIV (motif validation): [http://bioconductor.org/packages/devel/bioc/html/MotI
 
 ---
 
-## 第九讲：ChIP-seq可视化大全 {-}
+##### 第九讲：ChIP-seq可视化大全 {-}
 
 讲到这里，我们的自学ChIP-seq分析系列教程就告一段落了，当然，我会随时查漏补缺，根据读者的反馈来更新着系列教程。
 
@@ -1604,7 +3045,7 @@ MotIV (motif validation): [http://bioconductor.org/packages/devel/bioc/html/MotI
 
 如图所示
 
-[![nn.3808-F1-multiple-IP-chip-seq-data-visualization](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/nn.3808-F1-multiple-IP-chip-seq-data-visualization.jpg)](http://www.bio-info-trainee.com/wp-content/uploads/2016/07/nn.3808-F1-multiple-IP-chip-seq-data-visualization.jpg)
+![CHIP-seq的peaks](image/C6/multiple-IP-chip-seq-data-visualization.jpg)
 
 然后我所了解的图片大概有下面这些，都是有专门的软件，甚至自己写脚本也可以做的
 
@@ -1625,12 +3066,440 @@ CHIP-seq pipeline :　[http://www.slideshare.net/COST-events/chipseq-data-analys
 
 大家一定要看这个ChIP-seq guidelines and practices of the ENCODE and modENCODE consortia.  [http://www.ncbi.nlm.nih.gov/pubmed/22955991](http://www.ncbi.nlm.nih.gov/pubmed/22955991)
 
+#### ChIP-seq数据分析指引
+
+##### 写在前面 {-}
+
+参加了[RNA-seq基础入门 ](http://www.biotrainee.com/thread-1750-1-1.html )的朋友可以先看看 我以前分享过有参组学(全基因组，全外显子组学，转录组学，表观)的几个NGS测序数据分析的表现形式的异同点，主要是各个地方的测序深度，各个地方的覆盖情况的区别！
+
+分析流程都是fastq-->bam-->vcf/expression/peaks，中间选择不同软件，不同参数而已。 视频在链接： http://pan.baidu.com/s/1jIQFGSA 密码：48uj
+
+本次其实已经有不少人已经完成了，优秀作业如下：
+
+* [jimmy的ChIP-seq实战分析](http://mp.weixin.qq.com/s/_A0rHldzEgVk7bgwt457qQ)
+* [张生的ChIP-seq实战分析](https://mp.weixin.qq.com/s/mEwl7-f2WTNfmK-FkNkP0A)
+* [赵小凡的ChIP-seq实战分析](http://mp.weixin.qq.com/s/LcAEzGEmjj37XYogeU3v6A)
+
+
+
+##### step1:计算机资源的准备 {-}
+
+这个跟转录组对计算资源的要求是大同小异的，最好是有mac或者linux系统，8G+的内存，500G的存储即可。
+
+* 如果你是Windows，那么安装必须安装 git,notepad++,everything，还有虚拟机，在虚拟机里面安装linux，最好是ubuntu。
+* 如果本身就是mac或者linux，那么很简单了，安装好wget吧
+
+需要安装的各种ChIP-seq软件包括 sratoolkit,fastqc,bowtie2,samtools,htseq-count,bedtools,macs2,HOMER,R,Rstudio 
+
+软件安装的代码，在生信技能树公众号后台回复老司机即可拿到。
+
+如果呀详细了解计算机配置清单，软件安装等，请查看我们[公众号推文](http://mp.weixin.qq.com/s/e-m8edpa4G-uqZxY4affPA)
+
+###### 作业1 {-}
+
+安装好软件，下载软件的说明书，整理它们的官网链接。
+
+
+##### step2:读文章拿到测序数据 {-}
+
+本次讲解选取的文章是为了探索PRC1，PCR2这样的蛋白复合物，不是转录因子或者组蛋白的CHIP-seq，请注意区别。
+
+文章题目
+
+RYBP and Cbx7 define specific biological functions of polycomb complexes in mouse embryonic stem cells
+
+https://www.ncbi.nlm.nih.gov/pubmed/23273917
+
+从文章里面找到数据存放地址如下：
+
+数据下载：
+
+* https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42466
+* ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP017/SRP017311
+
+###### 作业2 {-}
+
+看文章里的methods部分，把它用到的软件和参数摘抄下来，然后理解GEO/SRA数据库的数据存放形式，把规律和笔记发在论坛上面
+
+##### step3:了解fastq测序数据 {-}
+
+需要用安装好的sratoolkit把sra文件转换为fastq格式的测序文件，并且用fastqc软件及MultiQC汇总查看测试测序文件的质量！
+
+###### 作业3 {-}
+
+理解测序reads，GC含量，质量值，接头，index，fastqc的全部报告，搜索中文教程，并发在论坛上面。
+
+
+##### step4:了解参考基因组及基因注释 {-}
+
+在UCSC下载hg19参考基因组，我博客有详细说明，从gencode数据库下载基因注释文件，并且用IGV去查看你感兴趣的基因的结构，比如TP53,KRAS,EGFR等等。
+
+###### 作业4 {-}
+
+截图几个基因的IGV可视化结构！还可以下载ENSEMBL，NCBI的gtf，也导入IGV看看，截图基因结构。了解IGV常识。
+
+##### step5:序列比对 {-}
+
+比对软件很多，首先大家去收集一下，因为我们是带大家入门ChIP-seq基础，请统一用bowtie2，并且搞懂它的用法。 再思考一下为什么不同的组学数据有着不同的最佳比对软件。
+
+直接去bowtie2的主页下载index文件即可，然后把fastq格式的reads比对上去得到sam文件。
+
+接着用samtools把它转为bam文件，并且排序索引好，考虑一下是否需要去重PCR重复，载入IGV，再截图几个基因看看！
+
+顺便对bam文件进行简单QC，参考直播我的基因组系列。
+
+###### 作业5 {-}
+
+把ChIP-seq比对得到的bam跟转录组的bam统一载入IGV，看看各种genomic features上面的reads分布的区别，想一想为什么是这样。
+
+
+##### step6:寻找peaks {-}
+
+peaks-calling的软件也不少，如果需要了解原理，请看我[前面的推文](http://mp.weixin.qq.com/s/tnbhwZ16QiAnWulCvBNFsQ)  这里统一用MACS2软件
+
+###### 作业6 {-}
+
+把通过macs2得到的bed格式peaks文件，也载入IGV，跟bam文件进行比较。
+
+##### step7:peaks注释 {-}
+
+得到的bed格式peaks文件只是记录每个peaks的染色体以及起始终止坐标，一般情况下需要看看该peaks在基因组的哪一个区段。
+看看它们在各种基因组区域(基因上下游，5,3端UTR，启动子，内含子，外显子，基因间区域，microRNA区域)分布情况，但是一般的peaks都有近万个，所以需要批量注释！
+
+能做CHIP-seq的peaks注释，有R的bioconductor包ChIPpeakAnno，以及chipseeker包，还有HOMER软件，大家都可以用一下。 注释完毕，顺便可视化一下。
+
+###### 作业7 {-}
+
+找到R包，并读文档，整理文档和链接，以及文档里面的例子，如何学习一个R包。 比较多种注释的结果的差异。
+
+##### step8：信号的可视化 {-}
+
+因为peaks在基因组的分布是有规律的，如果是集中在TSS附近，就可以画TSS附近的信号强度图，一些人为处理可以改变peaks的分布，同理信号强度也会改变，这个是大家的注意分析结果以及生物学一样。
+
+可以选择NGSPLOT这个R包，或者deeptools这个python软件，个人比较喜欢deeptools
+
+这里可以选择
+
+###### 作业8 {-}
+
+得到一些genomic features的信号强度可视化图。
+
+##### 后记 {-}
+
+因为本文选择的是PRC1，PCR2这样的蛋白复合物，不是转录因子或者组蛋白的CHIP-seq，所以一般不需要做motif等等。
+
+而且我们文章并没有设计处理前后的IP实验，没有peaks的变化，也不需要找差异结合位点。
+
+#### 450K甲基化芯片数据处理传送门
+
+##### 写在前面 {-}
+
+Illumina甲基化芯片目前仍是很多实验室做甲基化项目的首选，尤其是对于大样本研究而言，其性价比相当高。这种芯片的发展主要经历了27K、450K以及850K，目前积累的数据主要是450K芯片的，未来850K可能会成为主流。之前我写过一篇[450K芯片预处理的帖子](http://www.biotrainee.com/thread-237-1-1.html)，其中也介绍了这种芯片的基础知识以及流程图和代码，大家可以先看看。芯片的处理流程一般就是：**数据读入——数据过滤——数据校正——下游分析。**
+
+##### step1:计算机资源的准备 {-}
+
+与测序相比，芯片的处理可能对计算资源的要求是不算高，主要使用的工具就是R，R的使用比较耗内存，尤其是处理大批量数据的时候。
+
+R本身是支持各种系统的，所以不管是mac、windows还是linux理论上都是可以的，只要下载对应版本即可。当然，如果你会linux最好在linux操作。其实数据分析很多都是相通的，所以之前群主推荐的配置和工具都是可以拿来用的。
+
+需要安装的R packages包括 ChAMP，minfi和wateRmelon等.
+
+###### 作业1 {-}
+
+1. 安装好R软件及相应的包，下载R包的说明书，整理它们的官网链接。
+2. 了解illumina 450K甲基化芯片的探针设计，下载manifest文件。
+
+##### step2:读文章拿到测序数据 {-}
+
+本次讲解用到的数据来自文章[The relationship between DNA methylation, genetic and expression inter-individual variation in untransformed human fibroblast](https://www.ncbi.nlm.nih.gov/pubmed/24555846)
+
+从文章里面找到数据存放地址如下：https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52025
+
+###### 作业2 {-}
+
+看文章里的methods部分，把它的分析步骤摘抄下来，然后理解GEO数据库的数据存放形式，把规律和笔记发在论坛上面，类似于[RNA-seq数据处理入门](http://www.biotrainee.com/thread-1750-1-1.html)和[CHIP-seq数据处理入门](http://www.biotrainee.com/thread-2013-1-1.html)
+
+##### step3:了解芯片数据 {-}
+
+需要阅读相关的资料，比如illumina的官网介绍及相关的文献，对甲基化及该芯片的技术核心有一定了解，对于存在的问题也要知道，这对于后面分析时理解校正的意义非常重要！
+
+###### 作业3 {-}
+
+理解芯片的probe，Bead，p值，I型探针和II型探针等。
+
+##### step4:了解probe注释 {-}
+
+在GEO或者illumina下载450K注释文件，理解每一列的意义及探针的分类。或者下载官网的manifest文件并且理解。
+
+###### 作业4 {-}
+
+下载注释文件，理解甲基化探针的分类及注释。
+
+##### step5:数据读入 {-}
+
+处理甲基化芯片的R包其实很多，我之前用的是minfi，现在用ChAMP应该更加方便，它整合了很多分析处理数据的方法，例如过滤和校正等，所以大家可以以ChAMP为主。
+
+###### 作业5 {-}
+
+查看甲基化芯片文件的命名规则，整理文件读入所需的表格，使用ChAMP包读入文件。
+
+##### step6:数据过滤及数据校正 {-}
+
+数据过滤主要是根据p值和bead数，probe还需要注意过滤snp和multiple-hit，样本过滤可以考虑PCA或MDS，很多时候R包会直接帮我们做了，但是需要对过滤的标准做到心中有数。
+
+数据校正主要是I型探针和II型探针校正，批次校正和混杂因素校正等。
+
+###### 作业6 {-}
+
+根据p值和bead数过滤探针和样本，过滤SNP和multiple-hit的探针，使用BMIQ校正探针类型，使用combat校正批次效应，使用lm校正混杂因素。
+
+##### step7:下游分析 {-}
+
+下游分析一般根据需求来定，比如差异甲基化分析、甲基化与表达的整合分析等。
+
+##### 作业7 {-}
+
+学习T-test和线性回归的差异甲基化分析。
+
+##### step8：探针注释、绘图等 {-}
+
+甲基化探针可以根据官方给的注释文件进行基因和CGI的注释。
+
+也可以使用webgestalt对感兴趣的探针做GO和Pathway的分析。
+
+可以使用ggplot等对探针的分布进行绘图。
+
+###### 作业8 {-}
+
+理解甲基化探针的CGI及基因位置注释并且简单可视化。
+
+
 ### 微生物组
+
+“微生物组”（microbiome）是指存在于特定环境 （生态位，biotype）中所有微生物种类及其遗传信息和功能的集合，其不仅包括该环境中微生物间的相互作用，还包括有微生物与该环境中其它物种及环境的相互作用。
+
+微生物组本身就包含了上面的基因组，转录组的数据分析，同时也涉及到蛋白和代谢的组学研究。
+
+微生物作为地球上进化历史最长、生物量最大、生物多样性最丰富的生命形式，推动地球化学物质循环，影响人类健康乃至地球生态系统，蕴藏着极为丰富的物种资源和基因资源。在自然条件下，各类微生物与其所处的环境及环境中存在的宿主构成了复杂的生态系统，微生物以其社会行为，在维护人类健康及地球生态系统物质循环中发挥着不可替代的作用。
+
+正因为认识到了微生物对人和地球的重要性，美国一批处在学科前沿的科学家就曾在《科学》周刊上，提出开展“联合微生物组研究计划（Unified Microbiome Initiative，简称 UMI）”的建议。
+
+UMI是经由白宫科学与技术政策办公室、加利福尼亚 Oxnard的Kavli基金会组织这些科学家经过一系列研讨后提出来。UMI将把美国国立卫生研究院、美国自然基金委、美国农业部、美国能源部、美国环境总署等政府部门和私立基金会以及企业界的力量动员和整合起来，开展对人体、植物、动物、土壤和海洋等几乎所有环境中微生物组的深入研究。这是美国在推出脑科学计划和精准医学计划以后，又一个举世瞩目的大科学计划。
+
+**基于质谱法的蛋白组学和代谢组学测量**
+
+虽然DNA测序的进展使得能够更好地了解微生物中的微生物系统发育和功能基因组成，但也希望了解在特定条件下产生哪些蛋白质（即宏蛋白质组学）和代谢物质（即代谢组学），以及扰动如何影响微生物功能。微生物在不同样品中产生的蛋白质和代谢产物的测量主要通过MS实现。在微生物样品的MS分析中，感兴趣的生物分子在源中离子化，根据其在质量分析仪中的质荷比进行分离，最后检测，提供具有高灵敏度，分辨率和产量的宏蛋白质组学或代谢组学测量。
+
+1984年电喷雾电离（ESI）的引入大大增加了MS测量用于评估的效用。 ESI的一个挑战是执行它在大气压力（760乇）下，质量分析仪通常在10-6和10-11乇之间的压力状态下工作。这种压力差异超过九个数量级，如果源和质量分析仪区域耦合不好，则会发生巨大的离子损失。因此，在过去二十年中，已经优化了使用离子漏斗和透射四极区域的界面设计，以重新聚焦离子，同时不断降低压力。这些领域的改进导致离子损失减少和灵敏度更高。然而，分析复合微生物中的生物分子由于高动态范围和给定样品中存在数千个组分，MS仍然非常困难。这些挑战需要在分辨率，精度和MS / MS速度方面改进质量分析仪。四极杆，离子阱，飞行时间和离子回旋共振（ICR）质谱分析仪构成了2005年引入轨道曝光仪之前使用的大多数质量分析仪。orbitrap技术为实验室提供了更高的分辨能力，更为经济实惠。orbitrap技术在过去十年的进步包括更高分辨率的测量和更快的MS / MS ，这里包括linear ion trap （低分辨率）和orbitrap（高分辨率）的扫描速率。最大分辨率和MS扫描速度过去15年显示，这两个特征都已被优化，以便在每个测量中获得最佳的生物分子覆盖和准确性。然而，由于微生物组织样品的复杂性，还采用了一维和二维液相色谱分离和气相离子迁移光谱等附加技术来增加鉴定的蛋白质和代谢物的数量。这些分离技术在检测前降低了样品的复杂性，由于每个微生物组分样品中存在许多分子，因此离子阱和检测器的抑制较少，并且可以使给定样品中的蛋白质和代谢物更高的覆盖范围。
+
 
 ### 蛋白质组
 
+蛋白质组学（Proteomics）是指在**大规模水平上研究蛋白质的特征**，包括蛋白质的表达水平，翻译后修饰，蛋白与蛋白相互作用等，由此获得蛋白质水平关于疾病发生、细胞代谢等过程的整体而全面的认识。从蛋白角度分析疾病发生与发展的分子机理，挖掘疾病标志物（biomarker），并为免疫治疗和药物开发提供强力支撑，迈进精准医疗。蛋白质组的研究不仅为生命活动规律提供物质基础，也为多种疾病机制的阐明及攻克提供理论。
+
+蛋白质组学的研究是生命科学进入后基因组时代的特征，不仅是探索生命奥秘的必须工作，也能为人类健康事业带来巨大的利益。蛋白质不仅能为生命活动规律提供物质基础，而且蛋白质丰度的改变能够阐明多种疾病的机理。
+
+#### 定量蛋白质组学
+
+**定量蛋白质组学**是蛋白质组学中非常重要的研究方向。目前有很多定量方法例如SILAC, TMT, LFQ, PRM等多种方法，每种方法都有各自的优缺点，如何根据实验需求选择合适的定量方法是实验中的难点和热点。
+
+##### 蛋白质芯片（Protein Array）{-}
+
+> 蛋白质芯片检测技术，是将大量不同的蛋白质有序地排列、固定于固相载体表面，形成微阵列，利用蛋白质分子间特异性结合的原理，实现对生物蛋白质分子精准、快速、高通量的检测。
+
+主要类型：
+
+* 夹心法芯片(Sandwich-based Array)
+* 标记法芯片(Label-based Array)
+* 定量芯片(Quantitative Array)
+* 半定量芯片(Semi-Quantitative Array)
+
+##### 质谱（Mass Spectrometry）{-}
+
+> 质谱法是利用电场和磁场，将运动的离子按它们的质荷比分离后，测出离子准确质量并确定离子的化合物组成，即是通过分析样品的离子质荷比而实现对样品的定性和定量的一种方法。
+
+主要类型：
+
+* 二维电泳+质谱(2D/Mass Spectrometry, MS) 
+* 表面增强激光解吸电离飞行时间质谱(Surface-enhanced laser desorption/ionization-time of flight, SELDI)
+* 同位素标记相对和绝对定量(Isobaric tags for relative and absolute quantitation, iTRAQ)
+
+
+#### 蛋白质修饰组学
+
+**翻译后修饰**是指对翻译后的蛋白质进行共价加工的过程，通过在一个或多个氨基酸残基加上修饰基团，可以改变蛋白质的理化性质。许多至关重要的生命进程不仅由蛋白质的相对丰度控制，更重要的是受到时空特异性和翻译后修饰的调控，揭示翻译后修饰的发生规律是解析蛋白质复杂多样的生物功能的一个重要前提。
+
+常见的翻译后修饰包括**磷酸化**、**糖基化**、**乙酰化**、**泛素化**等等，具体如下表:
+
+![蛋白质常见的翻译后修](image/C6/protein_modification.png)
+
+
+质谱是鉴定蛋白质翻译后修饰的重要方法，其原理是利用蛋白质发生修饰后的质量偏移来实现翻译后修饰位点的鉴定；同时，由于翻译后修饰的蛋白质在样本中含量低且动态范围广，检测前需要对发生修饰的蛋白质或肽段进行富集，然后再进行质谱鉴定。
+
+
+#### 定量修饰蛋白质组学
+
+**修饰蛋白质组学定量分析**主要是将修饰蛋白质或肽段富集方法与蛋白质组学相对定量的技术结合起来，在鉴定翻译后修饰位点的同时，对不同样本中翻译后修饰的程度进行相对定量，从而实现大规模的修饰蛋白质组学定性和定量分析；通常用于修饰定量分析的蛋白质组学方法包括非标记定量Label free，标记定量iTRAQ及SILAC。 根据技术原理可以分为两种
+
+- 同重元素标记法和非标记法（lable free）。其中标记法依据使用的平台不一样可分为iTRAQ（ABI公司，分4标和8标）和TMT（Thermo公司，分2-10标）
+- 非标记法根据数据采集的模式可以分为两种：lable free（DDA，Data Dependent Acquisition）和DIA（DIA，Data-Independent Acquisition）。
+
+定量之后就可以走转录组数据的分析流程了，包括差异表达，GO/KEGG等功能数据库的注释，共表达热图，相关分析。 具体分析流程如下：
+
+
+![定量修饰蛋白质组学分析数据分析流程](image/C6/protein_modification_expression.png)
+
 ### 代谢组
 
+**代谢组学**是继基因组学和蛋白质组学之后新发展起来的一门学科，它通过对**人体内小分子代谢物（50~1,500 Da）**进行精准定性定量，分析代谢物与人体生理病理变化的关系，研究疾病发生发展、寻找疾病生物标记物、预测疾病预后等。代谢组学在临床诊断上将有广阔的发展前景，主要应用方向有四个方面：
 
+* 临床诊断（Biomarker）
+* 病因与病理机制
+* 临床用药指导中
+* 临床前动物模型筛选上
+
+机体在环境因素作用下，复杂信号通路中基因、酶、蛋白调节**最终结果的整体体现为代谢表型。**精准医疗相比传统医疗最大的优势体现在它是根据个体的差异有针对性地实施治疗策略，提高个体疾病治疗的成功率和有效率，可减少治疗后的副作用。代谢组学通过高分辨的**质谱、核磁等分析技术**，检测体液当中的代谢产物，通过模式识别模型筛选和疾病相关的代谢标志物。这些代谢标志物的变化体现了机体与饮食、生活方式、肠道菌群、地理位置及遗传背景等因素相互作用的结果。
+
+最终体现在代谢表型的差异上。因此，代谢表型的不同反映了由遗传背景及环境因素所引起的个体差异。代谢组学技术的特点体现为代谢表型的特点。首先人体代谢表型由遗传背景和环境双重因素决定。
+
+#### **代谢组学相关数据库**
+
+常用的代谢组学相关数据库有人类代谢组数据库（Human Metabolome Database， HMDB）、KEGG数据库、Reactome数据库(http://www.reactome.org)等，一一介绍如下：
+
+* 人类代谢组数据库（HMDB）是代谢组学热门数据库之一，包含人体内发现的小分子代谢物的详细信息，包含不少于79,650种代谢物条目。
+* SMPDB数据库与HMDB关联，包含约700种人类代谢和疾病途径的途径图。KEGG数据库是代谢组热门数据库之一，包含代谢通路和互作网络信息。
+* Reactome数据库主要收集了人体主要代谢通路信息以及重要反应。
+* MassBank数据库主要收集许多高分辨率低代谢组分的谱图。
+
+**BioCyc数据库**包含通路和基因组数据。METLIN数据库，是商业化的代谢组及串联质谱数据库，包含有约43000种代谢物和22000个MS/MS谱图。FiehnLib数据库是商业化的代谢组数据库，包含约1000个保守的代谢分子的EI光谱。
+
+**NIST/EPA/NIH Mass Spectral Library数据库**也是商业化的代谢组数据库，包含超过190,000 个EI谱图。 BioCyc数据库收集了通路和基因组数据，可以免费使用。MetaCyc数据库广泛收集了许多来自不同生物体的代谢通路以及酶的信息，囊括了超过51000篇文献。MMCD数据库收集有超过10000种代谢物的信息以及它们的质谱和核磁共振谱数据，大多数是拟南芥的代谢物。
+
+如何更好地整合各种组学数据目前仍是生物学界面临的一个重大挑战，并且有时还要面对不够完善的实验设计、不同实验平台的数据的整合。常用的方法是代谢通路水平的分析、生物网络分析、经验关联分析等。
+
+#### **代谢组学相关网页工具**
+
+> 有一些软件或网站可以提供现成的整合多种组学数据的分析。
+
+* 如可以进行代谢通路富集分析的有：IMPaLA网站，使用了来自11个数据库等3000多个代谢通路的信息，可以用于整合多种组学的分析；此外还有iPEAP软件，MetaboAnalyst网站等也可以提供代谢通路富集分析。
+
+
+* 提供生物网络分析的包括：SAMNetWeb网站，可以提供转录组和蛋白组的通路腹肌分析和网络分析；pwOmics包，是R软件包，能够由随着时间变化的数转录组和蛋白组信息构建网络；相似的软件还有MetaMapR（R软件包，拥有用户界面）、MetScape（Cytoscape插件） 、Grinn（R软件包）等。
+
+
+* 可以进行经验关联分析的有：WGCNA（R软件包），可以基于相关性和网络拓扑结构对多种组学数据进行整合分析；其他R软件包还有MixOmic、DiffCorr、qpgraph、huge。
+
+
+
+#### **代谢组学数据特点**
+
+代谢组学数据具有以下特点：
+
+- 高噪声：生物体内含有大量维持自身正常功能的内源性小分子，具有特定研究意义的生物标志物只是其中很少一部分，绝大部分代谢物和研究目的无关。
+- 高维、小样本：代谢物的数目远大于样品个数，不适合使用传统的统计学方法进行分析，多变量分析容易出现过拟合和维数灾难问题。
+- 高变异性：一是不同代谢物质的理化性质差异巨大，其浓度含量动态范围宽达7～9个数量级，二是生物个体间存在各种来源的变异，如年龄、性别都可能影响代谢产物的变化，三是仪器测量受各种因素影响，容易出现随机测量误差和系统误差，这使得识别有重要作用的生物标志物可能极其困难。
+- 相互作用关系复杂：各种代谢物质可能不仅具有简单的相加效应，而且可能具有交互作用，从而增加了识别这些具有复杂关系的生物标志物的难度。
+- 相关性和冗余性：各种代谢物并非独立存在，而是相互之间具有不同程度的相关性，同时由于碎片、加合物和同位素的存在使得数据结构存在很大的冗余性，这就需要采用合理的统计分析策略来揭示隐藏其中的复杂数据关系。
+- 分布的不规则和稀疏性： 代谢组学数据分布不规则，而且数据具有稀疏性（即有很多值为零) ，因此，传统的一些线性和参数分析方法此时可能失效。
+
+#### **代谢组数据分析**
+
+说起代谢组数据分析软件，可能大家第一个想到的就是SIMCA-P。[SIMCA-P] (http://umetrics.com/products/simca)软件是由Umetrics公司在1987研究开发，目前是一款公认的多元变量统计分析软件，被绝大多数代谢组服务提供商所采用。
+
+SIMCA-P虽然是一款强大的多元变量统计分析软件，但也有不足之处：
+
+1. SIMCA-P是一款商业软件，需要收费（但有30天免费试用），windows版本的。对于想使用免费软件的老师来说，不那么友好；
+2. 代谢组数据的分析除了多元变量统计分析，还有原始数据前处理（pre-processing）、数据处理（processing）、单变量统计分析等，很显然SIMCA-P在这些方面力不从心。
+
+在《Metabolomics-Fundamentals and Applications》这本书的第四章节《Processing and Visualization of Metabolomics Data Using R》中，作者列出了一些代谢组数据处理、统计分析与可视化的开源免费软件工具！
+
+数据分析的流程
+
+1）数据预处理；2）PCA分析；3）PLS-DA分析；4）OPLS-DA分析；5）差异化合物筛选；6）差异化合物鉴定；7）多组分关联分析（同一个体同时取多组分）；8）代谢通路分析；9）多组学数据关联分析（具备多组学数据）
+
+##### **数据的预处理**
+
+代谢组学数据分析的目的是希望从中挖掘出生物相关信息，然而，代谢组学数据的变异来源很多，不仅包括生物变异，还包括环境影响和操作性误差等方面。
+
+处理手段主要包括归一化（standardization) 、标准化（normalization) ，即中心化（centering) 和尺度化（scaling)，以及数据转换（transformation)。
+
+##### **归一化是针对样品的操作**，由于生物个体间较大的代谢物浓度差异或样品采集过程中的差异（如取不同时间的尿样) ，为了消除或减轻这种不均一性，一般使用代谢物的相对浓度，即每个代谢物除以样品的总浓度，以此来校正个体差异或其他因素对代谢物绝对浓度的影响。
+
+##### **标准化是对不同样品代谢物的操作**，即统计学意义上的变量标准化。标准化的目的是消除不同代谢物浓度数量级的差别，但同时也可能会过分夸大低浓度组分的重要性，即低浓度代谢物的变异系数可能更大。
+
+数据转换是指对数据进行非线性变换，如log转换和power转换等。数据转换的目的是将一些偏态分布的数据转换成对称分布的数据，并消除异方差性的影响，以满足一些线性分析技术的要求。不同的预处理方法会对统计分析结果产生不同的影响（见表1) ，在实际应用中，我们应该根据具体的研究目的﹑数据类型以及要选用的统计分析方法综合考虑，选择适当的预处理方式。例如，Robert A. van den Berg等（2006) 通过实际代谢组学数据的分析发现，选用不同预处理方法在很大程度上影响着主成分分析（PCA) 的结果，自动尺度化（auto scaling)和全距尺度化（range scaling) 在对代谢组学数据进行探索性分析时表现更优，其PCA 分析后的结果在生物学上能够得到更合理的解释。
+
+##### **单变量分析方法**
+
+单变量分析方法简便﹑直观和容易理解，在代谢组学研究中通常用来快速考察各个代谢物在不同类别之间的差异。
+
+代谢组学数据在一般情况下难以满足参数检验的条件，使用较多的是非参数检验的方法，如Wilcoxon 秩和检验或Kruskal-Wallis 检验，t’检验也是一种比较好的统计检验方法。
+
+由于代谢组学数据具有高维的特点，所以在进行单变量分析时，会面临多重假设检验的问题。如果我们不对每次假设检验的检验水准α进行校正，则总体犯一类错误的概率会明显增加。
+
+一种解决方法是采用Bonferion校正，即用原检验水准除以假设检验的次数m作为每次假设检验新的检验水准（α/m) 。由于Bonferion校正的方法过于保守，会明显降低检验效能，所以在实际中更为流行的一种做法是使用阳性发现错误率（false discovery rate，FDR) 。
+
+这种方法可用于估计多重假设检验的阳性结果中，可能包含多少假阳性结果。FDR 方法不仅能够将假阳性的比例控制在规定的范围内，而且较之传统的方法在检验效能上也得到显著的提高。
+
+实际中也可以使用局部FDR（用fdr表示) ，其定义为某一次检验差异显著时，其结果为假阳性的概率。局部FDR 的使用，使得我们能够估计出任意变量为假阳性的概率，通常情况下有FDR≤fdr。
+
+除了进行传统的单变量假设检验分析，代谢组学分析中通常也计算代谢物浓度在两组间的改变倍数值（fold change) ，如计算某个代谢物浓度在两组中的均值之比，判断该代谢物在两组之间的高低表达。计算ROC 曲线下面积（AUC) 也是一种经常使用的方法。
+
+##### **多变量分析**
+
+代谢组学产生的是高维的数据，单变量分析不能揭示变量间复杂的相互作用关系，因此多变量统计分析在代谢组学数据分析中具有重要的作用。
+
+总体来说，代谢组学数据多变量统计分析方法大致可以分为两类：
+
+- 一类为非监督的学习方法，即在不给定样本标签的情况下对训练样本进行学习，如PCA、非线性映射（NLM) 等；
+- 另一类为有监督的学习方法，即在给定样本标签的情况下对训练样本进行学习，如偏最小二乘判别分析（PLS-DA) 、基于正交信号校正的偏最小二乘判别分析（OPLS-DA) 、人工神经网络（ANN) 、支持向量机（SVM) 等。其中，PCA、PLS-DA和OPLS-DA是目前代谢组学领域中使用最为普遍的多变量统计分析方法。
+
+##### **PCA**
+
+PCA是从原始变量之间的相互关系入手，根据变异最大化的原则将其线性变换到几个独立的综合指标上（即主成分) ，取2～3个主成分作图，直观地描述不同组别之间的代谢模式差别和聚类结果，并通过载荷图寻找对组间分类有贡献的原始变量作为生物标志物。通常情况下，由于代谢组学数据具有高维、小样本的特性，同时有噪声变量的干扰，PCA的分类结果往往不够理想。
+
+尽管如此，PCA作为代谢组学数据的预分析和质量控制步骤，通常用于观察是否具有组间分类趋势和数据离群点。在组间分类趋势明显时，说明其中一定有能够分类的标志物。
+
+PCA还可以用于分析质控样品是否聚集在一起，如果很分散或具有一定的变化趋势，则说明检测质量存在一定的问题。Zhang Zhiyu 等（2010) 通过PCA 成功区分了骨肉瘤患者和正常人，并发现良性骨肿瘤患者中有两例是异常值。Kishore K. Pasikanti 等（2009) 利用PCA 对尿液膀胱癌代谢组学数据进行分析后观察到质控样品在PCA得分图上紧密聚集，从而验证了仪器检测的稳定性和代谢组学数据的可靠性。
+
+ 
+
+##### **PLS-DA**
+
+PLS-DA 是目前代谢组学数据分析中最常使用的一种分类方法，它在降维的同时结合了回归模型，并利用一定的判别阈值对回归结果进行判别分析。ZhangTao 等（2013) 运用PLS-DA技术分析尿液卵巢癌代谢组学数据，成功将卵巢癌患者和良性卵巢肿瘤患者以及子宫肌瘤患者相互鉴别，并鉴定出组氨酸、色氨酸、核苷酸等多种具有判别能力的卵巢癌生物标志物。
+
+PLS的思想是，通过最大化自变量数据和应变量数据集之间的协方差来构建正交得分向量（潜变量或主成分) ，从而拟合自变量数据和应变量数据之间的线性关系。
+
+**PLS**的降维方法与**PCA **的不同之处在于**PLS **既分解自变量**X **矩阵也分解应变量**Y **矩阵，并在分解时利用其协方差信息，从而使降维效果较**PCA **能够更高效地提取组间变异信息。
+
+当因变量Y为二分类情况下，通常一类编码为1，另一类编码为0或-1；当因变量Y为多分类时，则需将其化为哑变量。通常，评价PLS-DA 模型拟合效果使用R2X、R2Y和Q2Y这三个指标，这些指标越接近1 表示PLS-DA 模型拟合数据效果越好。其中，R2X 和R2Y 分别表示PLSDA分类模型所能够解释X 和Y 矩阵信息的百分比，Q2Y 则为通过交叉验证计算得出，用以评价PLS-DA模型的预测能力，Q2Y 越大代表模型预测效果较好。
+
+实际中，PLS-DA 得分图常用来直观地展示模型的分类效果，图中两组样品分离程度越大，说明分类效果越显著。代谢组学数据分析中另一种常用的方法是OPLS-DA，它是PLS-DA 的扩展，即首先使用正交信号校正技术，将X 矩阵信息分解成与Y 相关和不相关的两类信息，然后过滤掉与分类无关的信息，相关的信息主要集中在第一个预测成分。Johan Trygg 等认为该方法可以在不降低模型预测能力的前提下，有效减少模型的复杂性和增强模型的解释能力。
+
+与PLSDA模型相同，可以用R2X、R2Y、Q2Y 和OPLS-DA 得分图来评价模型的分类效果。Carolyn M. Slupsky 等（2010) 使用OPLS-DA 发现卵巢癌患者、乳腺癌患者、正常人这三者之间的尿液代谢轮廓显著不同，从而推断尿液代谢组学可能为癌症的特异性诊断提供重要依据。
+
+由于代谢组学数据具有高维、小样本的特性，使用有监督学习方法进行分析时很容易产生过拟合的现象。
+
+为此，需要使用置换检验考察PLS-DA 在无差异情况下的建模效果。该方法在固定X 矩阵的前提下，随机置换Y分类标签n次，每次随机置换后建立新的PLS-DA 模型，并计算相应的R2Y 和Q2Y； 然后，与真实标签模型得到的结果进行比较，用图形直观表达是否有过拟合现象。
+
+由于样本量的不足，通常采用上述的交叉验证和置换检验方法作为模型验证方法。而实际中，在样本量允许的情况下，最为有效的模型验证方法即将整个数据集严格按照时间顺序划分为内部训练数据和外部测试数据两部分，利用内部训练数据建立模型，再对外部测试数据进行预测，客观地评价模型的有效性和适用性
+
+##### **生物标志物的筛选**
+
+代谢组学分析的最终目标是希望从中筛选出潜在的生物相关标志物，从而探索其中的生物代谢机制，因此需要借助一定的特征筛选方法进行变量筛选。
+
+对于高维代谢组学数据的特征筛选，研究的目的是从中找出对样本分类能力最强或较强的一个或若干个变量。**特征筛选方法主要分为三类： 过滤法、封装法和嵌入法**。
+
+****
+
+- **过滤法**主要是采用单变量筛选方法对变量进行筛选，优点是简单而快捷，能够快速的降维，如t’检验、Wilcoxon秩和检验、SAM等方法。
+- **封装法**是一种多变量特征筛选策略，通常是以判别模型分类准确性作为优化函数的前向选择、后向选择和浮动搜索特征变量的算法，它通常是按照“节省原则”进行特征筛选，最终模型可能仅保留其中很少部分的重要变量，如遗传算法等。
+- **嵌入法**的基本思想是将变量选择与分类模型的建立融合在一起，变量的重要性评价依靠特定分类模型的算法实现，在建立模型的同时，可以给出各变量重要性的得分值，如PLS-DA方法的VIP统计量等。
+
+为了更加客观、全面地评价每个变量的重要性，代谢组学研究中一般采取将上述方法结合起来的方式进行变量筛选。比较常见的一种策略是先进行单变量分析，再结合多变量模型中变量重要性评分作为筛选标准，如挑选fdr≤0.05 和VIP＞1.5的变量作为潜在生物标志物。
+
+用筛选的潜在生物标志物对外部测试数据集进行预测，评价其预测效果。最后，可以通过研究生物标志物的生物学功能和代谢通路，分析不同生物标志物之间的相互作用和关系，从而为探索生物代谢机制提供重要线索和信息。
+
+Yang Jinglei 等（2013) 即在代谢组学分析中使用fdr≤0.2和VIP＞1.5的双重标准来筛选精神分裂症的特异生物标志物，所筛选出的差异代谢物其AUC 在训练数据中达94. 5%，外部测试数据中达0. 895。
 
 

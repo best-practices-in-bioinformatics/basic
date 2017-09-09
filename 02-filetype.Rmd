@@ -152,6 +152,9 @@ Illumina 1.8+
 
 参考链接:
 
+https://en.wikipedia.org/wiki/FASTQ_format
+
+
 
 
 ## FASTA  
@@ -263,6 +266,7 @@ X |any
 
 
 参考链接
+https://en.wikipedia.org/wiki/FASTA_format
 
 注意事项：
 
@@ -284,11 +288,11 @@ SAM分为两部分，注释信息（header section ）和比对结果部分 （a
 通常是把FASTQ文件格式的测序数据比对到对应的参考基因组版本得到的。
 注释信息并不是SAM文件的重点，是该SAM文件产生以及被处理过程的一个记录，规定以@开头，用不同的tag表示不同的信息，主要有：
 
-* \@HD，说明符合标准的版本、对比序列的排列顺序；
-* \@SQ，参考序列说明；
-* \@RG，比对上的序列（read）说明；
-* \@PG，使用的程序说明；
-* \@CO，任意的说明信息。
+* @HD，说明符合标准的版本、对比序列的排列顺序；
+* @SQ，参考序列说明；
+* @RG，比对上的序列（read）说明；
+* @PG，使用的程序说明；
+* @CO，任意的说明信息。
 
 一个简单的SAM文件例子如下：
 
@@ -386,7 +390,7 @@ M”表示 match或 mismatch；
 
 11. QUAL，序列的质量信息，格式同FASTQ一样。read质量的ASCII编码。
 
-12. 可选字段（optional fields)，格式如``TAG:TYPE:VALUE``，其中TAG有两个大写字母组成，每个TAG代表一类信息，每一行一个TAG只能出现一次，TYPE表示TAG对应值的类型，可以是字符串、整数、字节、数组等。
+12. 可选字段（optional fields)，格式如：TAG:TYPE:VALUE，其中TAG有两个大写字母组成，每个TAG代表一类信息，每一行一个TAG只能出现一次，TYPE表示TAG对应值的类型，可以是字符串、整数、字节、数组等。
 
 
 ### SAM要处理好的问题：
@@ -408,13 +412,7 @@ M”表示 match或 mismatch；
 
 参考链接:
 
-http://blog.csdn.net/arnoyshell/article/details/9383555
-
-https://www.plob.org/article/2722.html
-
-http://qinqianshan.com/sam-format/
-
-最权威的定义见：https://samtools.github.io/hts-specs/SAMv1.pdf
+https://en.wikipedia.org/wiki/SAM_(file_format)
 
 
 ## BAM 格式
@@ -447,7 +445,15 @@ sapply(res, head)
 通常是对BAM文件格式的比对结果进行处理得到的。
 BCF格式文件是VCF格式的二进制文件。我们就不再介绍BCF格式啦。
 
+提到vcf就必须提到千人基因组计划，因为千人计划组才产生的vcf。生信菜鸟团有一篇博客《居然可以下载千人基因组计划的所有数据bam，vcf数据》
+http://www.bio-info-trainee.com/1339.html
+专门讲了千人计划的数据下载。
+
 ### 定义和示例
+![image](http://note.youdao.com/yws/public/resource/8279f51aad9a31e5cf4a3ee22f079b67/xmlnote/WEBRESOURCE3fc19fdeadd09bfae12584c3cd16cb21/2640)
+
+如上图所示，vcf记录的即为各类型的变异。例如：插入，缺失等。
+
 
 VCF分为两部分，注释信息和变异位点记录信息。
 注释信息通常以#开头，会描述该VCF版本，目前以4.2居多，然后会一行行记录变异位点信息里面会出现的所有TAG。
@@ -512,7 +518,7 @@ FILTER：使用上一个QUAL值来进行过滤的话，是不够的。GATK能使
 
 INFO： 这一行是variant的详细信息，内容很多，以下再具体详述。
 
-FORMAT 和 sample1 ：这两行合起来提供了 sample1 这个sample的基因型的信息。’sample1′代表这该名称的样品，是由SAM/BAM文件中的\@RG下的 SM 标签决定的。
+FORMAT 和 sample1 ：这两行合起来提供了 sample1 这个sample的基因型的信息。’sample1′代表这该名称的样品，是由SAM/BAM文件中的@RG下的 SM 标签决定的。
 (当然并不是所有的VCF都是由一个BAM文件产生，比如数据库dbSNP提供的vcf文件，就没有样本信息啦)
 
 ### 第8列的INFO
@@ -570,9 +576,16 @@ GQ：基因型的质量值(Genotype Quality)。Phred格式(Phred_scaled)的质�
 
 PL：指定的三种基因型的质量值(provieds the likelihoods of the given genotypes)。这三种指定的基因型为(0/0,0/1,1/1)，这三种基因型的概率总和为1。和之前不一致，该值越大，表明为该种基因型的可能性越小。 Phred值 = -10 * log (p) p为基因型存在的概率。
 
+![image](http://note.youdao.com/yws/public/resource/8279f51aad9a31e5cf4a3ee22f079b67/xmlnote/WEBRESOURCEe83d8167a97d4dba34a9f817bf8597e8/2668)
+
+
+上图可以帮助很好的理解vcf格式。
+
+
 
 注意事项：
 　　
+
 针对vcf格式有如bcftools等软件进行处理。
 
 生信菜鸟团的博客和生信技能树里面都介绍了很多处理vcf的软件。
@@ -580,6 +593,7 @@ PL：指定的三种基因型的质量值(provieds the likelihoods of the given 
 ## 参考链接：
 
 强烈推荐去看《生信技能树》中的：我的基因组28 
+https://en.wikipedia.org/wiki/Variant_Call_Format
 
 ## GTF和GFF
 
@@ -673,13 +687,11 @@ GTF文件的第9列同GFF文件不同，虽然同样是标签与值配对的情�
 ```
 
 速记口诀
-
 ```
-GTF,GFF 9列数据来组成
-结果前8列都相同
-GFF 9列间以tab 来分割，第9列用等号
-GTF不服气，标签与值用空格分离，特征之间也用分号分开;
-要问特立独行谁最牛，GTF排第一！
+* GTF,GFF 9列数据来组成*
+*结果前8列都相同*
+*GFF 9列间以tab 来分割，第9列用等号*
+*GTF不服气，标签与值用空格分离，特征之间也用分号分开;要问特立独行谁最牛，GTF排第一！*
 ```
 
 有趣小故事：
@@ -691,8 +703,86 @@ GTF是弟弟，天天心里想”WTF“! 不服气，就要特立独行！然后
 目前两种文件可以方便的相互转化，比如:使用Cufflinks软件的 的gffread。
 
 参考链接
-http://boyun.sh.cn/bio/?p=1602
+http://genome.ucsc.edu/goldenPath/help/customTrack.html#GTF
 http://blog.sina.com.cn/s/blog_8a4f556e0102yd3l.html
+
+##  GenePred
+
+> 这种格式主要用在基因浏览器中基因预测的track。如果有可变剪切的情况，那表格的每一行就是一个 transcript 的全部信息。
+
+具体解释如下
+```
+table genePred
+"A gene prediction."
+    (
+    string  name;               "Name of gene"
+    string  chrom;              "Chromosome name"
+    char[1] strand;             "+ or - for strand"
+    uint    txStart;            "Transcription start position"
+    uint    txEnd;              "Transcription end position"
+    uint    cdsStart;           "Coding region start"
+    uint    cdsEnd;             "Coding region end"
+    uint    exonCount;          "Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    )
+```
+
+如果觉得抽象，我们可以用示例来进行一下对比。小编在这里首先将模式植物拟南芥的gtf文件转化为gpd格式。`head -n 1` 看一下gpd文件第一行的样式。
+
+```
+#gpd
+AT1G01010.1	Chr1	+	3630	5899	3759	5630	6	3630,3995,4485,4705,5173,5438,	3913,4276,4605,5095,5326,5899
+```
+
+再来`grep`一下gtf文件中有**AT1G01010.1**信息的那些行是什么样
+
+```
+#gtf
+Chr1	Araport11	5UTR	3631	3759	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	3631	3913	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	start_codon	3760	3762	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	3760	3913	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	3996	4276	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	3996	4276	.	+	2	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	4486	4605	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	4486	4605	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	4706	5095	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	4706	5095	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	5174	5326	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	5174	5326	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	CDS	5439	5630	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	exon	5439	5899	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	stop_codon	5628	5630	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+Chr1	Araport11	3UTR	5631	5899	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
+```
+
+我们可以看出，在GTF中，AT1G01010.1这个transcript共有6个CDS，那么对应到相应gpd文件AT1G01010.1这一行的第8列就是6，而第9列和第10列则是这6个CDS对应的起始和终止位置。
+
+细心的朋友可能会发现，GTF文件中CDS起始位置在GenePred table中统统少了1，这其实就是两种文件的起始位置从1开始还是从0开始计数的区别。
+
+GTF的产生和流行有其历史的原因。但是从技术角度来讲，这个文件格式是个非常差劲的格式。
+
+GTF格式非常冗余。以人类转录组为例，Gencode V22的GTF文件为1.2G，压缩之后只有40M。大家知道压缩软件的压缩比是和软件的冗余程度。很少有文件能够压缩到1/30的大小。可见GTF格式多么冗余。GTF格式（及其早期版本GFF等）有很好的替代格式。从信息量上来讲：GTF 等价于 GenePred （Bed12) + Gene_Anno_table。
+
+GenePred是Jimmy Kent创建UCSC genome browser的时候建立的文件格式。UCSC的文件格式定义是非常smart的，包括之后我可能会讲到的2bit，bigwig格式。
+
+
+### GTF vs GenePred
+
+- 从文件大小上来看，压缩前：GTF（1.2G) >> Genepred(23M) + Gene_Anno_table (2.8M)。压缩后：GTF(40M) >> GenePred(7.8M) +Gene_Anno_table (580K)
+- 从可读性来讲，GTF是以gene interval 为单位（行），每行可以是gene，transcript，exon，intron，utr等各种信息，看起来什么都在里面，很全面，其实可读性非常差，而且容易产生各种错误。GenePred格式是以transcript为单位，每行就是一个transcript，简洁直观。
+- 从程序处理的角度来讲：以GTF文件作为输入的程序，如果换成以GenePred格式为输入，编程的难度会降低一个数量级，运算时间会快很多，代码的可读性强很多。
+
+
+GTF 转换成GenePred：
+
+```
+gtfToGenePred -genePredExt -ignoreGroupsWithoutExons -geneNameAsName2 test.gtf test.gpd
+```
+
+Gene_Anno_table: 其实就是把GTF的所有transcript行的第9列转换变成一个表格。
+
 
 ## BED
 
@@ -766,10 +856,47 @@ http://5527lok.blog.163.com/blog/static/64751582011530113134590/
 http://blog.sciencenet.cn/home.php?mod=space&uid=442719&do=blog&id=721452
 https://www.plob.org/article/3748.html
 http://ju.outofmemory.cn/entry/193943
+https://en.wikipedia.org/wiki/General_feature_format
+
+
+
 
 ## MAF
 
 MAF格式本来并不是一个常见的文本文件格式，只是因为癌症研究实在是太热门了，对它的理解也变得需求旺盛起来了。
+
+### MAF的说明 
+
+这些文件应该使用下面描述的突变注释格式（MAF）进行格式化。另外下文中有文件命名规范。
+
+以下几种类型的体细胞突变会在MAF文件中出现：
+*   错义突变及无义突变
+*	剪接位点，其定义为剪接位点2 bp以内的SNP
+*	沉默突变
+*	与基因的编码区、剪接位点或遗传元件目标区域重叠的引物。
+*	移码突变
+*	调控区突变
+
+### 可公开获取的MAF数据的定义
+
+大部分MAF提交提交的是原始数据。这些原始数据中在体细胞中标记的位点与已知的变异类型相重合的。为避免有可能出现的细胞系污染，MAF规定了一定的下细胞过滤标准。根据现行政策，可开放获取MAF资料应满足：
+
+*	包括所有已验证的体细胞突变名称
+*	包括与编码区域或剪接位点重叠的所有未验证的体细胞突变名称
+*	排除所有其他类型的突变（即非体细胞突变、不在编码区域或剪接位点的未验证体的细胞突变以及未在dbSNP、COSMIC或OMIM中注释为体细胞的dbSNP位点）
+
+### Somatic MAF 与 Protected MAF
+
+我们提交给DCC MAF存档的数据包括两种：Somatic MAF（named .somatic.maf）的开放访问数据以及不经过筛选的包含原始数据的Protected MAF（named.protected.maf）。所有数据将使用MAF标准进行格式化。
+
+下图列出了named.protected.maf文件的一些关键信息。
+![image](http://note.youdao.com/yws/public/resource/d6e22470ced3d1b316289f93fbdab3b3/xmlnote/WEBRESOURCE51908f50165d57e427001fd2fc50260e/8)
+
+
+
+### MAF文件字段
+MAF文件的格式是以制表符分隔的列。这些列都在表1中进行了详细注释，每个MAF文件中都必须按照相应格式进行处理，DCC将验证每列的顺序是否符合标注。每列的标题和值有时需要区分大小写。列中允许出现空值（即空白单元格）或枚举值。验证器将查找是否存在一个符合规范（例如#version 2.4）的标题，如果没有，验证将会失败。除了出现在表1中的列外，也可以选择附加其他列。可选列不经过DCC验证，可以按任何顺序进行。
+
 MAF文件可能有两种格式 ，可能是47列，或者120列，第一行一般都是 头文件，注释着每一列的信息，的确，信息量有点略大。如下：
 
 ```
@@ -944,126 +1071,82 @@ MAF文件可能有两种格式 ，可能是47列，或者120列，第一行一�
    119	MC3_Overlap
    120	GDC_Validation_Status
 ```
+ 
+ 
+```
+重要标准
+列表中每列的顺序最好与索引列相同。
+标有“Case Sensitive“的列所有标题都需要区分大小写。
+标有”Null“的列表示允许具有空值。
+标有“Enumerated column”的列表示具有指定的值，比如“Enumerated value” 是"No"表示该列没有指定的值；其他值表示允许列出的具体值; “Set”表示该列的值来自指定的一组已知值（例如HUGO基因符号）
+```
+### MAF文件检查
+DCC 档案验证器将检查MAF文件的完整性。如果MAF文件中的任何一项出现错误，验证将失败：
+```
+1.	列标题文本（包括大小写）和顺序必须与表1完全一致
+2.	表1中列出的列标题下的值不是空值时必须具有相应的值
+3.	表1中指定为“Case Sensitive”的值必须区分大小写。
+4.	如果列标题在规范中列出为具有枚举值（即“Enumerated”列的“Yes”），则这些列中的值必须来自“Enumerated”下列出的枚举值。
+5.	如果规范中列标题具有设置值（即“Enumerated”列的“Set”），则那些列下的值必须来自该域的枚举值（例如，HUGO基因符号）。
+6.	所有Allele-based列必须包含 –(deletion)或由以下大写字母组成的字符串：A，T，G，C。
+7.	如果Validation_Status == "Untested" 那么Tumor_Validation_Allele1, Tumor_Validation_Allele2, Match_Norm_Validation_Allele1, Match_Norm_Validation_Allele2 可以是空值(由 Validation_Status决定).
+a)	如果Validation_Status == "Inconclusive" 那么Tumor_Validation_Allele1, Tumor_Validation_Allele2, Match_Norm_Validation_Allele1, Match_Norm_Validation_Allele2 可以是空值(由 Validation_Status决定)
+8.	如果Validation_Status == Valid, 那么Validated_Tumor_Allele1 and Validated_Tumor_Allele2一定要是 A, C, G, T, 或“-“中的一种
 
+a)	如果Validation_Status  == "Valid" 那么Tumor_Validation_Allele1, Tumor_Validation_Allele2, Match_Norm_Validation_Allele1, Match_Norm_Validation_Allele2 不可以是空值
 
+b)	 如果Validation_Status == "Invalid" 那么Tumor_Validation_Allele1, Tumor_Validation_Allele2, Match_Norm_Validation_Allele1, Match_Norm_Validation_Allele2 不可以是空值Tumor_Validation_Allelle1 == Match_Norm_Validation_Allele1 
+Tumor_Validation_Allelle2 == Match_Norm_Validation_Allele2  (出现错误时，增加以替代8a)
 
+9.	检查Mutation_Status的等位基因值:
+检查Validation_status的等位基因值:
+
+a)	如果Mutation_Status == "Germline" and Validation_Status == "Valid", 那么Tumor_Validation_Allele1 == Match_Norm_Validation_Allele1 Tumor_Validation_Allele2 == Match_Norm_Validation_Allele2.
+
+b)	如果Mutation_Status == "Somatic" ，Validation_Status == "Valid", 那么Match_Norm_Validation_Allele1 == Match_Norm_Validation_Allele2 == Reference_Allele 且(Tumor_Validation_Allele1 or Tumor_Validation_Allele2) != Reference_Allele
+
+c)	如果Mutation_Status == "LOH" and Validation_Status=="Valid", 那么Tumor_Validation_Allele1 == Tumor_Validation_Allele2 Match_Norm_Validation_Allele1 != Match_Norm_Validation_Allele2 and Tumor_Validation_Allele1 == (Match_Norm_Validation_Allele1 or Match_Norm_Validation_Allele2).
+10.	检查 Start_position <= End_position
+11.	根据Variant_Type检查Start_position和End_position: 
+a)	如果Variant_Type == "INS", 那么(End_position - Start_position + 1 == length (Reference_Allele) 或End_position - Start_position == 1) 且length(Reference_Allele) <= length(Tumor_Seq_Allele1 and Tumor_Seq_Allele2)
+b)	如果Variant_Type == "DEL", 那么End_position - Start_position + 1 == length (Reference_Allele), 
+且length(Reference_Allele) >= length(Tumor_Seq_Allele1 and Tumor_Seq_Allele2)
+c)	如果Variant_Type == "SNP", 那么length(Reference_Allele and Tumor_Seq_Allele1 and Tumor_Seq_Allele2) ==  1 且(Reference_Allele and Tumor_Seq_Allele1 and Tumor_Seq_Allele2) != "-"
+d)	如果Variant_Type == "DNP", 那么length(Reference_Allele 和Tumor_Seq_Allele1 and Tumor_Seq_Allele2) ==  2 且(Reference_Allele and Tumor_Seq_Allele1 andTumor_Seq_Allele2) !contain "-"
+e)	如果Variant_Type == "TNP", 那么length(Reference_Allele and Tumor_Seq_Allele1 and Tumor_Seq_Allele2) ==  3 且(Reference_Allele and Tumor_Seq_Allele1 and Tumor_Seq_Allele2) !contain "-"
+f)	如果Variant_Type == "ONP", 那么length(Reference_Allele) == length(Tumor_Seq_Allele1) == length(Tumor_Seq_Allele2) > 3 且(Reference_Allele and Tumor_Seq_Allele1 and Tumor_Seq_Allele2) !contain "-"
+12.	基于UUID的文件的验证: 
+a)	列＃33必须包含肿瘤样本的BCR等分试样的UUID的Tumor_Sample_UUID
+b)	列＃34必须是Matched_Norm_Sample_UUID，其中包含用于匹配正常样本的BCR等份的UUID
+c)	由Tumor_Sample_Barcode和Matched_Norm_Sample_Barcode表示的元数据应分别对应于分配给Tumor_Sample_UUID和Matched_Norm_Sample_UUID的UUID
+```
+
+### MAF命名协议
+在上传到DCC的档案中，MAF文件名应与以下方式与包含档案名称相关：
+如果存档名称是：
+```
+<domain>_<disease_abbrev>.<platform>.Level_2.<serial_index>.<revision>.0.tar.gz
+那么具有存档的公开的MAF文件命名依据为：
+<domain>_<disease_abbrev>.<platform>.Level_2.<serial_index>[.<optional_tag>].somatic.maf
+具有存档的受保护的MAF文件命名依据为：
+<domain>_<disease_abbrev>.<platform>.Level_2.<serial_index>[.<optional_tag>].protected.maf
+<optional_tag>可能包含字母数字字符、破折号或下划线，但不能有空格或句号。<optional_tag>可以省略。使用<optional_tag>的目的是给出一些简短的注释。
+例如，对于文件
+genome.wustl.edu_OV.IlluminaGA_DNASeq.Level_2.7.6.0.tar.gz
+```
+有效的MAF名称的为：
+```
+genome.wustl.edu_OV.IlluminaGA_DNASeq.Level_2.7.preliminary.somatic.maf
+genome.wustl.edu_OV.IlluminaGA_DNASeq.Level_2.7.protected.maf
+```
+	
 参考链接：
+
+https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+%28MAF%29+Specification+-+v2.4
 
 https://software.broadinstitute.org/software/igv/MutationAnnotationFormat
 
 https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+%28MAF%29+Specification
 
-## GenePred
-
-> 学习GenePred之前可以再回顾一下**GFF**和**GTF**两种文件文件
-
-###  GFF/GTF  {-}
-
-大多数生物信息学数据的分析和挖掘都十分依赖注释信息，注释文件的好坏对分析结果有着非常重要的影响。目前，大家常用的有**GFF**和**GTF**两种文件。其中**GTF**格式是对**GFF**格式文件的精炼和规范。
-
-
-**GFF**文件要求每一行数据必须有由tab键分隔的九个字段，每一个字段代表的含义如下所示。
-
-|     名称      |                    描述                    |           简译            |
-| :---------: | :--------------------------------------: | :---------------------: |
-| **seqname** | The name of the sequence. Must be a chromosome or scaffold |          序列名称           |
-| **source**  | The program that generated this feature  |          数据来源           |
-| **feature** | The name of this type of feature. Some examples of standard feature types are "CDS" "start_codon" "stop_codon" and "exon" |          属性类型           |
-|  **start**  | The starting position of the feature in the sequence. **The first base is numbered 1** |          片段起点           |
-|   **end**   | The ending position of the feature (**inclusive**). |          片段终点           |
-|  **score**  | A score between 0 and 1000. If the track line *useScore* attribute is set to 1 for this annotation data set, the *score* value will determine the level of gray in which this feature is displayed (higher numbers = darker gray) |           得分            |
-| **strand**  | Valid entries include "+", "-", or "." (for don't know/don't care). |           方向            |
-|  **frame**  | If the feature is a coding exon, *frame* should be a number between 0-2 that represents the reading frame of the first base. If the feature is not a coding exon, the value should be ".". |        *仅对CDS有效*        |
-|  **group**  | All lines with the same group are linked together into a single item. | 多个键值对（等号链接）组成的描述信息，分号分隔 |
-
-GTF文件前8列和GFF文件相同，第9列信息标签和值用空格分开，不同信息用分号分隔。
-
-###  GenePred  {-}
-
-那什么是** GenePred table** 格式呢？ 这种格式主要用在基因浏览器中基因预测的track。如果有可变剪切的情况，那表格的每一行就是一个 transcript 的全部信息。
-
-具体解释如下
-```
-table genePred
-"A gene prediction."
-    (
-    string  name;               "Name of gene"
-    string  chrom;              "Chromosome name"
-    char[1] strand;             "+ or - for strand"
-    uint    txStart;            "Transcription start position"
-    uint    txEnd;              "Transcription end position"
-    uint    cdsStart;           "Coding region start"
-    uint    cdsEnd;             "Coding region end"
-    uint    exonCount;          "Number of exons"
-    uint[exonCount] exonStarts; "Exon start positions"
-    uint[exonCount] exonEnds;   "Exon end positions"
-    )
-```
-
-如果觉得抽象，我们可以用示例来进行一下对比。小编在这里首先将模式植物拟南芥的gtf文件转化为gpd格式。`head -n 1` 看一下gpd文件第一行的样式。
-
-```
-#gpd
-AT1G01010.1	Chr1	+	3630	5899	3759	5630	6	3630,3995,4485,4705,5173,5438,	3913,4276,4605,5095,5326,5899
-```
-
-再来`grep`一下gtf文件中有**AT1G01010.1**信息的那些行是什么样
-
-```
-#gtf
-Chr1	Araport11	5UTR	3631	3759	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	exon	3631	3913	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	start_codon	3760	3762	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	CDS	3760	3913	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	exon	3996	4276	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	CDS	3996	4276	.	+	2	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	exon	4486	4605	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	CDS	4486	4605	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	exon	4706	5095	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	CDS	4706	5095	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	exon	5174	5326	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	CDS	5174	5326	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	CDS	5439	5630	.	+	0	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	exon	5439	5899	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	stop_codon	5628	5630	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-Chr1	Araport11	3UTR	5631	5899	.	+	.	transcript_id "AT1G01010.1"; gene_id "AT1G01010"
-```
-
-我们可以看出，在GTF中，AT1G01010.1这个transcript共有6个CDS，那么对应到相应gpd文件AT1G01010.1这一行的第8列就是6，而第9列和第10列则是这6个CDS对应的起始和终止位置。
-
-细心的朋友可能会发现，GTF文件中CDS起始位置在GenePred table中统统少了1，这其实就是两种文件的起始位置从1开始还是从0开始计数的区别。
-
-对GTF和GendPred有了一个初步的了解，我们来看一下作者的原文。
-
----
-
-## 作者正文  {-}
-
-GTF的产生和流行有其历史的原因。但是从技术角度来讲，这个文件格式是个非常差劲的格式。
-
-GTF格式非常冗余。以人类转录组为例，Gencode V22的GTF文件为1.2G，压缩之后只有40M。大家知道压缩软件的压缩比是和软件的冗余程度。很少有文件能够压缩到1/30的大小。可见GTF格式多么冗余。GTF格式（及其早期版本GFF等）有很好的替代格式。从信息量上来讲：GTF 等价于 GenePred （Bed12) + Gene_Anno_table。
-
-GenePred是Jimmy Kent创建UCSC genome browser的时候建立的文件格式。UCSC的文件格式定义是非常smart的，包括之后我可能会讲到的2bit，bigwig格式。
-
-
-### GTF vs GenePred  {-}
-
-- 从文件大小上来看，压缩前：GTF（1.2G) >> Genepred(23M) + Gene_Anno_table (2.8M)。压缩后：GTF(40M) >> GenePred(7.8M) +Gene_Anno_table (580K)
-- 从可读性来讲，GTF是以gene interval 为单位（行），每行可以是gene，transcript，exon，intron，utr等各种信息，看起来什么都在里面，很全面，其实可读性非常差，而且容易产生各种错误。GenePred格式是以transcript为单位，每行就是一个transcript，简洁直观。
-- 从程序处理的角度来讲：以GTF文件作为输入的程序，如果换成以GenePred格式为输入，编程的难度会降低一个数量级，运算时间会快很多，代码的可读性强很多。
-
-
-GTF 转换成GenePred：
-
-```
-gtfToGenePred -genePredExt -ignoreGroupsWithoutExons -geneNameAsName2 test.gtf test.gpd
-```
-
-Gene_Anno_table: 其实就是把GTF的所有transcript行的第9列转换变成一个表格。
-
  
-  
 ## 其它格式
-这个就多了去了。
-
-

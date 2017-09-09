@@ -228,15 +228,15 @@ Dec 12 2012 00:00    Directory BUILD.37.3
 
 如果要下载GTF注释文件，基因组版本尤为重要。
 
-### **NCBI**：最新版（hg38） {-}
+##### **NCBI**：最新版（hg38） {-}
 
 - ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/GFF/ 
 
-### **NCBI**：其它版本 {-}
+##### **NCBI**：其它版本 {-}
 
 - ftp://ftp.ncbi.nlm.nih.gov/genomes/Homo_sapiens/ARCHIVE/    
 
-### **Ensembl** {-}
+##### **Ensembl** {-}
 
 - ftp://ftp.ensembl.org/pub/release-75/gtf/homo_sapiens/Homo_sapiens.GRCh37.75.gtf.gz
 
@@ -244,7 +244,7 @@ Dec 12 2012 00:00    Directory BUILD.37.3
 
 - ftp://ftp.ensembl.org/pub/
 
-### **UCSC**  {-}
+##### **UCSC**  {-}
 
 它本身需要一系列参数：
 
@@ -284,6 +284,7 @@ rm -fr chr*.fasta
 ```
 
 ##NCBI
+
 NCBI (National Center for Biotechnology Information，美国国立生物技术信息中心）于1988年11月4日建立，是NIH（美国国立卫生研究院）的NLM（国立医学图书馆）的一个分支。目的是通过提供在线生物学数据和生物信息学分析工具来帮助人类更好的认知生物学问题。
 目前有将近40个在线的文库和分子生物学数据库，包括：PubMed, PubMed Central, and GenBank等。网址： https://www.ncbi.nlm.nih.gov/
 
