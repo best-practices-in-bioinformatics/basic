@@ -13,13 +13,13 @@
 
 值得一提的是HiSeq X10作为目前通量最高的测序仪，其大多测的是人类癌症病人相关数据，而这些数据因为隐私问题，很多都是不予公开的，需要注册申请才能下载。
 
-下面我们就GEO里面存放的数据进行分门别类的介绍，分首先是芯片数据，包括各种生物学应用的芯片，然后是高通量测序数据，包括二代三代测序。
+下面我们就GEO里面存放的数据进行分门别类的介绍，分首先是芯片数据，包括各种生物学应用的芯片，然后是高通量测序数据，包括二代三代测序数据。
 
 ## 芯片技术
 
-> 早期的数据都是由芯片产生，2001年做两百多个mRNA表达谱芯片数据分析都可以发nature，虽然现在逐渐被NGS替代了，但是成本方面却还是它们的优点，所以仍然会有不少科研项目选择芯片来产生数据。
+> 早期的生物信息学数据都是由芯片产生，2001年做两百多个mRNA表达谱芯片数据分析都可以发nature，虽然现在逐渐被NGS替代了，但是成本方面却还是它们的优点，所以仍然会有不少科研项目选择芯片来检测样本。
 
-这样，做生物信息学数据分析的我们还是得掌握它们的基本分类，历史，已经处理方法。而且已经发表的芯片数据量非常庞大，在里面进行一些探索性挖掘也会有意想不到的收获。当然，前提是要下功夫了解芯片，学习它们。
+这样，做生物信息学数据分析的我们还是得掌握它们的基本分类，历史，以及处理方法。而且已经发表的芯片数据量非常庞大，在里面进行一些探索性挖掘也会有意想不到的收获。当然，前提是要下功夫了解芯片，学习它们。
 
 ### 三大芯片制造商
 
@@ -110,13 +110,15 @@ Agilent的表达谱芯片，是用荧光素直接标记的，检测灵敏度高�
 用于研究基因表达的芯片可以有两种：① cDNA芯片；② 寡核苷酸芯片。
 
 
-早期的芯片主要是hgu系列，包括95,133 出货量最大的应该是hgu133plus2系列了，如下
+早期的表达谱芯片主要是Affymetrix公司的hgu系列，包括95,133 出货量最大的应该是**hgu133plus2系列**了，如下
 
 ![](image/C1/affymetrix-133plus2-array.png)
 
-统称为旧版的affymetrix芯片，用R语言的affy包即可读取进行数据处理，我曾经写过教程：[用affy包读取affymetix的基因表达芯片数据-CEL格式数据](http://www.bio-info-trainee.com/1580.html)
+统称为旧版的affymetrix芯片，用R语言的affy包即可读取进行数据处理，我曾经写过教程：[用affy包读取affymetix的基因表达芯片数据-CEL格式数据](http://www.bio-info-trainee.com/1580.html) 就是下面的代码：
 
 ```
+## 把所有的cel文件都放在一个文件夹(比如/home/jmzeng/your/celfiles文件夹)下面，文件夹地址赋给变量 dir_cels
+dir_cels='/home/jmzeng/your/celfiles'
 library(affy)
 #perform mas5 normalization
 affy_data = ReadAffy(celfile.path=dir_cels)
@@ -130,21 +132,24 @@ eset <- rma(data)
 write.exprs(eset,file="data.txt")
 ```
 
-还有新版的表达谱芯片，比如Human Gene 1.0 St Array  ，用R语言的oligo包来进行数据处理，我曾经写过教程：[用oligo包来读取affymetix的基因表达芯片数据-CEL格式数据](http://www.bio-info-trainee.com/1586.html)
+还有新版的表达谱芯片，比如Human Gene 1.0 St Array  
 
 ![](image/C1/affymetrix-2.0ST-array.png)
 
-把芯片数据转换为表达矩阵的核心代码如下：
+用R语言的oligo包来进行数据处理，我曾经写过教程：[用oligo包来读取affymetix的基因表达芯片数据-CEL格式数据](http://www.bio-info-trainee.com/1586.html)，把芯片数据转换为表达矩阵的核心代码如下：
+
 ```
 library(oligo)
 celFiles <- list.celfiles()
 affyRaw <- read.celfiles(celFiles)
-library(pd.mogene.2.0.st)  ## 根据芯片平台来载入芯片设计包，没办法自动选择，跟芯片探针包不一样：mogene20sttranscriptcluster.db
+library(pd.mogene.2.0.st)  
+## 根据芯片平台来载入芯片设计包，没办法自动选择
+## 不同的芯片探针包不一样：mogene20sttranscriptcluster.db
 eset <- rma(affyRaw)
 write.exprs(eset,file="data.txt")
 ```
 
-affymetrix还开发了更新版的表达谱检测芯片，HST2.0，据文献报道其很多方面都优于转录组测序，不过芯片设计比较复杂，如下：
+affymetrix还开发了**更新版**的表达谱检测芯片，比如针对人类的HST2.0，据文献报道其很多方面都优于转录组测序，这款芯片设计比较复杂，如下：
 
 ![](image/C1/affymetrix-human2.0ST-characterization.png)
 
@@ -164,8 +169,6 @@ GSE622221, GSE4180414, GSE5140122 | A total of 117 samples (54 cases and 63 cont
 [GSE21815](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE21815) |  2016-CRC Agilent-014850 Whole Human Genome Microarray 4x44K
 
 公布这些数据的文章里面都有对这些数据处理的方法的详细描述，以及对应的分析结果。
-
-
 
 
 ### 基因分型芯片
@@ -202,11 +205,39 @@ illumina的Omni系列芯片经过了许多年的市场迭代，能检测的位�
 > 拷贝数变异（CNV）是由基因组发生重排而导致的，一般指长度为1 kb 以上的基因组大片段的拷贝数增加或者减少，主要表现为亚显微水平的缺失和重复。
 CNV 是基因组结构变异 ( SV ) 的重要组成部分。CNV 位点的突变率远高于SNP，是人类疾病的重要致病因素之一。
 大量研究表明，尤其是肿瘤，与拷贝数变异密切先关。
+
 能检测CNV的手段主要有：全基因组测序、生物芯片、CNVseq、CNVplex、AccuCopy、质谱法、Taqman法。
+
+#### Affymetrix SNP6.0 array
 
 其中最出名的要属Affymetrix SNP6.0 array这款芯片 ，在TCGA计划和CCLE里面都有。芯片特有超过180万个遗传变异标记，包括单核苷酸多态性（SNP）以及拷贝数变异（CNV）。对CCLE数据库可以做的分析非常多，强烈建议初学者花时间好好了解一下，[我博客也写过教程](http://www.bio-info-trainee.com/1327.html)
  
 值得一提的是拷贝数变异的检测目前是以芯片技术为标准，NGS技术仍然是落后于芯片技术，在这一点上面。对于Affymetrix SNP6.0 array这款芯片得到也是CEL文件的原始数据，可以走PICNIC软件的流程来进行分析，得到最后的拷贝数变异的片段。
+
+#### affymetrix公司的OncoScan平台
+
+> 使用Affymetrix OncoScan FFPE芯片对肿瘤相关样品(包括cfDNA与FFPE样本)进行试验与数据分析，并通过OncoScan 3.01软件找到与临床相关的拷贝数变异（CNV）和杂合性缺失（LOH）。
+
+
+突破性的技术：在短短48小时内完成全基因组范围的实体瘤拷贝数分析，仅需80ng起始DNA。
+全新的OncoScan FFPE芯片利用Affymetrix独特的分子倒置探针（MIP）技术，能够快速经济地分析来自FFPE样本的少量的高度降解的DNA，让实体瘤癌症分析向前迈进了一大步。
+这一新产品在一次实验中即可提供全基因组范围的拷贝数数据，且在全基因组内大约900个已知的癌基因、杂合性缺失（LOH）上的分辨率极高，同时可以提供临床相关的获得性突变的数据。在分析软件方面，研发人员升级了早一代的BioDiscovery Nexus软件，增加了许多转为癌症分析设计的功能，命名为OncoScan™ Nexus Express软件，它实现了几分钟内数百个样本的拷贝数分析能力，也将随产品免费提供。
+此项技术之前是通过Affymetrix研究服务实验室的OncoScan™ Express 2.0服务来提供的，展现出空前的成功率，在过去两年已有70多篇文章发表。该平台实现了高度降解样本的DNA检测，从保存了十年或以上的FFPE样本中挖掘出丰富的信息。
+
+### GPL18602
+
+目前在GEO平台的地址是：https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL18602
+
+| Status          | Public on Apr 23, 2014                   |
+| --------------- | ---------------------------------------- |
+| Title           | [OncoScan] Affymetrix OncoScan FFPE Assay |
+| Technology type | in situ oligonucleotide                  |
+| Distribution    | commercial                               |
+| Organism        | [Homo sapiens](https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id=9606) |
+| Manufacturer    | Affymetrix                               |
+
+截止到目前(2017年09月07日)仅有22个实验数据，共355个样本的公共数据被上传。是非常新的平台
+
 
 ### 甲基化芯片
 
@@ -325,7 +356,7 @@ HiSeq 3000/4000系统则基于成熟的HiSeq 2500系统，采用创新的有序�
 
 HiSeq X Ten系统的问世完成了人类历史上一大里程碑事件——千元基因组时代的到来。HiSeq X Ten系统是由一套共10台超高通量的HiSeq X仪器组成，每年能带来超过18,000个人类基因组，而每个基因组的价格约为1000美元，让癌症和复杂疾病的研究达到新的水平。虽然目前GEO里面的数据HiSeq X Ten测序仪产出的数据并不是独占鳌头，但也只是时间问题。
 
-NovaSeq系列测序仪问世，毫无疑问标志着测序新纪元的到来，旨在将基因组测序的价格进一步降至100美元。全新的NovaSeq系列测序系统，突破技术革新，具有可扩展的通量、灵活简便的配置和简化的操作流程，允许以更大的深度来发现罕见的遗传变异，为大规模发现复杂疾病变异打开了全新的市场。
+NovaSeq系列测序仪问世，毫无疑问标志着测序新纪元的到来，旨在将基因组测序的价格进一步降至100美元。全新的NovaSeq系列测序系统，突破技术革新，具有可扩展的通量、灵活简便的配置和简化的操作流程，允许以更大的深度来发现罕见的遗传变异，为大规模发现复杂疾病变异打开了全新的市场。**NovaSeq 测序平台单次运行最多可检测48个人类基因组，产出 6Tb 的数据量，运行时间缩短至40个小时。**
 
 
 illumina技术核心在于桥式PCR和边合成边测序（SBS）。illumina测序系统的碱基读取也是基于化学发光法来的，给每一个碱基加入荧光基团，通过拍照捕捉发光的碱基，如此就得到了DNA的原始序列信息。
@@ -352,7 +383,7 @@ illumina sequence identifier中包含了此次测序的信息，根据平台不�
 
 |标识符|解释|  
 |-----|:---:|
-|@|必须以@开头|
+|@|必须以\@开头|
 |HWUSI-EAS100R|	|the unique instrument name|
 |6|flowcell lane|
 |73|tile number within the flowcell lane|
@@ -416,7 +447,10 @@ DATA {(0): 67, 71,67, 67, 65, 71, 67, 71, 65, 65, 84, 71, 71, 67, 84, 71, 67, (1
 
 用代码``h5dump -d /PulseData/BaseCalls/QualityValue raw.h5 > Basecall.quality``,文件内容如下,其碱基质量值采用与illumina技术一致：
 
+```
 DATA {(0): 51, 44,42, 44, 24, 24, 51, 51, 51, 51, 50, 20, 20, 20, 50, 51, 51, (17): 48, 48, 48,47, 9, 9, 9, 51, 51, 46, 31, 31, 31, 31, 44, 51, 51, 30, (35): 30, 51, 51, 7,7, 7, 7, 51, 51, 44, 44, 44, 51, 51, 50, 27, 27, 26,
+```
+
 
 ### 长到天际的Nanopore 
 
@@ -427,10 +461,11 @@ Oxford Nanopore 公司2005年在英国牛津成立，其运用的纳米孔测序
 
 Nanopore目前还主要在测试和生产阶段，尚未大规模应用，其应用主要体现在微生物等小基因组生物上。推出至今，其最亮眼的表现莫过于2014年西非埃博拉病毒爆发，MinION以最快的速度破译病毒序列，名噪一时。随着独特的纳米孔技术的成熟和完善，未来在即时检测、太空应用、大众检测等方面会有很大的想象空间。
 
-Nanopore测序得到的序列文件的格式基础也是HDF5（https://support.hdfgroup.org/HDF5/），下机产生后缀为Fast5的序列文档。Fast5文件可经由Poretools软件（http://poretools.readthedocs.io/en/latest/）转换为Fastq文件或Fasta，然后进行后续数据分析。
- ①  应用Poretools将fast5转换为fastq，示例见：
+Nanopore测序得到的序列文件的格式基础也是[HDF5](https://support.hdfgroup.org/HDF5/)，下机产生后缀为Fast5的序列文档。Fast5文件可经由[Poretools软件](http://poretools.readthedocs.io/en/latest/)转换为Fastq文件或Fasta，然后进行后续数据分析。
+
+-  ①  应用Poretools将fast5转换为fastq，示例见：
 http://poretools.readthedocs.io/en/latest/content/examples.html#poretools-fastq
-②  应用Poretools将fast5转换为fasta，示例见：
+- ②  应用Poretools将fast5转换为fasta，示例见：
 http://poretools.readthedocs.io/en/latest/content/examples.html#poretools-fasta
 
 
