@@ -159,14 +159,14 @@ affymetrix还开发了**更新版**的表达谱检测芯片，比如针对人类
 
 上述表达谱芯片在GEO里面的代表性数据有：
 
-GEO地址| 数据描述
----    |---
-[GSE11072](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE11072) |  2009-gastric cancer SBC Human 16K cDNA Microarray
-[GSE42872](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42872) |  2015-melanoma-vemurafenib HuGene-1_0-st 
-[GSE2467](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE24673) |  2015-hub-gene-mcode-retinoblastoma  HuGene-1_0-st 
-[GSE22863](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE22863) |  2011-NSCLC HuGene-1_0-st 
-GSE622221, GSE4180414, GSE5140122 | A total of 117 samples (54 cases and 63 controls) Affymetrix Human Genome U133 Plus 2.0 Array  2015-HCC
-[GSE21815](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE21815) |  2016-CRC Agilent-014850 Whole Human Genome Microarray 4x44K
+| GEO地址                                    | 数据描述                                     |
+| ---------------------------------------- | ---------------------------------------- |
+| [GSE11072](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE11072) | 2009-gastric cancer SBC Human 16K cDNA Microarray |
+| [GSE42872](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42872) | 2015-melanoma-vemurafenib HuGene-1_0-st  |
+| [GSE2467](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE24673) | 2015-hub-gene-mcode-retinoblastoma  HuGene-1_0-st |
+| [GSE22863](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE22863) | 2011-NSCLC HuGene-1_0-st                 |
+| GSE622221, GSE4180414, GSE5140122        | A total of 117 samples (54 cases and 63 controls) Affymetrix Human Genome U133 Plus 2.0 Array  2015-HCC |
+| [GSE21815](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE21815) | 2016-CRC Agilent-014850 Whole Human Genome Microarray 4x44K |
 
 公布这些数据的文章里面都有对这些数据处理的方法的详细描述，以及对应的分析结果。
 
@@ -224,9 +224,7 @@ CNV 是基因组结构变异 ( SV ) 的重要组成部分。CNV 位点的突变�
 这一新产品在一次实验中即可提供全基因组范围的拷贝数数据，且在全基因组内大约900个已知的癌基因、杂合性缺失（LOH）上的分辨率极高，同时可以提供临床相关的获得性突变的数据。在分析软件方面，研发人员升级了早一代的BioDiscovery Nexus软件，增加了许多转为癌症分析设计的功能，命名为OncoScan™ Nexus Express软件，它实现了几分钟内数百个样本的拷贝数分析能力，也将随产品免费提供。
 此项技术之前是通过Affymetrix研究服务实验室的OncoScan™ Express 2.0服务来提供的，展现出空前的成功率，在过去两年已有70多篇文章发表。该平台实现了高度降解样本的DNA检测，从保存了十年或以上的FFPE样本中挖掘出丰富的信息。
 
-### GPL18602
-
-目前在GEO平台的地址是：https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL18602
+目前Affymetrix的OncoScan在GEO平台的地址是：https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GPL18602
 
 | Status          | Public on Apr 23, 2014                   |
 | --------------- | ---------------------------------------- |
@@ -384,7 +382,7 @@ illumina sequence identifier中包含了此次测序的信息，根据平台不�
 |标识符|解释|  
 |-----|:---:|
 |@|必须以\@开头|
-|HWUSI-EAS100R|	|the unique instrument name|
+|HWUSI-EAS100R|	the unique instrument name|
 |6|flowcell lane|
 |73|tile number within the flowcell lane|
 |941|'x'-coordinate of the cluster within the tile|
