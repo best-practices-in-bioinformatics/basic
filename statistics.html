@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+
+  <meta property="og:title" content="" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="css\style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">中文书示例</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path=""><a href="#statistics"><i class="fa fa-check"></i><b>1</b> 统计及可视化</a><ul>
+<li class="chapter" data-level="1.1" data-path=""><a href="#section-1.1"><i class="fa fa-check"></i><b>1.1</b> 基本统计概念</a><ul>
+<li class="chapter" data-level="1.1.1" data-path=""><a href="#-"><i class="fa fa-check"></i><b>1.1.1</b> 第一节 描述性统计量</a></li>
+<li class="chapter" data-level="1.1.2" data-path=""><a href="#section-1.1.2"><i class="fa fa-check"></i><b>1.1.2</b> 第二节</a></li>
+<li class="chapter" data-level="1.1.3" data-path=""><a href="#section-1.1.3"><i class="fa fa-check"></i><b>1.1.3</b> 统计分布</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path=""><a href="#section-1.2"><i class="fa fa-check"></i><b>1.2</b> 常用统计方法</a><ul>
+<li class="chapter" data-level="1.2.1" data-path=""><a href="#section-1.2.1"><i class="fa fa-check"></i><b>1.2.1</b> 差异分析</a></li>
+<li class="chapter" data-level="1.2.2" data-path=""><a href="#section-1.2.2"><i class="fa fa-check"></i><b>1.2.2</b> 生存分析</a></li>
+<li class="chapter" data-level="1.2.3" data-path=""><a href="#section-1.2.3"><i class="fa fa-check"></i><b>1.2.3</b> 主成分分析</a></li>
+<li class="chapter" data-level="1.2.4" data-path=""><a href="#section-1.2.4"><i class="fa fa-check"></i><b>1.2.4</b> 进化树</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path=""><a href="#section-1.3"><i class="fa fa-check"></i><b>1.3</b> 常用可视化工具</a><ul>
+<li class="chapter" data-level="1.3.1" data-path=""><a href="#section-1.3.1"><i class="fa fa-check"></i><b>1.3.1</b> 网页工具</a></li>
+<li class="chapter" data-level="1.3.2" data-path=""><a href="#section-1.3.2"><i class="fa fa-check"></i><b>1.3.2</b> 本地软件</a></li>
+<li class="chapter" data-level="1.3.3" data-path=""><a href="#r"><i class="fa fa-check"></i><b>1.3.3</b> R绘图系统</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path=""><a href="#section-1.4"><i class="fa fa-check"></i><b>1.4</b> 可视化举例</a><ul>
+<li class="chapter" data-level="1.4.1" data-path=""><a href="#section-1.4.1"><i class="fa fa-check"></i><b>1.4.1</b> 表达矩阵可视化大全</a></li>
+<li class="chapter" data-level="1.4.2" data-path=""><a href="#section-1.4.2"><i class="fa fa-check"></i><b>1.4.2</b> 热图</a></li>
+<li class="chapter" data-level="1.4.3" data-path=""><a href="#section-1.4.3"><i class="fa fa-check"></i><b>1.4.3</b> 火山图</a></li>
+<li class="chapter" data-level="1.4.4" data-path=""><a href="#section-1.4.4"><i class="fa fa-check"></i><b>1.4.4</b> 染色体结构图</a></li>
+<li class="chapter" data-level="1.4.5" data-path=""><a href="#reads"><i class="fa fa-check"></i><b>1.4.5</b> reads覆盖图</a></li>
+<li class="chapter" data-level="1.4.6" data-path=""><a href="#section-1.4.6"><i class="fa fa-check"></i><b>1.4.6</b> 其它</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">本书由 bookdown 强力驱动</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<!--bookdown:title:end-->
+<!--bookdown:title:start-->
+<div id="statistics" class="section level1">
+<h1><span class="header-section-number">第 1 章</span> 统计及可视化</h1>
+<p>数据分析过程中，检查要用到各种各样的统计学原理。甚至某个原理本身单独都可以讲解一本书。</p>
+<div id="section-1.1" class="section level2">
+<h2><span class="header-section-number">1.1</span> 基本统计概念</h2>
+<div id="-" class="section level3">
+<h3><span class="header-section-number">1.1.1</span> 第一节 描述性统计量</h3>
+<p>什么是统计学问题呢？通常为了解决一类问题，我们会观察一组和该问题相关的样本，利用总体中的这部分样本来推断总体的情况进而得到结论。在通过样本推断总体之前，我们首先需用对已有样本数据进行简单的评估和描述，针对这一需求也就引出了<strong>描述统计量</strong>这一概念。进行描述性统计时，我们最关注的数据两个层面的问题，分别是数据的集中趋势和变异分散性。</p>
+<div id="e695b0e68daee79a84e99b86e4b8ade8b68be58abf" class="section level4 unnumbered">
+<h4>数据的集中趋势</h4>
+<p>面对少则几十个多则上千个数字，第一步通常是观察平均水平。这里介绍三个计算数据平均水平的概念。分别是均值(mean)、中位数(median)和众数(mode)。</p>
+<p><strong>均值</strong>：所有观察值的和除以观察的个数。通常，算数平均是最自然和常用的测度，其问题在于对异常值(outliers)非常敏感。有极端值存在时，均值不能代表样本的绝大多数情况。</p>
+<p><strong>中位数</strong>：所谓中位数，是指所有样本观测值由小到大排序，位于中间的一个（样本数为奇数）或者两个数据的平均值（样本数为偶数）。</p>
+<p>通常，当数据分布对称时，中位数近似等于算数平均数；当数据正倾斜时（画出的图像向右边倾斜），中位数小于算数平均数；当数据负倾斜时（画出的图像向左倾斜），中位数大于算数平均数。因此在很多情况下，我们可以通过比较样本的均值和中位数对数据的分布对称性进行一个初判断。</p>
+<p><strong>众数</strong>：在样本的所有观测值中，出现频率最大（出现次数最多）的数值称为众数。这里需要说明的是，当数据量很大而且数值不会多次重复出现时众数并不能给我带来太多的信息。比如当你计算上万个基因的表达量后，得到众数最可能的是0，因为每个基因的表达值或多或少都有一些不同，这时候出现最多的就是那些没有检测的表达基因的0了。</p>
+<p>但是在遇到类别数据而非数值型数据时，众数有很大用处，或者说众数是唯一可以用于类别数据的平均数。</p>
+<p>在R中，上述提到的均值和中位数可以通过<code>mean(data)</code>和<code>median(data)</code>函数进行计算,而中位数可以通过<code>modeest</code>包的<code>mfv(data)</code>函数得到。</p>
+</div>
+<div id="e695b0e68daee79a84e58f98e5bc82e680a7efbc88e7a6bbe695a3e680a7efbc89" class="section level4 unnumbered">
+<h4>数据的变异性（离散性）</h4>
+<p>平均数显然不能说明一切问题，因为在说明样本数据时我们还必须考虑数据是不是过于分散。例如在篮球队员的投篮平均得分相同的情况下，更重要的时知道他们哪些人发挥得更加稳定。</p>
+<p><strong>极差(range)</strong>指的是一个样本中最大值和最小值之间的差值。在统计学中也称为全距，它能够指出数据的“宽度”（范围）。但是，它和均值一样非常容易受到极端值得影响，而且会受到样本量的明显影响。</p>
+<p>针对极差的缺点，统计学中又引入了<strong>分位数(quantiles)</strong>的概念，通俗讲就是把数据的“宽度”细分后再去进行比较从而更好地描述数据的分布形态。分位数用三个点将从小到大排列好的数据分为四个相等部分，而这三个点也就是我们常说的四分位数，分别叫做下四分位数，中位数和上四分位数。当然，除了四分位你也可以计算十分位或者百分位。</p>
+<p>分位数的引进能够说明数值的位置，但是无法说明某个数值在该位置出现的概率。为了说明数据的稳定程度，我们可以考虑计算每个数据值到平均数的距离（此处，你可以脑补一个高瘦形的数据曲线和矮胖形的数据曲线），但是样本中所有观测值和均值的偏差和永远是0。为了解决这种正负距离相互抵消的问题，统计学中又引入了<strong>方差(variance)</strong>和<strong>标准差(standard deviation)</strong>的概念。</p>
+<p>所谓<strong>方差</strong>是指数值与均值距离平方数的平均数，而<strong>标准差</strong>则是方差的平方根。标准差体现了数据的变异度，标准差越小，数值和均值越近。通常，均值用μ表示，而标准差用σ表示。</p>
+<p>在R中，可以通过<code>quantile()</code>计算分位数，通过<code>var()</code>来计算方差，通过<code>sd()</code>来计算标准差。</p>
+<p>有个<strong>标准差</strong>的概念，随之而来的问题是当两个样本标准差相同但是均值相差很大时该如何做出区分。统计学中随之引入了<strong>变异系数(coefficient of variation, CV)</strong>的概念，变异系数是指样本标准差除以均值再乘100%。变异系数不会受数据尺度的影响，因此常用来进行不同样本之间变异性的比较。</p>
+<p>在实际的数据分析中，如果要比较不同数据集(均值和标准差都不同)之间的数值，通常会引入<strong>z score</strong>的概念，z score 的计算方法是用某一数值减去均值在除以标准差。通过对原始数据进行z变换，我们将不同数据集转化为一个新的均值为0，标准差为1的分布。</p>
+</div>
+<div id="e8aea1e7ae97e68f8fe8bfb0e680a7e7bb9fe8aea1e9878f" class="section level4 unnumbered">
+<h4>计算描述性统计量</h4>
+<p>在R中，使用<code>summary()</code>函数方便的得到一个data frame 的各种描述性统计量。当某一列是数值型变量时，你可以得到该列数据的均值、极值、方差和分位数。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(iris) </code></pre></div>
+<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
+##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
+##  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
+##  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
+##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
+##  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
+##        Species  
+##  setosa    :50  
+##  versicolor:50  
+##  virginica :50  
+##                 
+##                 
+## </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#查看常用的描述统计量</span></code></pre></div>
+</div>
+<div id="e5bda2e8b1a1e58c96e5b195e7a4ba" class="section level4 unnumbered">
+<h4>形象化展示</h4>
+<p>所谓形象化展示就是用图示的方法来展示数据结果，比较常见的方法有条形图，箱线图，直方图等。</p>
+<p>下面我们使用R中内置的数据<strong>Edgar Anderson’s Iris Data</strong>进行一些简单展示。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 使用箱线图展示某一列数据的分布情况</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(iris<span class="op">$</span>Sepal.Length)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 使用直方图展示某一列数据的分布情况</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">ecdf</span>(iris<span class="op">$</span>Sepal.Length))</code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 绘制简单的累积分布函数图展示某一列数据分布情况</span></code></pre></div>
+</div>
+</div>
+<div id="section-1.1.2" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> 第二节</h3>
+</div>
+<div id="section-1.1.3" class="section level3">
+<h3><span class="header-section-number">1.1.3</span> 统计分布</h3>
+<p>正态分布 指数分步 γ(伽玛)分布 weibull分布 F分布 T分布 β(贝塔)分布 χ²(卡方)分布 均匀分布</p>
+<p>介绍这些分布跟NGS组学的关联</p>
+</div>
+</div>
+<div id="section-1.2" class="section level2">
+<h2><span class="header-section-number">1.2</span> 常用统计方法</h2>
+<div id="section-1.2.1" class="section level3">
+<h3><span class="header-section-number">1.2.1</span> 差异分析</h3>
+</div>
+<div id="section-1.2.2" class="section level3">
+<h3><span class="header-section-number">1.2.2</span> 生存分析</h3>
+</div>
+<div id="section-1.2.3" class="section level3">
+<h3><span class="header-section-number">1.2.3</span> 主成分分析</h3>
+</div>
+<div id="section-1.2.4" class="section level3">
+<h3><span class="header-section-number">1.2.4</span> 进化树</h3>
+</div>
+</div>
+<div id="section-1.3" class="section level2">
+<h2><span class="header-section-number">1.3</span> 常用可视化工具</h2>
+<div id="section-1.3.1" class="section level3">
+<h3><span class="header-section-number">1.3.1</span> 网页工具</h3>
+</div>
+<div id="section-1.3.2" class="section level3">
+<h3><span class="header-section-number">1.3.2</span> 本地软件</h3>
+<blockquote>
+<p>IGV等</p>
+</blockquote>
+</div>
+<div id="r" class="section level3">
+<h3><span class="header-section-number">1.3.3</span> R绘图系统</h3>
+<p>这部分内容主要从总体上介绍R的两大作图系统：传统绘图系统和grid绘图系统。尽管这部分内容不会详细介绍如何去绘制某一种具体的图形，但是了解这部分知识却能帮助你在日后作图时根据需求修改已有的绘图工具。</p>
+<p>无论是传统绘图系统还是grid绘图系统，它们都是建立在<code>grDevices</code>包的基础上。<code>grDevices</code>被称之为绘图引擎，提供了一系列R中的基本绘图函数，负责绘图参数和图片输出，并且几乎所有的高级的绘图函数都是建立在它的基础上。虽然它如此重要，功能十分强大，但但是由于太过底层，一般只有R包开发者才会深入研究。</p>
+<p>建立在绘图引擎之上，有两套互斥的绘图包：graphics包和grid包，将R的绘图功能从主体上一分为二。</p>
+<p><strong>传统绘图系统</strong>：graphics包之所以称其为传统绘图系统，是因为它实现了很多S语言（S语言由贝尔实验室开发并投入商用）所使用的绘图工具，比如说能用于绘制散点图和条形图的<code>plot()</code>，能用于绘制饼图的<code>pie()</code>，能用于绘制条形图的<code>barplot()</code>，而且每一个作图函数都提供了大量的图形参数用于修改图形。我们可以通过<code>library(help=&quot;graphics&quot;)</code>查看有哪些绘图函数，使用<code>demo(&quot;graphics&quot;)</code>了解传统绘图系统能绘制哪些图形。</p>
+<p><strong>GRID绘图系统</strong>: grid包与传统绘图系统不同，它不负责提供完整的图形函数。它的强大之处在于提供了基于<strong>视图概念</strong>定位区域的强大能力，相当于将R变成了Photoshop，也就是意味着你可以将图形视为不同区域元素的叠加，也意味着你可以做出非常复杂的图形，比如说下图</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(grid)
+<span class="kw">grid.newpage</span>()
+<span class="kw">grid.circle</span>(<span class="dt">x=</span><span class="kw">seq</span>(<span class="fl">0.1</span>,<span class="fl">0.9</span>,<span class="dt">length=</span><span class="dv">100</span>),
+            <span class="dt">y=</span><span class="fl">0.5</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.4</span><span class="op">*</span><span class="kw">sin</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">2</span><span class="op">*</span>pi,<span class="dt">length=</span><span class="dv">100</span>)),
+            <span class="dt">r=</span><span class="kw">abs</span>(<span class="fl">0.1</span><span class="op">*</span><span class="kw">cos</span>(<span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span>pi, <span class="dt">length=</span><span class="dv">100</span>))))</code></pre></div>
+<p><img src="04-statistics_files/figure-html/circle-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 图形来自于R会图形系统（第二版）</span></code></pre></div>
+<p>不过人们基本上不会直接使用grid绘制统计图形，一般是采用基于<strong>画笔系统</strong>的<code>lattice</code>包或基于<strong>图形语法</strong>的<code>ggplot2</code>。 你或许会问，“知道<code>lattice</code>和<code>ggplot2</code>是基于<code>grid</code>对今后作图由什么帮助吗？”。这里就谈及一点，你可以使用<code>grid</code>定制<code>ggplot2</code>输出，也就是将多幅图形集中在一起.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">grid.newpage</span>()
+<span class="kw">pushViewport</span>(<span class="kw">viewport</span>(<span class="dt">x=</span><span class="dv">0</span>, <span class="dt">width=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>, <span class="dt">just=</span><span class="st">&quot;left&quot;</span>))
+<span class="kw">print</span>(<span class="kw">ggplot</span>(mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>vs)) <span class="op">+</span><span class="st"> </span>
+<span class="st">        </span><span class="kw">geom_bar</span>(),
+      <span class="dt">newpage=</span><span class="ot">FALSE</span>)
+<span class="kw">popViewport</span>()
+<span class="kw">pushViewport</span>(<span class="kw">viewport</span>(<span class="dt">x=</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span>,<span class="dt">width=</span><span class="dv">2</span><span class="op">/</span><span class="dv">3</span>, <span class="dt">just=</span><span class="st">&quot;left&quot;</span>))
+<span class="kw">print</span>(<span class="kw">ggplot</span>(mtcars, <span class="kw">aes</span>(<span class="dt">x=</span>disp, <span class="dt">y=</span>mpg)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color=</span>drat)),
+  <span class="dt">newpage=</span><span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/multi-plot-1.png" width="672" /></p>
+<p>以上仅仅R语言图形系统的简单介绍，如果你只是想要绘制简单的图形，你只要继续看<a href="http://mp.weixin.qq.com/s/WN4TSMNjH4b6vZgYVjaRvQ">如何通过Google来使用ggplot2可视化</a> 这一篇就够用了。但是如果你希望用R，而不是PS和AI，去随心所欲绘制出任何图形，那么你需要至少看完如下3本书：</p>
+<ul>
+<li><a href="https://book.douban.com/subject/24527091/">ggplot2：数据分析与图形艺术</a></li>
+<li><a href="https://book.douban.com/subject/25873705/">R数据可视化手册</a></li>
+<li><a href="https://book.douban.com/subject/26792674/">R绘图系统</a></li>
+</ul>
+</div>
+</div>
+<div id="section-1.4" class="section level2">
+<h2><span class="header-section-number">1.4</span> 可视化举例</h2>
+<div id="section-1.4.1" class="section level3">
+<h3><span class="header-section-number">1.4.1</span> 表达矩阵可视化大全</h3>
+<p>无论是芯片数据，还是高通量测序，结果总能得到每个样本的基因表达量数据。而将这些数据导入到R语言，就能得到一组表达量矩阵。对于这组数据，至少可以绘制如下图形 - 箱形图(boxplot) - 小提琴图(vioplot) - 柱状图(histogram) - 密度图(density) - 配对图(gpairs) - 聚类图(cluster) - 主成分分析(PCA) - 热图(heatmap) - 火山图(volcano plot)</p>
+<p>在绘制这些图形之前，首先需要先安装加载一系列包</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;corrplot&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;corrplot&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;corrplot&#39;</span>) }
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;gpairs&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;gpairs&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;gpairs&#39;</span>) }
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;vioplot&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;vioplot&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;vioplot&#39;</span>) }
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;tidyverse&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;tidyverse&#39;</span>) }
+<span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;CLL&#39;</span>)) {<span class="kw">biocLite</span>(<span class="st">&quot;CLL&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;CLL&#39;</span>) }</code></pre></div>
+<p>随后是加载绘图所需的表达矩阵数据。分析所用的表达矩阵数据对象(ExpressionSet obejct)由<a href="#Affymetrix">Affymetrix</a>的 AffyBatch 对象经 gcrma 处理后获得。</p>
+<p>原数据为22组样本的12,625个基因表达状况，根据疾病状态分为两组：stable 或 progressive，此处仅选取前8个样本用作演示。</p>
+<p><strong>注</strong>: gcrma是Bioconductor中一个与芯片数据处理相关的包,主要功能是利用序列信息调整背景.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;sCLLex&quot;</span>)
+sCLLex &lt;-<span class="st"> </span>sCLLex[,<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>] <span class="co"># 样本数过多，仅选取前8个</span>
+group_List &lt;-<span class="st"> </span>sCLLex<span class="op">$</span>Disease <span class="co"># 获取分组信息</span>
+exprSet &lt;-<span class="st"> </span><span class="kw">exprs</span>(sCLLex) <span class="co"># 获取表达矩阵</span>
+<span class="kw">head</span>(exprSet, <span class="dt">n=</span><span class="dv">3</span>)</code></pre></div>
+<pre><code>##           CLL11.CEL CLL12.CEL CLL13.CEL CLL14.CEL CLL15.CEL CLL16.CEL
+## 1000_at    5.743132  6.219412  5.523328  5.340477  5.229904  4.920686
+## 1001_at    2.285143  2.291229  2.287986  2.295313  2.662170  2.278040
+## 1002_f_at  3.309294  3.318466  3.354423  3.327130  3.365113  3.568353
+##           CLL17.CEL CLL18.CEL
+## 1000_at    5.325348  4.826131
+## 1001_at    2.350796  2.325163
+## 1002_f_at  3.502440  3.394410</code></pre>
+<p>之后，还要利用<code>tidyr::gather</code>将原本的<strong>宽数据</strong>重塑成<strong>长数据</strong>。这一步被称之为数据规整化，是数据分析流程中至关重要的一步，详见Hadley所写的<a href="http://r4ds.had.co.nz/tidy-data.html">Tidy data</a> 一章。当前数据存在问题是：列名(CLLxx.cCEL)应该是变量名，而这里却是变量的值。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">exprSet &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(exprSet)
+exprSet<span class="op">$</span>probe &lt;-<span class="st"> </span><span class="kw">row.names</span>(exprSet)
+exprSet_L &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">gather</span>(exprSet, <span class="dt">key=</span><span class="st">&#39;sample&#39;</span>,<span class="dt">value=</span><span class="st">&#39;value&#39;</span>,CLL11.CEL<span class="op">:</span>CLL18.CEL)
+exprSet_L<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw">rep</span>(group_List, <span class="dt">each=</span><span class="kw">nrow</span>(exprSet))
+<span class="kw">rbind</span>(<span class="kw">head</span>(exprSet_L,<span class="dv">2</span>), <span class="kw">tail</span>(exprSet_L,<span class="dv">2</span>))</code></pre></div>
+<pre><code>##                       probe    sample    value    group
+## 1                   1000_at CLL11.CEL 5.743132 progres.
+## 2                   1001_at CLL11.CEL 2.285143 progres.
+## 100999 AFFX-YEL021w/URA3_at CLL18.CEL 3.651349   stable
+## 101000 AFFX-YEL024w/RIP1_at CLL18.CEL 2.914602   stable</code></pre>
+<p>经过这基本处理，便能得到以探针，样本，处理结果和组别信息为列名的数据框。</p>
+<p>完成了上述准备工作后，先用箱形图，小提琴图，柱状图，密度图了解各个样本表达数据的分布情况。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(grid)
+<span class="kw">grid.newpage</span>()
+<span class="kw">pushViewport</span>(<span class="kw">viewport</span>(<span class="dt">x=</span><span class="dv">0</span>, <span class="dt">width=</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dt">just=</span><span class="st">&quot;left&quot;</span>))
+p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(<span class="dt">x=</span>sample,<span class="dt">y=</span>value,<span class="dt">fill=</span>group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">90</span>, <span class="dt">hjust=</span><span class="dv">1</span>, <span class="dt">vjust=</span>.<span class="dv">5</span>))
+<span class="kw">print</span>(p1, <span class="dt">newpage=</span><span class="ot">FALSE</span>)
+<span class="kw">popViewport</span>()
+<span class="kw">pushViewport</span>(<span class="kw">viewport</span>(<span class="dt">x=</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dt">width=</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="dt">just=</span><span class="st">&quot;left&quot;</span>))
+p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(<span class="dt">x=</span>sample,<span class="dt">y=</span>value,<span class="dt">fill=</span>group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">90</span>, <span class="dt">hjust=</span><span class="dv">1</span>, <span class="dt">vjust=</span>.<span class="dv">5</span>))
+<span class="kw">print</span>(p2, <span class="dt">newpage=</span><span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/distribution-1.png" width="672" /></p>
+<p>其中小提琴图可以认为是箱形图与核密度图的结合体。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="co"># 条形图</span>
+p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(value,<span class="dt">fill=</span>group))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">200</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>sample, <span class="dt">nrow =</span> <span class="dv">4</span>)
+<span class="kw">print</span>(p3)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/density-plot-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 密度图</span>
+p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(value,<span class="dt">col=</span>group))<span class="op">+</span><span class="kw">geom_density</span>()<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>sample, <span class="dt">nrow =</span> <span class="dv">4</span>)
+<span class="kw">print</span>(p4)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/density-plot-2.png" width="672" /></p>
+</div>
+<div id="section-1.4.2" class="section level3">
+<h3><span class="header-section-number">1.4.2</span> 热图</h3>
+</div>
+<div id="section-1.4.3" class="section level3">
+<h3><span class="header-section-number">1.4.3</span> 火山图</h3>
+</div>
+<div id="section-1.4.4" class="section level3">
+<h3><span class="header-section-number">1.4.4</span> 染色体结构图</h3>
+</div>
+<div id="reads" class="section level3">
+<h3><span class="header-section-number">1.4.5</span> reads覆盖图</h3>
+</div>
+<div id="section-1.4.6" class="section level3">
+<h3><span class="header-section-number">1.4.6</span> 其它</h3>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yihui/bookdown-chinese/edit/master/%s",
+"text": "缂栬緫"
+},
+"download": null,
+"toc": {
+"collapse": "none"
+},
+"search": false
+});
+});
+</script>
+
+</body>
+
+</html>
