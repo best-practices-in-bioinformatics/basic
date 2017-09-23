@@ -120,11 +120,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="1.4" data-path=""><a href="#section-1.4"><i class="fa fa-check"></i><b>1.4</b> 可视化举例</a><ul>
 <li class="chapter" data-level="1.4.1" data-path=""><a href="#section-1.4.1"><i class="fa fa-check"></i><b>1.4.1</b> 表达矩阵可视化大全</a></li>
-<li class="chapter" data-level="1.4.2" data-path=""><a href="#section-1.4.2"><i class="fa fa-check"></i><b>1.4.2</b> 热图</a></li>
-<li class="chapter" data-level="1.4.3" data-path=""><a href="#section-1.4.3"><i class="fa fa-check"></i><b>1.4.3</b> 火山图</a></li>
-<li class="chapter" data-level="1.4.4" data-path=""><a href="#section-1.4.4"><i class="fa fa-check"></i><b>1.4.4</b> 染色体结构图</a></li>
-<li class="chapter" data-level="1.4.5" data-path=""><a href="#reads"><i class="fa fa-check"></i><b>1.4.5</b> reads覆盖图</a></li>
-<li class="chapter" data-level="1.4.6" data-path=""><a href="#section-1.4.6"><i class="fa fa-check"></i><b>1.4.6</b> 其它</a></li>
+<li class="chapter" data-level="1.4.2" data-path=""><a href="#section-1.4.2"><i class="fa fa-check"></i><b>1.4.2</b> 染色体结构图</a></li>
+<li class="chapter" data-level="1.4.3" data-path=""><a href="#reads"><i class="fa fa-check"></i><b>1.4.3</b> reads覆盖图</a></li>
+<li class="chapter" data-level="1.4.4" data-path=""><a href="#section-1.4.4"><i class="fa fa-check"></i><b>1.4.4</b> 其它</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -340,28 +338,39 @@ p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span 
 <p>其中小提琴图可以认为是箱形图与核密度图的结合体。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="co"># 条形图</span>
-p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(value,<span class="dt">fill=</span>group))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">200</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>sample, <span class="dt">nrow =</span> <span class="dv">4</span>)
+p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(value,<span class="dt">fill=</span>group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">200</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>sample, <span class="dt">nrow =</span> <span class="dv">4</span>)
 <span class="kw">print</span>(p3)</code></pre></div>
 <p><img src="04-statistics_files/figure-html/density-plot-1.png" width="672" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 密度图</span>
-p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(value,<span class="dt">col=</span>group))<span class="op">+</span><span class="kw">geom_density</span>()<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>sample, <span class="dt">nrow =</span> <span class="dv">4</span>)
+p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(value,<span class="dt">col=</span>group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>()<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>sample, <span class="dt">nrow =</span> <span class="dv">4</span>)
 <span class="kw">print</span>(p4)</code></pre></div>
-<p><img src="04-statistics_files/figure-html/density-plot-2.png" width="672" /></p>
+<p><img src="04-statistics_files/figure-html/density-plot-2.png" width="672" /> 这里使用了ggplot2的分面特性，<code>fact_wrao()</code>为每一个变量都绘制相应的图。如果不使用分面，还可以观察不同分组数据在同一幅图中的分布情况。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span class="kw">aes</span>(value,<span class="dt">col=</span>group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>() 
+<span class="kw">print</span>(p5)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>上面提及的四类图形描述的都是每一组样本各自的情况，而下面谈到的<code>gpairs</code>和<code>cluster</code>则是探索不同变量之间的关系。</p>
+<p><code>gpairs</code>能够产生分组变量两两之间的关系。要求的输入数据为<strong>宽数据</strong>，即每列代表不同的细胞，每行表示不同的基因。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gpairs)
+<span class="kw">gpairs</span>(exprSet[,<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]
+       <span class="co">#,upper.pars = list(scatter = &#39;stats&#39;) </span>
+       <span class="co">#,lower.pars = list(scatter = &#39;corrgram&#39;)</span>
+      )</code></pre></div>
+<p><img src="04-statistics_files/figure-html/gpairs-1.png" width="672" /></p>
+<p>聚类分析通过计算基因表达量之间的欧几里得距离，从而对不同样本进行分类。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out.dist=<span class="kw">dist</span>(<span class="kw">t</span>(exprSet[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]),<span class="dt">method=</span><span class="st">&#39;euclidean&#39;</span>)
+out.hclust=<span class="kw">hclust</span>(out.dist,<span class="dt">method=</span><span class="st">&#39;complete&#39;</span>)
+<span class="kw">plot</span>(out.hclust)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/cluster-1.png" width="672" /></p>
+<p><strong>热图(heatmap)</strong>类似于散点图，只不过利用颜色表征数据的大小，因此</p>
 </div>
 <div id="section-1.4.2" class="section level3">
-<h3><span class="header-section-number">1.4.2</span> 热图</h3>
-</div>
-<div id="section-1.4.3" class="section level3">
-<h3><span class="header-section-number">1.4.3</span> 火山图</h3>
-</div>
-<div id="section-1.4.4" class="section level3">
-<h3><span class="header-section-number">1.4.4</span> 染色体结构图</h3>
+<h3><span class="header-section-number">1.4.2</span> 染色体结构图</h3>
 </div>
 <div id="reads" class="section level3">
-<h3><span class="header-section-number">1.4.5</span> reads覆盖图</h3>
+<h3><span class="header-section-number">1.4.3</span> reads覆盖图</h3>
 </div>
-<div id="section-1.4.6" class="section level3">
-<h3><span class="header-section-number">1.4.6</span> 其它</h3>
+<div id="section-1.4.4" class="section level3">
+<h3><span class="header-section-number">1.4.4</span> 其它</h3>
 </div>
 </div>
 </div>
