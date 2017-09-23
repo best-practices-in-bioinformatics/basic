@@ -116,19 +116,152 @@ T分布
 
 > IGV等
 
-### R语言基础绘图系
+### R绘图系统
+这部分内容主要从总体上介绍R的两大作图系统：传统绘图系统和grid绘图系统。尽管这部分内容不会详细介绍如何去绘制某一种具体的图形，但是了解这部分知识却能帮助你在日后作图时根据需求修改已有的绘图工具。
 
-### R语言ggplot2绘图系统
+无论是传统绘图系统还是grid绘图系统，它们都是建立在`grDevices`包的基础上。`grDevices`被称之为绘图引擎，提供了一系列R中的基本绘图函数，负责绘图参数和图片输出，并且几乎所有的高级的绘图函数都是建立在它的基础上。虽然它如此重要，功能十分强大，但但是由于太过底层，一般只有R包开发者才会深入研究。
+
+建立在绘图引擎之上，有两套互斥的绘图包：graphics包和grid包，将R的绘图功能从主体上一分为二。
+
+**传统绘图系统**：graphics包之所以称其为传统绘图系统，是因为它实现了很多S语言（S语言由贝尔实验室开发并投入商用）所使用的绘图工具，比如说能用于绘制散点图和条形图的`plot()`，能用于绘制饼图的`pie()`，能用于绘制条形图的`barplot()`，而且每一个作图函数都提供了大量的图形参数用于修改图形。我们可以通过`library(help="graphics")`查看有哪些绘图函数，使用`demo("graphics")`了解传统绘图系统能绘制哪些图形。
+
+
+**GRID绘图系统**: grid包与传统绘图系统不同，它不负责提供完整的图形函数。它的强大之处在于提供了基于**视图概念**定位区域的强大能力，相当于将R变成了Photoshop，也就是意味着你可以将图形视为不同区域元素的叠加，也意味着你可以做出非常复杂的图形，比如说下图
+```{r circle}
+library(grid)
+grid.newpage()
+grid.circle(x=seq(0.1,0.9,length=100),
+            y=0.5 + 0.4*sin(seq(0,2*pi,length=100)),
+            r=abs(0.1*cos(seq(0, 2 *pi, length=100))))
+# 图形来自于R会图形系统（第二版）
+```
+
+不过人们基本上不会直接使用grid绘制统计图形，一般是采用基于**画笔系统**的`lattice`包或基于**图形语法**的`ggplot2`。 你或许会问，“知道`lattice`和`ggplot2`是基于`grid`对今后作图由什么帮助吗？”。这里就谈及一点，你可以使用`grid`定制`ggplot2`输出，也就是将多幅图形集中在一起.
+```{r multi-plot}
+library(ggplot2)
+grid.newpage()
+pushViewport(viewport(x=0, width=1/3, just="left"))
+print(ggplot(mtcars, aes(x=vs)) + 
+        geom_bar(),
+      newpage=FALSE)
+popViewport()
+pushViewport(viewport(x=1/3,width=2/3, just="left"))
+print(ggplot(mtcars, aes(x=disp, y=mpg)) +
+  geom_point(aes(color=drat)),
+  newpage=FALSE)
+  
+```
+
+以上仅仅R语言图形系统的简单介绍，如果你只是想要绘制简单的图形，你只要继续看[如何通过Google来使用ggplot2可视化](http://mp.weixin.qq.com/s/WN4TSMNjH4b6vZgYVjaRvQ) 这一篇就够用了。但是如果你希望用R，而不是PS和AI，去随心所欲绘制出任何图形，那么你需要至少看完如下3本书：
+
+- [ggplot2：数据分析与图形艺术](https://book.douban.com/subject/24527091/)
+- [R数据可视化手册](https://book.douban.com/subject/25873705/)
+- [R绘图系统](https://book.douban.com/subject/26792674/)
 
 ## 可视化举例
 
 ### 表达矩阵可视化大全
+无论是芯片数据，还是高通量测序，结果总能得到每个样本的基因表达量数据。而将这些数据导入到R语言，就能得到一组表达量矩阵。对于这组数据，至少可以绘制如下图形
+- 箱形图(boxplot)
+- 小提琴图(vioplot)
+- 柱状图(histogram)
+- 密度图(density)
+- 配对图(gpairs)
+- 聚类图(cluster)
+- 主成分分析(PCA)
+- 热图(heatmap)
+- 火山图(volcano plot)
 
-把rmd文件发在这里即可，[表达矩阵可视化](http://bio-info-trainee.com/tmp/basic_visualization_for_expression_matrix.html)
+在绘制这些图形之前，首先需要先安装加载一系列包
+```{r ,message=FALSE, warning=FALSE}
+if (! require('corrplot')) {install.packages("corrplot"); require('corrplot') }
+if (! require('gpairs')) {install.packages("gpairs"); require('gpairs') }
+if (! require('vioplot')) {install.packages("vioplot"); require('vioplot') }
+if (! require('tidyverse')) {install.packages("tidyverse"); require('tidyverse') }
+source("http://bioconductor.org/biocLite.R")
+if (! require('CLL')) {biocLite("CLL"); require('CLL') }
+```
 
-### 热图
+随后是加载绘图所需的表达矩阵数据。分析所用的表达矩阵数据对象(ExpressionSet obejct)由[Affymetrix](#Affymetrix)的 AffyBatch 对象经 gcrma 处理后获得。
 
-### 火山图
+原数据为22组样本的12,625个基因表达状况，根据疾病状态分为两组：stable 或 progressive，此处仅选取前8个样本用作演示。
+
+**注**: gcrma是Bioconductor中一个与芯片数据处理相关的包,主要功能是利用序列信息调整背景.
+```{r, message=FALSE, warning=FALSE}
+data("sCLLex")
+sCLLex <- sCLLex[,1:8] # 样本数过多，仅选取前8个
+group_List <- sCLLex$Disease # 获取分组信息
+exprSet <- exprs(sCLLex) # 获取表达矩阵
+head(exprSet, n=3)
+```
+
+之后，还要利用`tidyr::gather`将原本的**宽数据**重塑成**长数据**。这一步被称之为数据规整化，是数据分析流程中至关重要的一步，详见Hadley所写的[Tidy data](http://r4ds.had.co.nz/tidy-data.html) 一章。当前数据存在问题是：列名(CLLxx.cCEL)应该是变量名，而这里却是变量的值。
+```{r tidy-it}
+exprSet <- as.data.frame(exprSet)
+exprSet$probe <- row.names(exprSet)
+exprSet_L <- tidyr::gather(exprSet, key='sample',value='value',CLL11.CEL:CLL18.CEL)
+exprSet_L$group <- rep(group_List, each=nrow(exprSet))
+rbind(head(exprSet_L,2), tail(exprSet_L,2))
+```
+
+经过这基本处理，便能得到以探针，样本，处理结果和组别信息为列名的数据框。
+
+完成了上述准备工作后，先用箱形图，小提琴图，柱状图，密度图了解各个样本表达数据的分布情况。
+```{r distribution}
+library(ggplot2)
+library(grid)
+grid.newpage()
+pushViewport(viewport(x=0, width=1/2, just="left"))
+p1 <- ggplot(exprSet_L,aes(x=sample,y=value,fill=group)) + geom_boxplot() +
+  theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.5))
+print(p1, newpage=FALSE)
+popViewport()
+pushViewport(viewport(x=1/2, width=1/2, just="left"))
+p2 <- ggplot(exprSet_L,aes(x=sample,y=value,fill=group)) + geom_violin() + 
+  theme(axis.text.x = element_text(angle=90, hjust=1, vjust=.5))
+print(p2, newpage=FALSE)
+```
+
+其中小提琴图可以认为是箱形图与核密度图的结合体。
+
+```{r density-plot}
+library(ggplot2)
+# 条形图
+p3 <- ggplot(exprSet_L,aes(value,fill=group)) + geom_histogram(bins = 200)+facet_wrap(~sample, nrow = 4)
+print(p3)
+# 密度图
+p4 <- ggplot(exprSet_L,aes(value,col=group)) + geom_density()+facet_wrap(~sample, nrow = 4)
+print(p4)
+```
+这里使用了ggplot2的分面特性，`fact_wrao()`为每一个变量都绘制相应的图。如果不使用分面，还可以观察不同分组数据在同一幅图中的分布情况。
+```{r}
+p5 <- ggplot(exprSet_L,aes(value,col=group)) + geom_density() 
+print(p5)
+```
+
+上面提及的四类图形描述的都是每一组样本各自的情况，而下面谈到的`gpairs`和`cluster`则是探索不同变量之间的关系。
+
+`gpairs`能够产生分组变量两两之间的关系。要求的输入数据为**宽数据**，即每列代表不同的细胞，每行表示不同的基因。
+```{r gpairs, warning=FALSE}
+library(gpairs)
+gpairs(exprSet[,1:8]
+       #,upper.pars = list(scatter = 'stats') 
+       #,lower.pars = list(scatter = 'corrgram')
+      )
+```
+
+聚类分析通过计算基因表达量之间的欧几里得距离，从而对不同样本进行分类。
+```{r cluster}
+out.dist=dist(t(exprSet[1:8]),method='euclidean')
+out.hclust=hclust(out.dist,method='complete')
+plot(out.hclust)
+```
+
+**热图(heatmap)**类似于散点图，只不过利用颜色表征数据的大小，因此
+```{r}
+
+```
+
 
 ### 染色体结构图
 
