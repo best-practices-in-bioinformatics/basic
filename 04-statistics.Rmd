@@ -116,9 +116,47 @@ T分布
 
 > IGV等
 
-### R语言基础绘图系
+### R绘图系统
+这部分内容主要从总体上介绍R的两大作图系统：传统绘图系统和grid绘图系统。尽管这部分内容不会详细介绍如何去绘制某一种具体的图形，但是了解这部分知识却能帮助你在日后作图时根据需求修改已有的绘图工具。
 
-### R语言ggplot2绘图系统
+无论是传统绘图系统还是grid绘图系统，它们都是建立在`grDevices`包的基础上。`grDevices`被称之为绘图引擎，提供了一系列R中的基本绘图函数，负责绘图参数和图片输出，并且几乎所有的高级的绘图函数都是建立在它的基础上。虽然它如此重要，功能十分强大，但但是由于太过底层，一般只有R包开发者才会深入研究。
+
+建立在绘图引擎之上，有两套互斥的绘图包：graphics包和grid包，将R的绘图功能从主体上一分为二。
+
+**传统绘图系统**：graphics包之所以称其为传统绘图系统，是因为它实现了很多S语言（S语言由贝尔实验室开发并投入商用）所使用的绘图工具，比如说能用于绘制散点图和条形图的`plot()`，能用于绘制饼图的`pie()`，能用于绘制条形图的`barplot()`，而且每一个作图函数都提供了大量的图形参数用于修改图形。我们可以通过`library(help="graphics")`查看有哪些绘图函数，使用`demo("graphics")`了解传统绘图系统能绘制哪些图形。
+
+
+**GRID绘图系统**: grid包与传统绘图系统不同，它不负责提供完整的图形函数。它的强大之处在于提供了基于**视图概念**定位区域的强大能力，相当于将R变成了Photoshop，也就是意味着你可以将图形视为不同区域元素的叠加，也意味着你可以做出非常复杂的图形，比如说下图
+```{r circle}
+library(grid)
+grid.newpage()
+grid.circle(x=seq(0.1,0.9,length=100),
+            y=0.5 + 0.4*sin(seq(0,2*pi,length=100)),
+            r=abs(0.1*cos(seq(0, 2 *pi, length=100))))
+# 图形来自于R会图形系统（第二版）
+```
+
+不过人们基本上不会直接使用grid绘制统计图形，一般是采用基于**画笔系统**的`lattice`包或基于**图形语法**的`ggplot2`。 你或许会问，“知道`lattice`和`ggplot2`是基于`grid`对今后作图由什么帮助吗？”。这里就谈及一点，你可以使用`grid`定制`ggplot2`输出，也就是将多幅图形集中在一起.
+```{r multi-plot}
+library(ggplot2)
+grid.newpage()
+pushViewport(viewport(x=0, width=1/3, just="left"))
+print(ggplot(mtcars, aes(x=vs)) + 
+        geom_bar(),
+      newpage=FALSE)
+popViewport()
+pushViewport(viewport(x=1/3,width=2/3, just="left"))
+print(ggplot(mtcars, aes(x=disp, y=mpg)) +
+  geom_point(aes(color=drat)),
+  newpage=FALSE)
+  
+```
+
+以上仅仅R语言图形系统的简单介绍，如果你只是想要绘制简单的图形，你只要继续看[如何通过Google来使用ggplot2可视化](http://mp.weixin.qq.com/s/WN4TSMNjH4b6vZgYVjaRvQ) 这一篇就够用了。但是如果你希望用R，而不是PS和AI，去随心所欲绘制出任何图形，那么你需要至少看完如下3本书：
+
+- [ggplot2：数据分析与图形艺术](https://book.douban.com/subject/24527091/)
+- [R数据可视化手册](https://book.douban.com/subject/25873705/)
+- [R绘图系统](https://book.douban.com/subject/26792674/)
 
 ## 可视化举例
 
