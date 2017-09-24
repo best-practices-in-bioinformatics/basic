@@ -121,8 +121,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.4" data-path=""><a href="#section-1.4"><i class="fa fa-check"></i><b>1.4</b> 可视化举例</a><ul>
 <li class="chapter" data-level="1.4.1" data-path=""><a href="#section-1.4.1"><i class="fa fa-check"></i><b>1.4.1</b> 表达矩阵可视化大全</a></li>
 <li class="chapter" data-level="1.4.2" data-path=""><a href="#section-1.4.2"><i class="fa fa-check"></i><b>1.4.2</b> 染色体结构图</a></li>
-<li class="chapter" data-level="1.4.3" data-path=""><a href="#reads"><i class="fa fa-check"></i><b>1.4.3</b> reads覆盖图</a></li>
-<li class="chapter" data-level="1.4.4" data-path=""><a href="#section-1.4.4"><i class="fa fa-check"></i><b>1.4.4</b> 其它</a></li>
+<li class="chapter" data-level="1.4.3" data-path=""><a href="#section-1.4.3"><i class="fa fa-check"></i><b>1.4.3</b> 转录本结构图</a></li>
+<li class="chapter" data-level="1.4.4" data-path=""><a href="#reads"><i class="fa fa-check"></i><b>1.4.4</b> reads覆盖图</a></li>
+<li class="chapter" data-level="1.4.5" data-path=""><a href="#section-1.4.5"><i class="fa fa-check"></i><b>1.4.5</b> 其它</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -224,6 +225,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">1.2</span> 常用统计方法</h2>
 <div id="section-1.2.1" class="section level3">
 <h3><span class="header-section-number">1.2.1</span> 差异分析</h3>
+<p>差异分析一般指的是寻找</p>
 </div>
 <div id="section-1.2.2" class="section level3">
 <h3><span class="header-section-number">1.2.2</span> 生存分析</h3>
@@ -248,9 +250,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="r" class="section level3">
 <h3><span class="header-section-number">1.3.3</span> R绘图系统</h3>
-<p>这部分内容主要从总体上介绍R的两大作图系统：传统绘图系统和grid绘图系统。尽管这部分内容不会详细介绍如何去绘制某一种具体的图形，但是了解这部分知识却能帮助你在日后作图时根据需求修改已有的绘图工具。</p>
-<p>无论是传统绘图系统还是grid绘图系统，它们都是建立在<code>grDevices</code>包的基础上。<code>grDevices</code>被称之为绘图引擎，提供了一系列R中的基本绘图函数，负责绘图参数和图片输出，并且几乎所有的高级的绘图函数都是建立在它的基础上。虽然它如此重要，功能十分强大，但但是由于太过底层，一般只有R包开发者才会深入研究。</p>
-<p>建立在绘图引擎之上，有两套互斥的绘图包：graphics包和grid包，将R的绘图功能从主体上一分为二。</p>
+<p>这部分内容主要从总体上介绍R的两大作图系统：传统绘图系统和grid绘图系统。尽管这部分不会详细介绍如何去绘制某一种具体的图形，但是了解这部分知识却能帮助你在日后作图时根据需求修改已有的绘图工具。</p>
+<p>无论是传统绘图系统还是grid绘图系统，它们都是建立在<code>grDevices</code>包的基础上。<code>grDevices</code>被称之为绘图引擎，提供了一系列R中的基本绘图函数，负责绘图参数和图片输出，并且几乎所有的高级的绘图函数都是建立在它的基础上。虽然它如此重要，功能十分强大，但由于太过底层，一般只有R包开发者才会深入研究。建立在绘图引擎之上，有两套互不相容的绘图包：<code>graphics</code> 包和 <code>grid</code> 包，将R的绘图功能从主体上一分为二。</p>
 <p><strong>传统绘图系统</strong>：graphics包之所以称其为传统绘图系统，是因为它实现了很多S语言（S语言由贝尔实验室开发并投入商用）所使用的绘图工具，比如说能用于绘制散点图和条形图的<code>plot()</code>，能用于绘制饼图的<code>pie()</code>，能用于绘制条形图的<code>barplot()</code>，而且每一个作图函数都提供了大量的图形参数用于修改图形。我们可以通过<code>library(help=&quot;graphics&quot;)</code>查看有哪些绘图函数，使用<code>demo(&quot;graphics&quot;)</code>了解传统绘图系统能绘制哪些图形。</p>
 <p><strong>GRID绘图系统</strong>: grid包与传统绘图系统不同，它不负责提供完整的图形函数。它的强大之处在于提供了基于<strong>视图概念</strong>定位区域的强大能力，相当于将R变成了Photoshop，也就是意味着你可以将图形视为不同区域元素的叠加，也意味着你可以做出非常复杂的图形，比如说下图</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(grid)
@@ -291,8 +292,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;gpairs&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;gpairs&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;gpairs&#39;</span>) }
 <span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;vioplot&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;vioplot&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;vioplot&#39;</span>) }
 <span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;tidyverse&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;tidyverse&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;tidyverse&#39;</span>) }
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;RColorBrewer&#39;</span>)) {<span class="kw">install.packages</span>(<span class="st">&quot;RColorBrewer&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;RColorBrewer&#39;</span>) }
 <span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
-<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;CLL&#39;</span>)) {<span class="kw">biocLite</span>(<span class="st">&quot;CLL&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;CLL&#39;</span>) }</code></pre></div>
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;CLL&#39;</span>)) {<span class="kw">biocLite</span>(<span class="st">&quot;CLL&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;CLL&#39;</span>) }
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;pheatmap&#39;</span>)) {<span class="kw">biocLite</span>(<span class="st">&quot;pheatmap&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;pheatmap&#39;</span>) }
+<span class="cf">if</span> (<span class="op">!</span><span class="st"> </span><span class="kw">require</span>(<span class="st">&#39;limma&#39;</span>)) {<span class="kw">biocLite</span>(<span class="st">&quot;limma&quot;</span>); <span class="kw">require</span>(<span class="st">&#39;limma&#39;</span>) }</code></pre></div>
 <p>随后是加载绘图所需的表达矩阵数据。分析所用的表达矩阵数据对象(ExpressionSet obejct)由<a href="#Affymetrix">Affymetrix</a>的 AffyBatch 对象经 gcrma 处理后获得。</p>
 <p>原数据为22组样本的12,625个基因表达状况，根据疾病状态分为两组：stable 或 progressive，此处仅选取前8个样本用作演示。</p>
 <p><strong>注</strong>: gcrma是Bioconductor中一个与芯片数据处理相关的包,主要功能是利用序列信息调整背景.</p>
@@ -349,28 +353,119 @@ p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(exprSet_L,<span 
 <span class="kw">print</span>(p5)</code></pre></div>
 <p><img src="04-statistics_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>上面提及的四类图形描述的都是每一组样本各自的情况，而下面谈到的<code>gpairs</code>和<code>cluster</code>则是探索不同变量之间的关系。</p>
-<p><code>gpairs</code>能够产生分组变量两两之间的关系。要求的输入数据为<strong>宽数据</strong>，即每列代表不同的细胞，每行表示不同的基因。</p>
+<p><strong>配对关系图</strong>：<code>gpairs</code>能够产生分组变量两两之间的关系。要求的输入数据为<strong>宽数据</strong>，即每列代表不同的细胞，每行表示不同的基因。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gpairs)
 <span class="kw">gpairs</span>(exprSet[,<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]
        <span class="co">#,upper.pars = list(scatter = &#39;stats&#39;) </span>
        <span class="co">#,lower.pars = list(scatter = &#39;corrgram&#39;)</span>
       )</code></pre></div>
 <p><img src="04-statistics_files/figure-html/gpairs-1.png" width="672" /></p>
-<p>聚类分析通过计算基因表达量之间的欧几里得距离，从而对不同样本进行分类。</p>
+<p><strong>聚类图</strong>： 通过计算基因表达量之间的欧几里得距离，从而对不同样本进行分类。</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out.dist=<span class="kw">dist</span>(<span class="kw">t</span>(exprSet[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]),<span class="dt">method=</span><span class="st">&#39;euclidean&#39;</span>)
 out.hclust=<span class="kw">hclust</span>(out.dist,<span class="dt">method=</span><span class="st">&#39;complete&#39;</span>)
 <span class="kw">plot</span>(out.hclust)</code></pre></div>
 <p><img src="04-statistics_files/figure-html/cluster-1.png" width="672" /></p>
-<p><strong>热图(heatmap)</strong>类似于散点图，只不过利用颜色表征数据的大小，因此</p>
+<p><strong>热图(heatmap)</strong>： 本质上类似于散点图，只不过它利用颜色深浅表征数据的大小，以矩阵替代点。如果颜色表示为两个样本之间的距离，可以结合上面的聚类图，用来探索不同处理样本之间的差异。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sampleDistMatrix &lt;-<span class="st"> </span><span class="kw">as.matrix</span>( out.dist )
+<span class="kw">rownames</span>(sampleDistMatrix) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">colnames</span>(exprSet[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]), group_List,<span class="dt">sep=</span><span class="st">&quot;-&quot;</span>)
+<span class="kw">colnames</span>(sampleDistMatrix) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+colors &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>( <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>)) )(<span class="dv">255</span>)
+<span class="kw">pheatmap</span>(sampleDistMatrix,
+         <span class="dt">clustering_distance_rows =</span> out.dist,
+         <span class="dt">clustering_distance_cols =</span> out.dist,
+         <span class="dt">col =</span> colors)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/heatmap1-1.png" width="672" /></p>
+<p>当然，也能用热图揭示不同样本间基因表达模式的差异，这里颜色就用来表征基因表达量。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 选择表达量较高的基因</span>
+choose_gene &lt;-<span class="st"> </span><span class="kw">names</span>(<span class="kw">sort</span>(<span class="kw">apply</span>(exprSet[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>], <span class="dv">1</span>, mad),<span class="dt">decreasing =</span> T)[<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>])
+choose_matrix &lt;-<span class="st"> </span>exprSet[choose_gene, ][<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]
+choose_matrix &lt;-<span class="st"> </span><span class="kw">scale</span>(choose_matrix)
+
+<span class="co"># 使用pheatmap绘图</span>
+<span class="kw">rownames</span>(choose_matrix) &lt;-<span class="st"> </span><span class="kw">rownames</span>(choose_matrix)
+<span class="kw">colnames</span>(choose_matrix) &lt;-<span class="st"> </span>group_List
+colors &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>( <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;Blues&quot;</span>)) )(<span class="dv">255</span>)
+<span class="kw">pheatmap</span>(choose_matrix,
+         <span class="dt">col =</span> colors,
+         <span class="dt">fontsize_row =</span> <span class="dv">5</span>)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/heatmap-2-1.png" width="672" /> 除了<code>pheatmap</code>，<code>gplots</code>包的<code>heatmap.2()</code>和自带的<code>heatmap</code>也能绘制热图。热图是否美观主要取决于整体配色。下图直观的表达了一个观点，合理的配色是可视化效果的加分项。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap</span>(choose_matrix)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/heatmap-3-1.png" width="672" /></p>
+<p><strong>PCA</strong>: PCA本质是散点图，X和Y轴表示不同主成分，不同点之间的距离表示样本之间在两个主成分下的差异。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pc &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(exprSet[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]),<span class="dt">scale=</span><span class="ot">TRUE</span>)
+pcx &lt;-<span class="st"> </span><span class="kw">data.frame</span>(pc<span class="op">$</span>x)
+pcr &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">samples =</span> <span class="kw">rownames</span>(pcx),group_List, pcx) 
+p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(pcr, <span class="kw">aes</span>(PC1, PC2)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">5</span>, <span class="kw">aes</span>(<span class="dt">color =</span> group_List)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> samples),<span class="dt">hjust =</span> <span class="op">-</span><span class="fl">0.1</span>, <span class="dt">vjust =</span> <span class="op">-</span><span class="fl">0.3</span>)
+<span class="kw">print</span>(p)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><strong>火山图</strong>：火山图主要用在差异表达分析之后，用于直观地进行样本间差异基因筛选。本质上依旧是散点图，X轴表示取对数后的倍数变化(log2 Fold Change), Y轴则表示取对数后的显著性水平</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="kw">factor</span>(group_List))
+fit &lt;-<span class="st"> </span><span class="kw">lmFit</span>(exprSet[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>],design)
+fit &lt;-<span class="st"> </span><span class="kw">eBayes</span>(fit)
+DEG &lt;-<span class="st"> </span><span class="kw">topTable</span>(fit,<span class="dt">coef=</span><span class="dv">2</span>,<span class="dt">n=</span><span class="ot">Inf</span>)
+<span class="kw">with</span>(DEG, <span class="kw">plot</span>(logFC, <span class="op">-</span><span class="kw">log10</span>(P.Value), <span class="dt">pch=</span><span class="dv">20</span>, <span class="dt">main=</span><span class="st">&quot;Volcano plot&quot;</span>))   </code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>火山图既然本质上是散点图，那么只要以log2FC和-log10 pvalue 构建数据框，就可以使用 ggplot2 进行绘图，对目标区域进行高亮显示。</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logFC_cutoff &lt;-<span class="st"> </span><span class="kw">with</span>(DEG,<span class="kw">mean</span>(<span class="kw">abs</span>( logFC)) <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="kw">sd</span>(<span class="kw">abs</span>( logFC)) )
+DEG<span class="op">$</span>change &lt;-<span class="st">  </span><span class="kw">as.factor</span>(<span class="kw">ifelse</span>(DEG<span class="op">$</span>P.Value <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">&amp;</span><span class="st"> </span><span class="kw">abs</span>(DEG<span class="op">$</span>logFC) <span class="op">&gt;</span><span class="st"> </span>logFC_cutoff,
+                              <span class="kw">ifelse</span>(DEG<span class="op">$</span>logFC <span class="op">&gt;</span><span class="st"> </span>logFC_cutoff ,<span class="st">&#39;UP&#39;</span>,<span class="st">&#39;DOWN&#39;</span>),<span class="st">&#39;NOT&#39;</span>)
+                       )
+this_tile &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;Cutoff for logFC is &#39;</span>,<span class="kw">round</span>(logFC_cutoff,<span class="dv">3</span>),
+                    <span class="st">&#39;</span><span class="ch">\n</span><span class="st">The number of up gene is &#39;</span>,<span class="kw">nrow</span>(DEG[DEG<span class="op">$</span>change <span class="op">==</span><span class="st">&#39;UP&#39;</span>,]) ,
+                    <span class="st">&#39;</span><span class="ch">\n</span><span class="st">The number of down gene is &#39;</span>,<span class="kw">nrow</span>(DEG[DEG<span class="op">$</span>change <span class="op">==</span><span class="st">&#39;DOWN&#39;</span>,])
+)
+
+g &lt;-<span class="st">  </span><span class="kw">ggplot</span>(<span class="dt">data=</span>DEG, <span class="kw">aes</span>(<span class="dt">x=</span>logFC, <span class="dt">y=</span><span class="op">-</span><span class="kw">log10</span>(P.Value), <span class="dt">color=</span>change)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha=</span><span class="fl">0.4</span>, <span class="dt">size=</span><span class="fl">1.75</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_set</span>(<span class="kw">theme_set</span>(<span class="kw">theme_bw</span>(<span class="dt">base_size=</span><span class="dv">20</span>)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log2 fold change&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;-log10 p-value&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>( this_tile  ) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">size=</span><span class="dv">15</span>,<span class="dt">hjust =</span> <span class="fl">0.5</span>))<span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&#39;blue&#39;</span>,<span class="st">&#39;black&#39;</span>,<span class="st">&#39;red&#39;</span>))  ## corresponding to the levels(res$change)
+<span class="kw">print</span>(g)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 <div id="section-1.4.2" class="section level3">
 <h3><span class="header-section-number">1.4.2</span> 染色体结构图</h3>
 </div>
-<div id="reads" class="section level3">
-<h3><span class="header-section-number">1.4.3</span> reads覆盖图</h3>
+<div id="section-1.4.3" class="section level3">
+<h3><span class="header-section-number">1.4.3</span> 转录本结构图</h3>
+<p>RNA转录翻译时存在可变剪切，因此同一个基因在不同时间和空间下会产生不同的转录本。<a href="#GTF和GFF">GTF和GFF</a> 在数据存放类型一章介绍过，用于注释基因组上的基因。</p>
+<p>对转录本结构进行可视化的本质在于理解，Y轴用于区分不同的基因，X轴则表示染色体距离，以矩阵长度表示基因元件的起始和结束。因此，可以使用ggplot2<a href="https://mp.weixin.qq.com/s/UySUZRIpfX0VhNqveTPHwQ">根据GTF画基因的多个转录本结构</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gtf &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;data/gencode.v7.annotation_goodContig.gtf.gz&quot;</span>,<span class="dt">stringsAsFactors =</span> F,<span class="dt">header =</span> F,<span class="dt">comment.char =</span> <span class="st">&quot;#&quot;</span>,<span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)
+gtf &lt;-<span class="st"> </span>gtf[gtf[,<span class="dv">2</span>] <span class="op">==</span><span class="st">&#39;HAVANA&#39;</span>,]
+gtf &lt;-<span class="st"> </span>gtf[<span class="kw">grepl</span>(<span class="st">&#39;protein_coding&#39;</span>,gtf[,<span class="dv">9</span>]),]               
+gtf<span class="op">$</span>gene &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="kw">as.character</span>(gtf[,<span class="dv">9</span>]), <span class="cf">function</span>(x) <span class="kw">sub</span>(<span class="st">&quot;.*gene_name</span><span class="ch">\\</span><span class="st">s([^;]+);.*&quot;</span>, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, x))
+draw_gene &lt;-<span class="st"> &#39;ANXA1&#39;</span>
+structure &lt;-<span class="st"> </span>gtf[gtf<span class="op">$</span>gene<span class="op">==</span>draw_gene,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>)]
+<span class="kw">names</span>(structure) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;chr&quot;</span>, <span class="st">&quot;record&quot;</span>, <span class="st">&quot;start&quot;</span>, <span class="st">&quot;end&quot;</span>)
+idx &lt;-<span class="st"> </span><span class="kw">which</span>(structure<span class="op">$</span>record <span class="op">==</span><span class="st"> &quot;transcript&quot;</span>)
+s &lt;-<span class="st"> </span>idx<span class="op">+</span><span class="dv">1</span>
+e &lt;-<span class="st"> </span><span class="kw">c</span>(idx[<span class="op">-</span><span class="dv">1</span>]<span class="op">-</span><span class="dv">1</span>, <span class="kw">nrow</span>(structure))
+g &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">seq_along</span>(s), <span class="cf">function</span>(i) {
+  x &lt;-<span class="st"> </span>structure[s[i]<span class="op">:</span>e[i],]
+  x<span class="op">$</span>transcript &lt;-<span class="st"> </span>i  
+  <span class="kw">return</span>(x)
+}) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">do.call</span>(rbind, .)
+g &lt;-<span class="st"> </span>g[g<span class="op">$</span>record <span class="op">==</span><span class="st"> &quot;exon&quot;</span>,]
+g<span class="op">$</span>transcript &lt;-<span class="st"> </span><span class="kw">factor</span>(g<span class="op">$</span>transcript)
+
+<span class="kw">library</span>(ggplot2)
+<span class="kw">ggplot</span>(g) <span class="op">+</span><span class="st"> </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">x=</span>start, <span class="dt">xend=</span>end, <span class="dt">y=</span>transcript, <span class="dt">yend=</span>transcript, <span class="dt">color=</span>transcript), <span class="dt">size=</span><span class="dv">5</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;ANXA1&quot;</span>)</code></pre></div>
+<p><img src="04-statistics_files/figure-html/transript-plot-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 代码来源biobabble</span></code></pre></div>
 </div>
-<div id="section-1.4.4" class="section level3">
-<h3><span class="header-section-number">1.4.4</span> 其它</h3>
+<div id="reads" class="section level3">
+<h3><span class="header-section-number">1.4.4</span> reads覆盖图</h3>
+<p>由于染色体的物理特性，某些区域的测序深度会明显高于其他部分。reads覆盖图用于探索不同read在不同区域的覆盖情况。 其实本身原理很简单，就是把全基因组的每个坐标的depth都得到，然后得到depth的频数，然后画图。 我们可以对每条染色体单独来绘图，也可以针对全基因组来绘图。这里使用是我们存放在data文件下的wgs.bam。 脚本很简单：</p>
+<pre class="shel"><code>samtools mpileup wgs.bam |perl -alne &#39;{if($F[3]&gt;100){$depth{&quot;over100&quot;}++}else{$depth{$F[3]}++}}END{print &quot;$_\t$depth{$_}&quot; foreach sort{$a &lt;=&gt; $b}keys %depth}&#39; &gt; wgs.depth.txt</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&#39;data/wgs.depth.txt&#39;</span>, <span class="dt">stringsAsFactors =</span> F)
+
+<span class="kw">plot</span>(a[,<span class="dv">2</span>])</code></pre></div>
+<p><img src="04-statistics_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="section-1.4.5" class="section level3">
+<h3><span class="header-section-number">1.4.5</span> 其它</h3>
 </div>
 </div>
 </div>

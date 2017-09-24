@@ -101,6 +101,7 @@ T分布
 ## 常用统计方法
 
 ### 差异分析
+差异分析一般指的是寻找
 
 ### 生存分析
 
@@ -117,11 +118,9 @@ T分布
 > IGV等
 
 ### R绘图系统
-这部分内容主要从总体上介绍R的两大作图系统：传统绘图系统和grid绘图系统。尽管这部分内容不会详细介绍如何去绘制某一种具体的图形，但是了解这部分知识却能帮助你在日后作图时根据需求修改已有的绘图工具。
+这部分内容主要从总体上介绍R的两大作图系统：传统绘图系统和grid绘图系统。尽管这部分不会详细介绍如何去绘制某一种具体的图形，但是了解这部分知识却能帮助你在日后作图时根据需求修改已有的绘图工具。
 
-无论是传统绘图系统还是grid绘图系统，它们都是建立在`grDevices`包的基础上。`grDevices`被称之为绘图引擎，提供了一系列R中的基本绘图函数，负责绘图参数和图片输出，并且几乎所有的高级的绘图函数都是建立在它的基础上。虽然它如此重要，功能十分强大，但但是由于太过底层，一般只有R包开发者才会深入研究。
-
-建立在绘图引擎之上，有两套互斥的绘图包：graphics包和grid包，将R的绘图功能从主体上一分为二。
+无论是传统绘图系统还是grid绘图系统，它们都是建立在`grDevices`包的基础上。`grDevices`被称之为绘图引擎，提供了一系列R中的基本绘图函数，负责绘图参数和图片输出，并且几乎所有的高级的绘图函数都是建立在它的基础上。虽然它如此重要，功能十分强大，但由于太过底层，一般只有R包开发者才会深入研究。建立在绘图引擎之上，有两套互不相容的绘图包：`graphics` 包和 `grid` 包，将R的绘图功能从主体上一分为二。
 
 **传统绘图系统**：graphics包之所以称其为传统绘图系统，是因为它实现了很多S语言（S语言由贝尔实验室开发并投入商用）所使用的绘图工具，比如说能用于绘制散点图和条形图的`plot()`，能用于绘制饼图的`pie()`，能用于绘制条形图的`barplot()`，而且每一个作图函数都提供了大量的图形参数用于修改图形。我们可以通过`library(help="graphics")`查看有哪些绘图函数，使用`demo("graphics")`了解传统绘图系统能绘制哪些图形。
 
@@ -178,8 +177,11 @@ if (! require('corrplot')) {install.packages("corrplot"); require('corrplot') }
 if (! require('gpairs')) {install.packages("gpairs"); require('gpairs') }
 if (! require('vioplot')) {install.packages("vioplot"); require('vioplot') }
 if (! require('tidyverse')) {install.packages("tidyverse"); require('tidyverse') }
+if (! require('RColorBrewer')) {install.packages("RColorBrewer"); require('RColorBrewer') }
 source("http://bioconductor.org/biocLite.R")
 if (! require('CLL')) {biocLite("CLL"); require('CLL') }
+if (! require('pheatmap')) {biocLite("pheatmap"); require('pheatmap') }
+if (! require('limma')) {biocLite("limma"); require('limma') }
 ```
 
 随后是加载绘图所需的表达矩阵数据。分析所用的表达矩阵数据对象(ExpressionSet obejct)由[Affymetrix](#Affymetrix)的 AffyBatch 对象经 gcrma 处理后获得。
@@ -241,7 +243,7 @@ print(p5)
 
 上面提及的四类图形描述的都是每一组样本各自的情况，而下面谈到的`gpairs`和`cluster`则是探索不同变量之间的关系。
 
-`gpairs`能够产生分组变量两两之间的关系。要求的输入数据为**宽数据**，即每列代表不同的细胞，每行表示不同的基因。
+**配对关系图**：`gpairs`能够产生分组变量两两之间的关系。要求的输入数据为**宽数据**，即每列代表不同的细胞，每行表示不同的基因。
 ```{r gpairs, warning=FALSE}
 library(gpairs)
 gpairs(exprSet[,1:8]
@@ -250,22 +252,129 @@ gpairs(exprSet[,1:8]
       )
 ```
 
-聚类分析通过计算基因表达量之间的欧几里得距离，从而对不同样本进行分类。
+**聚类图**： 通过计算基因表达量之间的欧几里得距离，从而对不同样本进行分类。
 ```{r cluster}
 out.dist=dist(t(exprSet[1:8]),method='euclidean')
 out.hclust=hclust(out.dist,method='complete')
 plot(out.hclust)
 ```
 
-**热图(heatmap)**类似于散点图，只不过利用颜色表征数据的大小，因此
-```{r}
-
+**热图(heatmap)**： 本质上类似于散点图，只不过它利用颜色深浅表征数据的大小，以矩阵替代点。如果颜色表示为两个样本之间的距离，可以结合上面的聚类图，用来探索不同处理样本之间的差异。
+```{r heatmap1}
+sampleDistMatrix <- as.matrix( out.dist )
+rownames(sampleDistMatrix) <- paste(colnames(exprSet[1:8]), group_List,sep="-")
+colnames(sampleDistMatrix) <- NULL
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+pheatmap(sampleDistMatrix,
+         clustering_distance_rows = out.dist,
+         clustering_distance_cols = out.dist,
+         col = colors)
 ```
 
+当然，也能用热图揭示不同样本间基因表达模式的差异，这里颜色就用来表征基因表达量。
+```{r heatmap-2}
+# 选择表达量较高的基因
+choose_gene <- names(sort(apply(exprSet[1:8], 1, mad),decreasing = T)[1:50])
+choose_matrix <- exprSet[choose_gene, ][1:8]
+choose_matrix <- scale(choose_matrix)
+
+# 使用pheatmap绘图
+rownames(choose_matrix) <- rownames(choose_matrix)
+colnames(choose_matrix) <- group_List
+colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
+pheatmap(choose_matrix,
+         col = colors,
+         fontsize_row = 5)
+```
+除了`pheatmap`，`gplots`包的`heatmap.2()`和自带的`heatmap`也能绘制热图。热图是否美观主要取决于整体配色。下图直观的表达了一个观点，合理的配色是可视化效果的加分项。
+```{r heatmap-3}
+heatmap(choose_matrix)
+```
+
+**PCA**: PCA本质是散点图，X和Y轴表示不同主成分，不同点之间的距离表示样本之间在两个主成分下的差异。
+```{r}
+pc <- prcomp(t(exprSet[1:8]),scale=TRUE)
+pcx <- data.frame(pc$x)
+pcr <- cbind(samples = rownames(pcx),group_List, pcx) 
+p <- ggplot(pcr, aes(PC1, PC2)) + geom_point(size = 5, aes(color = group_List)) +
+  geom_text(aes(label = samples),hjust = -0.1, vjust = -0.3)
+print(p)
+```
+
+**火山图**：火山图主要用在差异表达分析之后，用于直观地进行样本间差异基因筛选。本质上依旧是散点图，X轴表示取对数后的倍数变化(log2 Fold Change), Y轴则表示取对数后的显著性水平
+```{r}
+design <- model.matrix(~factor(group_List))
+fit <- lmFit(exprSet[1:8],design)
+fit <- eBayes(fit)
+DEG <- topTable(fit,coef=2,n=Inf)
+with(DEG, plot(logFC, -log10(P.Value), pch=20, main="Volcano plot"))   
+```
+
+火山图既然本质上是散点图，那么只要以log2FC和-log10 pvalue 构建数据框，就可以使用 ggplot2 进行绘图，对目标区域进行高亮显示。
+```{r}
+logFC_cutoff <- with(DEG,mean(abs( logFC)) + 2*sd(abs( logFC)) )
+DEG$change <-  as.factor(ifelse(DEG$P.Value < 0.05 & abs(DEG$logFC) > logFC_cutoff,
+                              ifelse(DEG$logFC > logFC_cutoff ,'UP','DOWN'),'NOT')
+                       )
+this_tile <- paste0('Cutoff for logFC is ',round(logFC_cutoff,3),
+                    '\nThe number of up gene is ',nrow(DEG[DEG$change =='UP',]) ,
+                    '\nThe number of down gene is ',nrow(DEG[DEG$change =='DOWN',])
+)
+
+g <-  ggplot(data=DEG, aes(x=logFC, y=-log10(P.Value), color=change)) +
+  geom_point(alpha=0.4, size=1.75) +
+  theme_set(theme_set(theme_bw(base_size=20)))+
+  xlab("log2 fold change") + ylab("-log10 p-value") +
+  ggtitle( this_tile  ) + theme(plot.title = element_text(size=15,hjust = 0.5))+
+  scale_colour_manual(values = c('blue','black','red'))  ## corresponding to the levels(res$change)
+print(g)
+```
 
 ### 染色体结构图
 
+### 转录本结构图
+RNA转录翻译时存在可变剪切，因此同一个基因在不同时间和空间下会产生不同的转录本。[GTF和GFF](#GTF和GFF) 在数据存放类型一章介绍过，用于注释基因组上的基因。
+
+对转录本结构进行可视化的本质在于理解，Y轴用于区分不同的基因，X轴则表示染色体距离，以矩阵长度表示基因元件的起始和结束。因此，可以使用ggplot2[根据GTF画基因的多个转录本结构](https://mp.weixin.qq.com/s/UySUZRIpfX0VhNqveTPHwQ)
+```{r transript-plot}
+gtf <- read.table("data/gencode.v7.annotation_goodContig.gtf.gz",stringsAsFactors = F,header = F,comment.char = "#",sep = '\t')
+gtf <- gtf[gtf[,2] =='HAVANA',]
+gtf <- gtf[grepl('protein_coding',gtf[,9]),]               
+gtf$gene <- sapply(as.character(gtf[,9]), function(x) sub(".*gene_name\\s([^;]+);.*", "\\1", x))
+draw_gene <- 'ANXA1'
+structure <- gtf[gtf$gene==draw_gene,c(1,3:5)]
+names(structure) <- c("chr", "record", "start", "end")
+idx <- which(structure$record == "transcript")
+s <- idx+1
+e <- c(idx[-1]-1, nrow(structure))
+g <- lapply(seq_along(s), function(i) {
+  x <- structure[s[i]:e[i],]
+  x$transcript <- i  
+  return(x)
+}) %>% do.call(rbind, .)
+g <- g[g$record == "exon",]
+g$transcript <- factor(g$transcript)
+
+library(ggplot2)
+ggplot(g) + geom_segment(aes(x=start, xend=end, y=transcript, yend=transcript, color=transcript), size=5) + theme(legend.position="none") + labs(title="ANXA1")
+# 代码来源biobabble
+```
+
 ### reads覆盖图
+由于染色体的物理特性，某些区域的测序深度会明显高于其他部分。reads覆盖图用于探索不同read在不同区域的覆盖情况。 其实本身原理很简单，就是把全基因组的每个坐标的depth都得到，然后得到depth的频数，然后画图。
+我们可以对每条染色体单独来绘图，也可以针对全基因组来绘图。这里使用是我们存放在data文件下的wgs.bam。 脚本很简单：
+```shell
+samtools mpileup wgs.bam | perl -alne \ '{if($F[3]>100){$depth{"over100"}++}else{$depth{$F[3]}++}}END{print "$_\t$depth{$_}" foreach sort{$a <=> $b}keys %depth}' \
+> wgs.depth.txt
+```
+得到数据分为两列, 第一列是测序深度，第二列是在该测序深度下有多少个位点。因此第二列加起来就会是染色体的禅读。
+```{r}
+a <- read.table('data/wgs.depth.txt', stringsAsFactors = F)
+p1 <- ggplot(a, aes(x=V1, y=V2)) + geom_line(lwd=2)
+p2 <- p1 + geom_vline(xintercept = 27) + xlab("测序深度") + ylab("位点数") 
+print(p2)
+```
+
 
 ### 其它
 
