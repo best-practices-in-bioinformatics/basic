@@ -1564,7 +1564,7 @@ https://cancergenome.nih.gov/abouttcga/overview
 项目完成的三个阶段
 
 | 阶段             | 目标                                       | 深度     | 策略              | 状态         | 
-| -------------- | ---------------------------------------- | ------ | ---------------  :--: |
+| -------------- | --------------------|-------------------- | ------ | --------------- |
 | 1-low coverage | Assess strategy of sharing data across samples | 2-4X   | 180个样本全基因组测序    | 2008年9月完成  | 
 | 2-trios        | Assess coverage and platforms and centres | 20-60X | 2个母亲-父亲-孩子的家系测序 | 2008年10月完成 |    
 | 3-gene regions | Assess methods for gene-region-capture   | 50X    | 900个样本1000个基因   | 2009年6月完成  |      
