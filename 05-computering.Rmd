@@ -76,6 +76,7 @@ ncbi-blast-2.6.0+.dmg	123 MB
 可以看到软件开发单位提供的有src后缀的源代码文件，还有适用于各个操作系统的预编译版本
 
 ### 二进制软件(预编译版本)
+
 作为新手，建议大家直接根据自己的系统下载预编译版本软件，并且直接解压就可以使用啦。
 例子如下：
 ```
@@ -318,7 +319,7 @@ R最新版的安装
 虚拟机屏幕及联网设置
 配置shiny，shiny-server，R-studio
 
-### R 
+### R  {# R-language}
 
 > R语言不仅在生物信息数据处理中发挥着重要作用，也是其它主流数据处理人士的首选工具。现在非常多自学生物信息学的小伙伴必须学的就是R，所以写一个R的系统性入门指导是非常有必要的。我作为老一辈的生信工程师，所以喜欢perl一点，排斥python。我也稍微看过一些python的语法，个人认为R和python几乎是一模一样的。R的特点就是内置了大量的函数，基本上你认识的英文单词都可以是一个函数，即使不是，你也可以自定义为函数。搞清楚了函数和变量，就可以看懂大部分的R代码了。
 
@@ -471,7 +472,7 @@ http://cran.r-project.org/doc/contrib/Short-refcard.pdf
 http://www.rstudio.com/resources/cheatsheets/
 
 
-### perl
+### perl  {# perl-language}
 
 > Perl是典型的脚本语言，短小精悍，非常容易上手，尤其适合处理文本，数据，以及系统管理。它在老一辈的生物信息学分析人员中非常流行，出于历史遗留原因大家肯定会或多或少地接触 Perl，即使你再怎么推崇Python或者GO等新兴编程语言。
 
@@ -598,7 +599,7 @@ https://www.cs.tut.fi/~jkorpela/perl/regexp.html
 https://support.sas.com/rnd/base/datastep/perl_regexp/regexp-tip-sheet.pdf
 
 
-### python 
+### python  {# python-language}
 
 > Python开发的方向太多了，有机器学习，数据挖掘，网络开发，爬虫等等。其实在生信领域，Python还显现不出绝对的优势，生信的大部分软件流程都是用shell或Perl写的，而且已经足够好用了。我选Python是因为我想顺便学点数据挖掘和机器学习的东西，而且Python这些年越来越火，发展势头远超其他脚本语言，所以学它肯定是没错的。
 
@@ -745,7 +746,7 @@ Python只是一门编程语言，一种实现工具，我们可以用很多种�
 
 - 《Bioinformatics Programming Using Python》 
  
-### R包安装终极解决方案
+### R包安装终极解决方案  {# R-package}
 
 
 ##### 写在前面：  {-}
@@ -971,7 +972,7 @@ sudo R CMD INSTALL package.tar.gz
 window或者mac平台一般不推荐命令行格式，可视化那么舒心，何必自讨苦吃呢？
 
 
-### perl 模块终极解决方案
+### perl模块终极解决方案 {# perl-module}
 
 
 > 这种细节问题问我，我当然无法直接给出答案咯。毕竟，我的知识积累都不是靠死记硬背的。所以需要取回过头查看一下我的博客，才意识到，
@@ -1208,7 +1209,7 @@ use lib '/home/your-home/perl_lib';
 
 
 
-### Python包安装的小结  
+### Python包安装的小结  {# python-package}
 
 > 想当初刚学习Python的时候，就会用书本里面自带的一些package，用**sys**，**os**也用得很开心。
 后来接触到biopython项目，发现原来Python有这么不同功能的包，简直琳琅满目。

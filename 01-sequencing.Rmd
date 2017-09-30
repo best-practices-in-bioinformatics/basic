@@ -25,7 +25,7 @@
 
 > 在GEO数据库里面查看GPL信息，就可以看到芯片厂商出品的数据排名，基本上就是 affymetrix , illumina , agilent 这3家公司为主。
 
-#### Affymetrix 
+#### Affymetrix {-}
 
 昂飞（Affymetrix）公司，基因芯片行业的先驱，全球销量第一的基因芯片厂家。它是第一款商业化基因芯片的诞生之地，它是全球基因芯片行业标准的制定者。
 
@@ -53,7 +53,7 @@ Affymetrix公司曾入围全球50个最具创新能力公司和2011年度Frost &
 
 ![Affymetrix芯片排序](image/C1/GEO_Affymetrix_top50.png)
 
-#### Illumina 
+#### Illumina  {-}
 
 > Illumina总部位于美国加州圣地哥。它们的二代测序技术太出名以至于掩盖掉了其芯片产品的关辉，在GEO数据库可以查到它们的芯片科研市场占有率也不可小觑。
 Illumina的核心技术是光纤微珠芯片平台和Solexa测序平台，广泛应用于基因组学研究。
@@ -85,7 +85,7 @@ Illumina的核心技术是光纤微珠芯片平台和Solexa测序平台，广泛
 
 定量PCR仪Eco，是Illumina公司在2010年收购另外一个定量PCR仪厂家而扩增的产品线。定量PCR仪是目前分子生物学实验中常用的核苷酸检测设备，已经被广泛应用于生命科学领域的各个方面，包括新药开发研究、药物疗效研究、药物预后指标研究等等。
 
-#### agilent
+#### agilent {-}
 
 Agilent的生物芯片（系统）和别的公司的生物芯片（系统）一样，同样由：扫描仪、生物芯片、分析软件，三部分组成。
 
@@ -208,13 +208,13 @@ CNV 是基因组结构变异 ( SV ) 的重要组成部分。CNV 位点的突变�
 
 能检测CNV的手段主要有：全基因组测序、生物芯片、CNVseq、CNVplex、AccuCopy、质谱法、Taqman法。
 
-#### Affymetrix SNP6.0 array
+#### Affymetrix SNP6.0 array  {-}
 
 其中最出名的要属Affymetrix SNP6.0 array这款芯片 ，在TCGA计划和CCLE里面都有。芯片特有超过180万个遗传变异标记，包括单核苷酸多态性（SNP）以及拷贝数变异（CNV）。对CCLE数据库可以做的分析非常多，强烈建议初学者花时间好好了解一下，[我博客也写过教程](http://www.bio-info-trainee.com/1327.html)
  
 值得一提的是拷贝数变异的检测目前是以芯片技术为标准，NGS技术仍然是落后于芯片技术，在这一点上面。对于Affymetrix SNP6.0 array这款芯片得到也是CEL文件的原始数据，可以走PICNIC软件的流程来进行分析，得到最后的拷贝数变异的片段。
 
-#### affymetrix公司的OncoScan平台
+#### affymetrix公司的OncoScan平台 {-}
 
 > 使用Affymetrix OncoScan FFPE芯片对肿瘤相关样品(包括cfDNA与FFPE样本)进行试验与数据分析，并通过OncoScan 3.01软件找到与临床相关的拷贝数变异（CNV）和杂合性缺失（LOH）。
 

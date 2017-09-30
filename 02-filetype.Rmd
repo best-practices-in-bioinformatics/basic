@@ -18,7 +18,7 @@ FASTQ是基于文本的，保存生物序列（通常是核酸序列）和其测
 目的是将FASTA序列与质量数据放到一起，目前已经成为高通量测序结果的实施标准。
 
 
-### 定义和示例
+### 定义和示例  {-}
 
 FASTQ文件中每个序列通常有四行：
 
@@ -46,7 +46,7 @@ GATTTGGGGTTCAAAGCAGTATCGATCAAATAGTAAATCCATTTGTTCAACTCACAGTTT
  *老四质量分数最多事*
 ```
 
-### 序列标识
+### 序列标识  {-}
 
 上面说到第一行是序列标识以及相关的描述信息，以‘@’开头。可以像上面的示例那么简单，但如果是正规测序仪下机的真实数据，通常会很复杂。比如：
 
@@ -81,7 +81,7 @@ GGGTGATGGCCGCTGCCGATGGCGTCAAATCCCACC
 IIIIIIIIIIIIIIIIIIIIIIIIIIIIII9IG9IC
 ```
 
-### 质量编码格式
+### 质量编码格式 {-}
 
 质量评分指的是一个碱基的错误概率的对数值。
 其最初在Phred拼接软件中定义与使用，其后在许多软件中得到使用。
@@ -140,7 +140,7 @@ Illumina 1.8+
 
 来至于 wikipedia：
  
-### 文件后缀
+### 文件后缀 {-}
 
 没有特别的规定，通常使用.fq, .fastq, .txt等。
 但是要注意，这个文件格式主要指的是文本文件里面的每行每列的内容规则，并不是我们常见的计算机领域的mp3,mp4,avi,xls,doc等等。
@@ -166,7 +166,7 @@ https://en.wikipedia.org/wiki/FASTQ_format
 fasta序列格式是blast组织数据的基本格式，无论是数据库还是查询序列，大多数情况都使用fasta序列格式。 
 它要比上一小节介绍的FASTQ格式简明很多。
 
-### 定义和示例
+### 定义和示例 {-}
 
 总的来说，Fasta格式开始于一个标识符：">"，然后是一行描述，下面是的序列，直到下一个">",表示下一条。
 
@@ -284,7 +284,7 @@ SAM是一种序列比对格式标准，由sanger制定，是以TAB为分割符�
 主要应用于测序序列mapping到基因组上的结果表示，当然也可以表示任意的多重比对结果。
 SAM的全称是sequence alignment/map format。
 
-### 定义和示例
+### 定义和示例 {-}
 
 SAM分为两部分，注释信息（header section ）和比对结果部分 （alignment section）。
 通常是把FASTQ文件格式的测序数据比对到对应的参考基因组版本得到的。
@@ -310,7 +310,7 @@ SRR3101251.6 4 * 0 0 * * 0 0 NATTCCCACCTATGAGTGAGAATATGCGGTGTTTGGTTTTTTGTTCTTG #
 
 前四行是注释信息，后面是比对结果，下面对比对结果进行解释，它是SAM格式文件的精华部分。
 
-### 比对结果详解
+### 比对结果详解 {-}
 
 ```
 SRR035022.2621862 163 16 59999 37 22S54M = 60102 179 CCAACCCAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCCTAACCGACCCTCACCCTCACCC >AAA=>?AA>@@B@B?AABAB?AABAB?AAC@B?@AB@A?A>A@A?AAAAB??ABAB?79A?AAB;B?@?@<=8:8 XT:A:M XN:i:2 SM:i:37 AM:i:37 XM:i:0 XO:i:0 XG:i:0 RG:Z:SRR035022 NM:i:2 MD:Z:0N0N52 OQ:Z:CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCBCCCCCCBBCC@CCCCCCCCCCACCCCC;CCCBBC?CCCACCACA@
@@ -451,7 +451,7 @@ http://www.bio-info-trainee.com/1339.html
 
 当然，所有的数据格式定义，都推荐大家看原汁原味的英文介绍，那个是金标准，我们的翻译只是为了促进大家的理解，如果有模棱两可的地方，以英文原文为准：https://samtools.github.io/hts-specs/VCFv4.2.pdf 
 
-### 定义和示例
+### 定义和示例 {-}
 
 ![vcf文件可以记录的基因组变异类型](image/C2/vcf_variation_class.jpg)
 
@@ -529,7 +529,7 @@ INFO： 这一行是variant的详细信息，内容很多，以下再具体详�
 FORMAT 和 sample1 ：这两行合起来提供了 sample1 这个sample的基因型的信息。’sample1′代表这该名称的样品，是由SAM/BAM文件中的@RG下的 SM 标签决定的。
 (当然并不是所有的VCF都是由一个BAM文件产生，比如数据库dbSNP提供的vcf文件，就没有样本信息啦)
 
-### 第8列的INFO
+### 第8列的INFO {-}
 
 该列信息最多了，都是以 “TAG=Value”, 并使用”;”分隔的形式 。 其中 很多的注释信息在VCF文件的头部注释中给出。以下是这些TAG的解释
 
@@ -565,7 +565,7 @@ ReadPosRankSum：Z-score from Wilcoxon rank sum test of Alt vs. Ref read positio
 
 STR：Variant is a short tandem repeat
 
-### 9和10列代表基因型
+### 9和10列代表基因型 {-}
 
 ```
 GT:AD:DP:GQ:PL 0/1:173,141:282:99:255,0,255 
@@ -597,7 +597,6 @@ PL：指定的三种基因型的质量值(provieds the likelihoods of the given 
 
 生信菜鸟团的博客和生信技能树里面都介绍了很多处理vcf的软件。
 　　
-## 参考链接：
 
 强烈推荐去看《生信技能树》中的：我的基因组28 
 https://en.wikipedia.org/wiki/Variant_Call_Format
@@ -612,7 +611,7 @@ GTF和GFF格式是Sanger研究所定义，是一种简单的、方便的对于DN
 比如序列的哪里到哪里是基因，是转录本，是外显子，内含子或者CDS等等，已经成为序列注释的通用格式，许多软件都支持输入或者输出gff格式。
 
 
-### 定义和示例
+### 定义和示例 {-}
 
 gff由tab键隔开的9列组成，以下是各列的说明：
 
@@ -678,7 +677,7 @@ ctg123 . CDS 7000 7600 . + 2 ID=cds00004;Parent=mRNA00003
 ```
 可以看到第9列其实是可以无限扩展的，只需要以封号进行分割即可。
 
-### GTF 与GFF的差异
+### GTF 与GFF的差异 {-}
 
 GTF文件以及GFF文件都由9列数据组成，这两种文件的前8列都是相同的（一些小的差别），它们的差别重点在第9列。
 
@@ -694,6 +693,7 @@ GTF文件的第9列同GFF文件不同，虽然同样是标签与值配对的情�
 ```
 
 速记口诀
+
 ```
 * GTF,GFF 9列数据来组成*
 *结果前8列都相同*
@@ -717,7 +717,7 @@ http://blog.sina.com.cn/s/blog_8a4f556e0102yd3l.html
 
 > 这种格式主要用在基因浏览器中基因预测的track。如果有可变剪切的情况，那表格的每一行就是一个 transcript 的全部信息。
 
-### 定义和示例
+### 定义和示例 {-}
 
 每一行的具体解释如下
 ```
@@ -777,7 +777,7 @@ GTF格式非常冗余。以人类转录组为例，Gencode V22的GTF文件为1.2
 GenePred是Jimmy Kent创建UCSC genome browser的时候建立的文件格式。UCSC的文件格式定义是非常smart的，包括之后我可能会讲到的2bit，bigwig格式。
 
 
-### GTF vs GenePred
+### GTF vs GenePred {-}
 
 - 从文件大小上来看，压缩前：GTF（1.2G) >> Genepred(23M) + Gene_Anno_table (2.8M)。压缩后：GTF(40M) >> GenePred(7.8M) +Gene_Anno_table (580K)
 - 从可读性来讲，GTF是以gene interval 为单位（行），每行可以是gene，transcript，exon，intron，utr等各种信息，看起来什么都在里面，很全面，其实可读性非常差，而且容易产生各种错误。GenePred格式是以transcript为单位，每行就是一个transcript，简洁直观。
@@ -801,11 +801,11 @@ Gene_Anno_table: 其实就是把GTF的所有transcript行的第9列转换变成�
 所以BED格式最重要的就是染色体加上起始终止坐标这3列。
 
 
-### 定义和示例
+### 定义和示例 {-}
 
 BED行有3个必须的列和9个额外可选的列。 每行的数据格式要求一致。
 
-#### 必须包含的3列是：
+#### 必须包含的3列是： {-}
 
 1. chrom, 染色体或scafflold 的名字(eg chr3， chrY, chr2_random, scaffold0671 )
 
@@ -852,7 +852,7 @@ bed格式有相应的软件来处理这类格式的文件，如bedtools。
        
  
 
-### BED 与GFF的差异
+### BED 与GFF的差异 {-}
 
 BED文件中起始坐标为0，结束坐标至少是1,； 
 
@@ -874,7 +874,7 @@ https://en.wikipedia.org/wiki/General_feature_format
 
 MAF格式本来并不是一个常见的文本文件格式，只是因为癌症研究实在是太热门了，对它的理解也变得需求旺盛起来了。
 
-### MAF的说明 
+### MAF的说明  {-}
 
 这些文件应该使用下面描述的突变注释格式（MAF）进行格式化。另外下文中有文件命名规范。
 
@@ -895,7 +895,7 @@ MAF格式本来并不是一个常见的文本文件格式，只是因为癌症�
 我们提交给DCC MAF存档的数据包括两种：Somatic MAF（named .somatic.maf）的开放访问数据以及不经过筛选的包含原始数据的Protected MAF（named.protected.maf）。所有数据将使用MAF标准进行格式化。 
 
 
-### MAF文件字段
+### MAF文件字段 {-}
 
 MAF文件的格式是以制表符分隔的列。这些列都在表1中进行了详细注释，每个MAF文件中都必须按照相应格式进行处理，DCC将验证每列的顺序是否符合标注。每列的标题和值有时需要区分大小写。列中允许出现空值（即空白单元格）或枚举值。验证器将查找是否存在一个符合规范（例如#version 2.4）的标题，如果没有，验证将会失败。除了出现在表1中的列外，也可以选择附加其他列。可选列不经过DCC验证，可以按任何顺序进行。
 
@@ -1125,7 +1125,8 @@ b)	列＃34必须是Matched_Norm_Sample_UUID，其中包含用于匹配正常样
 c)	由Tumor_Sample_Barcode和Matched_Norm_Sample_Barcode表示的元数据应分别对应于分配给Tumor_Sample_UUID和Matched_Norm_Sample_UUID的UUID
 ```
 
-### MAF命名协议
+### MAF命名协议 {-}
+
 在上传到DCC的档案中，MAF文件名应与以下方式与包含档案名称相关：
 如果存档名称是：
 ```
@@ -1153,5 +1154,5 @@ https://software.broadinstitute.org/software/igv/MutationAnnotationFormat
 https://wiki.nci.nih.gov/display/TCGA/Mutation+Annotation+Format+%28MAF%29+Specification
 
  
-## 其它格式
+## 其它格式  {-}
 

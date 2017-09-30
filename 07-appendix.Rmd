@@ -6,23 +6,26 @@
 
 列出我们板块的人气最旺的20个题目，作为第五章节学习后的复习题目。
 
-## 生信编程很简单[^1]
+#### [1.生信编程很简单](http://www.biotrainee.com/thread-834-1-1.html) {-}
 
-[^1]: [生信编程很简单](http://www.biotrainee.com/thread-834-1-1.html)
+##### 编程语言系统入门 {-}
 
-### 编程语言系统入门
 - [生信分析人员如何系统入门python?](https://mp.weixin.qq.com/s/073y_TDA2gcJVGrw0XBxMA)
 - [生信分析人员如何系统入门perl？](http://mp.weixin.qq.com/s/lq6pSGtbZxbc0A6-ZLqaqQ)
 - [生信分析人员如何系统入门R？](http://mp.weixin.qq.com/s/ouejcgJ0rLy7eBxNPRO50g)
 - [生信分析人员如何系统入门Linux？](http://mp.weixin.qq.com/s/xWtUFG37WMTzA3c0PnCNtg)
 
-### 题目
-#### 对FASTQ的操作
+##### 题目 {-}
+
+###### 对FASTQ的操作 {-}
+
 - 5,3段截掉几个碱基
 - 序列长度分布统计
 - FASTQ 转换成 FASTA
 - 统计碱基个数及GC%
-#### 对FASTA的操作
+
+###### 对FASTA的操作 {-}
+
 - 取互补序列
 - 取反向序列
 - DNA to RNA
@@ -31,7 +34,9 @@
 - 按照序列长度/名字排序
 - 提取指定ID的序列
 - 随机抽取序列
-#### 高级难度
+
+###### 高级难度 {-}
+
 - 根据坐标取序列
 - 多文件合并
 - 根据ID列表取序列
@@ -39,7 +44,8 @@
 - 简并碱基的引物序列还原成多条序列
 - snp进行注释并格式化输出
 
-### 下载安装bowtie2（内含测试数据）
+##### 下载安装bowtie2（内含测试数据） {-}
+
 ```
 cd ~/biosoft
 mkdir bowtie &&  cd bowtie
@@ -47,18 +53,18 @@ wget https://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.2.9/bowtie2-2.2
 unzip bowtie2-2.2.9-linux-x86_64.zip
 ```
 
-## 人类基因组的外显子区域的长度[^2]
+#### [2.人类基因组的外显子区域的长度](http://www.biotrainee.com/thread-3-1-1.html) {-}
+ 
+##### 题目 {-}
 
-[^2]: [人类基因组的外显子区域的长度](http://www.biotrainee.com/thread-3-1-1.html)
-
-### 题目
 下载人类外显子的坐标文件，编写代码统计外显子区域的长度。
 
-### 测试数据
+##### 测试数据 {-}
+
 - Rbioconductor的TxDb.Hsapiens.UCSC.hg19.knownGene包
 - NCBI数据库：ftp://ftp.ncbi.nlm.nih.gov/pub/CCDS/current_human/
 
-### R实现代码示例
+##### R实现代码示例 {-}
 
 ```
 rm(list=ls())
@@ -101,16 +107,14 @@ length(tmp_pos) # 计算exon的长度
 length(unique(tmp_pos)) # 计算去重后的exon的长度
 ```
 
+#### [3.hg19基因组序列的一些探究](http://www.biotrainee.com/thread-625-1-1.html) {-}
 
-## hg19基因组序列的一些探究[^3]
+#####  题目 {-}
 
-[^3]: [hg19基因组序列的一些探究](http://www.biotrainee.com/thread-625-1-1.html)
-
-###  题目
 求：hg19 每条染色体长度，每条染色体N的含量，GC含量。
 （高级作业：蛋白编码区域的GC含量会比基因组其它区域的高吗？ ）
 
-###  测试数据
+#####  测试数据 {-}
 
 - hg19基因组序列下载
 
@@ -120,7 +124,9 @@ tar xvzf chromFa.tar.gz
 cat *.fa > hg19.fa
 rm chr*.fa # 先把着急删，我待会可能要那他测试运行速度
 ```
+
 - 简单测试数据
+
 ```
 >chr_1
 ATCGTCGaaAATGAANccNNttGTA
@@ -134,13 +140,17 @@ AGGTCTNAAAAGG
 >chr_4
 ATCGTCaaaGANNAATGANGgggTA
 ```
-### Perl代码示例
 
-##### 单行命令 {-}
+##### Perl代码示例 {-}
 
-```perl -alne '{if(/^>/){$chr=$_}else{ $A_count{$chr}+=($_=~tr/Aa//); $T_count{$chr}+=($_=~tr/Tt//);$C_count{$chr}+=($_=~tr/Cc//); $G_count{$chr}+=($_=~tr/Gg//); $N_count{$chr}+=($_=~tr/Nn//); }}END{print "$_\t$A_count{$_}\t$T_count{$_}\t$C_count{$_}\t$G_count{$_}\t$N_count{$_}" foreach sort keys  %N_count}' test.fa ```
+###### 单行命令 {-}
 
-##### 完整代码 {-}
+```
+perl -alne '{if(/^>/){$chr=$_}else{ $A_count{$chr}+=($_=~tr/Aa//); $T_count{$chr}+=($_=~tr/Tt//);$C_count{$chr}+=($_=~tr/Cc//); $G_count{$chr}+=($_=~tr/Gg//); $N_count{$chr}+=($_=~tr/Nn//); }}END{print "$_\t$A_count{$_}\t$T_count{$_}\t$C_count{$_}\t$G_count{$_}\t$N_count{$_}" foreach sort keys  %N_count}' test.fa 
+```
+
+###### 完整代码 {-}
+
 ```
 while (<>){
 chomp;
@@ -172,23 +182,29 @@ print "$_\t$A_count{$_}\t$T_count{$_}\t$C_count{$_}\t$G_count{$_}\t$N_count{$_}\
 >chr_4        9        4        2        7        3
 ```
 
-## 3：hg38每条染色体的基因、转录本分布[^4]
+#### [4.hg38每条染色体的基因、转录本分布](http://www.biotrainee.com/thread-626-1-1.html) {-}
 
-[^4]: [hg38每条染色体的基因、转录本分布](http://www.biotrainee.com/thread-626-1-1.html)
-
-###  题目
+#####  题目 {-}
 
 对GTF注释文件进行探究，统计每条染色体基因数、转录本数、内含子数、外显子数。
-（高级作业：下载human/rat/mouse/dog/cat/chicken等物种的gtf注释文件（http://asia.ensembl.org/info/data/ftp/index.html），编写函数实现对多个GTF文件进行批量统计染色体基因、转录本的分布及转录本外显子个数；继续探索回答以下问题：所有基因平均有多少个转录本？所有转录本平均有多个exon和intron？如果要比较多个数据库呢（gencode/UCSC/NCBI？）？如果把基因分成多个类型呢？protein coding gene，pseudogene，lncRNA还有miRNA的基因？它们的特征又有哪些变化呢？）
 
-### 测试数据
+高级作业：下载[human/rat/mouse/dog/cat/chicken等物种的gtf注释文件](http://asia.ensembl.org/info/data/ftp/index.html) 编写函数实现对多个GTF文件进行批量统计染色体基因、转录本的分布及转录本外显子个数；
+
+继续探索回答以下问题：
+
+- 所有基因平均有多少个转录本？
+- 所有转录本平均有多个exon和intron？
+- 如果要比较多个数据库呢（gencode/UCSC/NCBI？）？
+- 如果把基因分成多个类型呢？protein coding gene，pseudogene，lncRNA还有miRNA的基因？它们的特征又有哪些变化呢？
+
+##### 测试数据 {-}
 
 ```
 wget -c ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.chr.gtf.gz
 gzip -d Homo_sapiens.GRCh38.87.chr.gtf.gz
 ```
 
-### 代码示例
+##### 代码示例 {-}
 
 ```
 # 每条染色体的基因个数
@@ -197,18 +213,14 @@ zcat Homo_sapiens.GRCh38.87.chr.gtf.gz |perl -alne '{print if $F[2] eq "gene" }'
 zcat Homo_sapiens.GRCh38.87.chr.gtf.gz |perl -alne '{next unless $F[2] eq "gene" ;/gene_biotype "(.*?)";/;print $1}'  |sort |uniq -c
 ```
 
-## 多个同样行列式文件的合并[^5]
-[^5]: [多个同样行列式文件的合并](http://www.biotrainee.com/thread-603-1-1.html)
+#### [5.多个同样行列式文件的合并](http://www.biotrainee.com/thread-603-1-1.html) {-}
 
-###  题目
+#####  题目 {-}
 
 将htseq-count生成的所有独立样本文件进行合并（每个样品对应一个文件，包括了所有基因表达量）。
 希望通过编程处理每个文件得到输出的表达矩阵（行名是基因名，列名是样品名），如下所示：
 
-
-### 测试数据
-
-##### 模拟数据
+##### 模拟数据 {-}
 
 用perl脚本模仿htseq-count计算每个样本所有的基因表达量的输出独立样本文件：
 
@@ -224,7 +236,7 @@ perl -e 'system(" bash tmp.sh >$_.txt") foreach a..z'
 
 **每个样本的基因顺序并不一致，这时候你应该怎么做呢？**
 
-##### 真实数据
+##### 真实数据 {-}
 
 实际需求如下：[GSE48213](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE48213)里面有56个文件，需要合并成一个表达矩阵，来根据cell-line的不同，分组做差异分析。可以查看[paper](https://www.ncbi.nlm.nih.gov/pubmed/24176112 )
 
@@ -233,7 +245,8 @@ wget -c ftp://ftp.ncbi.nlm.nih.gov/geo/series/GSE48nnn/GSE48213/suppl/GSE48213_R
 tar -xf GSE48213_RAW.tar
 gzip -d *.gz
 ```
-### 代码示例
+
+##### 代码示例 {-}
 
 ```
 ## 首先在GSE48213_RAW目录里面生成tmp.txt文件，使用shell脚本：
@@ -245,23 +258,22 @@ library(reshape2)
 fpkm <- dcast(a,formula = V2~V1)
 ```
 
-## 根据GTF画基因的多个转录本结构[^6]
+#### [6.根据GTF画基因的多个转录本结构](http://www.biotrainee.com/thread-624-1-1.html) {-}
 
-[^6]: [根据GTF画基因的多个转录本结构](http://www.biotrainee.com/thread-624-1-1.html)
+#####  题目 {-}
 
-###  题目
 从NCBI,ENSEMBL,UCSC,GENCODE数据库下载各种GTF注释文件，编写代码得到所有基因的转录本个数，以及每个转录本的外显子的坐标，绘制如下转录本结构图：
 
 > 比如对这个ANXA1基因来说，非常多的转录本，但是基因的起始终止坐标，是所有转录本起始终止坐标的极大值和极小值。同时，它是一个闭合基因，因为它存在一个转录本的起始终止坐标等于该基因的起始终止坐标。可以看到它的外显子并不是非常整齐的，虽然多个转录本会共享某些外显子，但是也存在某些外显子比同区域其它外显子长的现象。
 
-### 测试数据
+##### 测试数据 {-}
 
 ```
 wget -c http://www.broadinstitute.org/cancer/cga/sites/default/files/data/tools/rnaseqc/gencode.v7.annotation_goodContig.gtf.gz
 gzip -d gencode.v7.annotation_goodContig.gtf.gz
 ```
 
-### R实现代码示例
+##### R实现代码示例 {-}
 
 ```
 rm(list=ls())
@@ -316,18 +328,16 @@ for (i in 1:nrow(structure)){
 }
 ```
 
-### 参考结果
+##### 参考结果 {-}
 
 
-##  下载最新版的KEGG信息，并且解析好[^7]
+#### [7.下载最新版的KEGG信息，并且解析好](http://www.biotrainee.com/thread-672-1-1.html) {-}
 
-[^7]: [下载最新版的KEGG信息，并且解析好](http://www.biotrainee.com/thread-672-1-1.html)
-
-###  题目
+#####  题目 {-}
 
 下载最新版的KEGG注释文本文件，编写脚本整理成kegg的pathway的ID与基因ID的对应格式。
 
-### 测试数据
+##### 测试数据 {-}
 
 - 1 首先打开[KEGG官方网站](http://www.genome.jp/kegg/catalog/org_list.html)，网页中展示出了各个物种的分类、拉丁名称、英文名称等信息。
 
@@ -344,26 +354,24 @@ for (i in 1:nrow(structure)){
 - 5 当然，下载好之后还没有结束。下载得到文本文件，可以看到里面的结构层次非常清楚，C开头的就是kegg的pathway的ID所在行，D开头的就是属于它的kegg的所有的基因。A,B是kegg的分类，总共是6个大类，42个小类。
 
 
-### Perl代码示例
+##### Perl代码示例 {-}
 
 ```
 perl -alne '{if(/^C/){/PATH:hsa(\d+)/;$kegg=$1}else{print "$kegg\t$F[1]" if /^D/ and $kegg;}}' hsa00001.keg >kegg2gene.txt
 ```
 
-### 参考结果
+##### 参考结果 {-}
 
 
-## 写超几何分布检验[^8]
+#### [8.写超几何分布检验](http://www.biotrainee.com/thread-749-1-1.html) {-}
 
-[^8]: [写超几何分布检验](http://www.biotrainee.com/thread-749-1-1.html)
-
-###  题目
+#####  题目 {-}
 
 学习GO/KEGG的富集分析的原理，编写代码实现超几何分布检验，将得到的结果与测试数据中的kegg.enrichment.html进行比较。
 
 (P值的计算：C(k,M)*C(n-k,N-M)/C(n,N) )
 
-### 测试数据
+##### 测试数据 {-}
 
 - kegg2gene（第六讲kegg数据解析结果）
 
@@ -408,7 +416,7 @@ htmlReport(KEGG.hyperG.results, file="kegg.enrichment.html", summary.args=list("
 
 ```
 
-### R代码示例
+##### R代码示例 {-}
 
 下载链接： https://github.com/jmzeng1314/humanid/blob/master/R/hyperGtest_jimmy.R
 
@@ -458,15 +466,13 @@ results=results[order(results$Pvalue),]
 rownames(results)=1:nrow(results)
 ```
 
-## ID转换[^9]
+#### [9.ID转换](http://www.biotrainee.com/thread-941-1-1.html)  {-}
 
-[^9]: [ID转换](http://www.biotrainee.com/thread-941-1-1.html)
-
-###  题目
+#####  题目 {-}
 
 probe_id，gene_id，gene_name, symbol之间的转换。
 
-### 测试数据
+##### 测试数据 {-}
 
 - 需要转换的探针ID(变量my_probe)
 
@@ -512,7 +518,7 @@ probe2genename[match(my_probe,probe2genename$probe_id),]
 
 ```
 
-### R代码示例
+##### R代码示例
 
 基因的转换：运行下面的R代码，得到的my_symbol_gene和my_entrez_gene就是需要转换的ID。
 
@@ -532,15 +538,13 @@ entrezID2symbol[match(my_symbol_gene,entrezID2symbol$symbol),]
 ```
 
 
-## 根据指定染色体及坐标得到序列[^10]
+#### [10.根据指定染色体及坐标得到序列](http://www.biotrainee.com/thread-666-1-1.html)
 
-[^10]: [根据指定染色体及坐标得到序列](http://www.biotrainee.com/thread-666-1-1.html)
-
-###  题目
+#####  题目 {-}
 
 参考基因组hg19，指定染色体及坐标"chr5","8397384"，编写程序得到这个坐标以及它上下一个碱基。（机器无法计算hg19，则使用测试数据，指定坐标是 3号染色体的第6个碱基。）
 
-### 测试数据
+##### 测试数据 {-}
 
 ```
 >chr_1
@@ -556,15 +560,13 @@ AGGTCTNAAAAGG
 ATCGTCaaaGANNAATGANGgggTA
 ```
 
-## 根据指定染色体及坐标得到位置信息[^11]
+#### [11.根据指定染色体及坐标得到位置信息](http://www.biotrainee.com/thread-863-1-2.html) {-}
 
-[^11]: [根据指定染色体及坐标得到位置信息](http://www.biotrainee.com/thread-863-1-2.html)
-
-###  题目
+#####  题目 {-}
 
 基因的chr,start,end都是已知的（坐标是hg38系统），任意给定基因组的chr:pos(chr1:2075000-2930999), 判断该区间在哪个基因上面？（可用现成软件bedtools）
 
-### 测试数据
+##### 测试数据 {-}
 
 ```
 chr7        148697841        148698941
@@ -580,15 +582,13 @@ chr7        148706271        148706671
 ```
 
 
-## 把文件内容按照染色体分开写出[^12]
+#### [12.把文件内容按照染色体分开写出](http://www.biotrainee.com/thread-1329-1-1.html) {-}
 
-[^12]: [把文件内容按照染色体分开写出](http://www.biotrainee.com/thread-1329-1-1.html)
-
-###  题目
+#####  题目 {-}
 
 根据染色体把文件拆分成1~22和其它染色体的两个文件呢？
 
-### 测试数据
+##### 测试数据 {-}
 
 ```
 wget ftp://ftp.ncbi.nlm.nih.gov/pub/CCDS/current_human/CCDS.current.txt
@@ -606,7 +606,8 @@ chr7    44044672    44045322
 chr1    153634052  153634772
 chr11  60905850    60906575
 ```
-### Perl代码示例
+
+##### Perl代码示例 {-}
 
 ```
 use FileHandle;
@@ -631,19 +632,17 @@ foreach( 1..22 ){
 close other;
 ```
 
-## JSON格式数据的格式化[^13]
+#### [13.JSON格式数据的格式化](http://www.biotrainee.com/thread-1355-1-1.html) {-}
 
-[^13]: [JSON格式数据的格式化](http://www.biotrainee.com/thread-1355-1-1.html)
-
-###  题目
+#####  题目 {-}
 
 学习json格式，下载测试数据，从该json文件里面提取：technique factor target principal_investigator submission label category type Developmental-Stage organism key这几列信息。
 
-### 测试数据
+##### 测试数据 {-}
 
 http://biotrainee.com/jbrowse/JBrowse-1.12.1/sample_data/json/modencode/modencodeMetaData.json
 
-### Perl代码示例
+##### Perl代码示例 {-}
 
 ```
 #!/usr/bin/env perl
@@ -670,25 +669,23 @@ for my $item ( @{$data->{items}} ) {
 }
 ```
 
-### 参考结果
+##### 参考结果 {-}
 
 完成之后的结果应该是：http://biotrainee.com/jbrowse/JBrowse-1.12.1/sample_data/json/modencode/modencodeMetaData.csv
 
 
+#### [14.多个探针对应一个基因，取平均值、最大值](http://www.biotrainee.com/thread-2077-1-1.html ) {-}
 
 
-## 多个探针对应一个基因，取平均值、最大值 [^14]
-
-[^14]: [多个探针对应一个基因，取平均值、最大值](http://www.biotrainee.com/thread-2077-1-1.html )
-
-
-###  题目
+#####  题目 {-}
 
 编写脚本对多个探针对应一个基因，取平均值、最大值。
 
-### 测试数据
+##### 测试数据 {-}
 
-### R代码示例
+R里面的包自带很多芯片表达数据，所以测试数据就在下面的R代码里面
+
+##### R代码示例 {-}
 
 ```
 # 平均值
@@ -707,24 +704,23 @@ head(exprSet)
 probe2symbol=toTable(hgu95av2SYMBOL)
 dat=merge(exprSet,probe2symbol,by='probe_id')
 results=t(sapply(split(dat,dat$symbol),function(x) colMeans(x[,1:(ncol(x)-1)])))
+
 ```
 
-## 把counts矩阵转换成RPKM矩阵[^15]
+#### [15.把counts矩阵转换成RPKM矩阵](http://www.biotrainee.com/thread-1791-1-1.html ) {-}
 
-[^15]: [把counts矩阵转换成RPKM矩阵](http://www.biotrainee.com/thread-1791-1-1.html )
-
-###  题目
+#####  题目 {-}
 
 编写脚本将hisat2+htseq-counts之后得到reads的counts矩阵转换成RPKM矩阵。
 
-### 测试数据
+##### 测试数据 {-}
 
 ```
 wget ftp://ftp.ncbi.nlm.nih.gov/pub/CCDS/current_mouse/CCDS.current.txt
 grep -v '^#' CCDS.current.txt | perl -alne '{/\[(.*?)\]/;$len=0;foreach(split/,/,$1){@tmp=split/-/;$len+=($tmp[1]-$tmp[0])};$h{$F[2]}=$len if $len >$h{$F[2]}} END{print "$_\t$h{$_}" foreach sort keys %h}' >mm10_ccds_length.txt
 ```
 
-### R代码示例
+##### R代码示例 {-}
 
 ```
 genes_len=read.table("mm10_ccds_length.txt",stringsAsFactors=F)
@@ -777,13 +773,12 @@ columns(txdb);keytypes(txdb)
 neededcols <- c("GENEID", "TXSTRAND", "TXCHROM")
 select(txdb, keys=mykeys, columns=neededcols, keytype="TXNAME")
 ```
-### 参考结果
 
-## 对有临床信息的表达矩阵批量做生存分析[^16]
+##### 参考结果 {-}
 
-[^16]: [对有临床信息的表达矩阵批量做生存分析](http://www.biotrainee.com/thread-929-1-1.html)
+#### [16.对有临床信息的表达矩阵批量做生存分析](http://www.biotrainee.com/thread-929-1-1.html) {-}
 
-###  题目
+#####  题目 {-}
 
 使用R实现生存分析：
 用```my.surv <- surv(OS_MONTHS,OS_STATUS=='DECEASED')```构建生存曲线；
@@ -791,7 +786,7 @@ select(txdb, keys=mykeys, columns=neededcols, keytype="TXNAME")
 用```survdiff(my.surv~type, data=dat)```来看看这个因子的不同水平是否有显著差异，其中默认用是的logrank test 方法；
 用```coxph(Surv(time, status) ~ ph.ecog + tt(age), data=lung) ```来检测自己感兴趣的因子是否受其它因子(age,gender等等)的影响。
 
-### 代码示例
+##### 代码示例 {-}
 
 ```
 rm(list=ls())
@@ -848,15 +843,13 @@ cox_results[,cox_results[4,]<0.05]
 
 PS: 里面的os_years应该修改为os_month，因为总的生存期不应该长达几十年，而且因为ag和os_years都是随机生成的，可能会出现很不符合自然科学的现象。但是这个是模拟数据，请大家不用较真。
 
-## 对多个差异分析结果直接取交集并集[^17]
+####  [17.对多个差异分析结果直接取交集并集](http://www.biotrainee.com/thread-1288-1-2.html) {-}
 
-[^17]: [对多个差异分析结果直接取交集并集]( http://www.biotrainee.com/thread-1288-1-2.html)
-
-###  题目
+#####  题目 {-}
 
 编写脚本对每两个差异分析结果计算基因交集个数与基因并集个数的比值，得到一个比值矩阵。
 
-### 测试数据
+##### 测试数据 {-}
 
 用perl单行命令模拟数据：
 
@@ -879,7 +872,7 @@ comparison_9 -> J;X;K;D;O;H;L;F;C;P;R;N
 comparison_10 -> G;S;K;H;C;O;W;F;Q;X
 ```
 
-### R代码示例
+##### R代码示例 {-}
 
 ```
 a=readLines('test.txt')
@@ -903,7 +896,7 @@ colnames(out)=n
 out[1:5,1:5]
 ```
 
-### 参考结果
+##### 参考结果 {-}
 
 结果的前五行如下：
 
@@ -916,11 +909,9 @@ comparison_4    0.2916667    0.6538462    0.7307692    1.0000000    0.4166667
 comparison_5    0.1875000    0.4090909    0.3750000    0.4166667    1.0000000
 ```
 
-## 根据GTF格式的基因注释文件得到人所有基因的染色体坐标[^18]
+#### [18.根据GTF格式的基因注释文件得到人所有基因的染色体坐标](http://www.biotrainee.com/thread-472-1-1.html ) {-}
 
-[^18]: [根据GTF格式的基因注释文件得到人所有基因的染色体坐标](http://www.biotrainee.com/thread-472-1-1.html )
-
-###  题目
+#####  题目 {-}
 
 从gencode数据库里面可以下载所有的gtf文件，编写脚本得到基因的染色体、起始终止坐标如下：
 
