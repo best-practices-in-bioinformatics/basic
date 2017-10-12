@@ -1551,7 +1551,7 @@ http://paper.dxy.cn/article/511878
 
 https://cancergenome.nih.gov/abouttcga/overview
 
-##1000 GENOME
+## 1000 GENOME
 
 **一、简介**
 
@@ -1658,6 +1658,7 @@ http://www.ebi.ac.uk/arrayexpress/experiments/E-GEOD-19480
 1000G的vcf文件中有一个ID列，对应的就是dbSNP的rs ID。
 因为方法改进，phase 3为代表最终的结果
 
+
 **参考资料**
 
 http://www.bio-info-trainee.com/1841.html
@@ -1666,5 +1667,46 @@ http://www.internationalgenome.org/about
 
 http://www.internationalgenome.org/category/dbsnp
 
+## Nar
+
+上面已经介绍了很多数据库，但在开展某一个研究的时候，我们需要知道有木有什么相关的数据库，比如某个疾病特异性数据库，该怎么找呢？
+
+这里介绍一个数据库比较权威的资源集中站，牛津大学出版社的Nucleic Acids Research（NAR）杂志。
+从1994年开始，NAR每年都要出版分子生物学数据库特辑（database issue），收录新增的数据库、盘点旧数据库的更新状况、移除失效链接等。
+目前最新版是第24版，即2017版。
+
+数据库地址：https://academic.oup.com/nar/search-results?f_TocHeadingTitle=Database+Issue
+
+
+而所有收录的数据库可以在NAR的网站上找到，下面是一个按字母排序的列表：
+
+  https://www.oxfordjournals.org/nar/database/a/
+
+不过找起来更方便的可能是按功能分类查找：
+
+  https://www.oxfordjournals.org/nar/database/c/
+
+NAR把数据库分为15个类别（有些数据库会同时被分到好几个类别）：
+
+* Nucleotide Sequence Databases 
+* RNA sequence databases 
+* Protein sequence databases 
+* Structure Databases 
+* Genomics Databases (non-vertebrate) 
+* Metabolic and Signaling Pathways 
+* Human and other Vertebrate Genomes 
+* Human Genes and Diseases 
+* Microarray Data and other Gene Expression Databases 
+* Proteomics Resources Other Molecular Biology Databases 
+* Organelle databases 
+* Plant databases 
+* Immunological databases 
+* Cell biology
+
+这些分类又包含了很多子分类。因为这里面的数据库参差不齐，所以
+对于用户来说，采用一个数据库做研究之前要多留心，要了解好它的数据来源和运营维护情况，是否有及时回应用户的反馈，是否有版本控制；还要多检索文献，看看这个数据库的使用情况，大家利用它做出了哪些成果，反馈如何等等。必要时可多找几个相关的数据库互相佐证。
+
+参考资料：
+解螺旋公众号
 
 
